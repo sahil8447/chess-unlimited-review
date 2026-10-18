@@ -1,0 +1,16 @@
+{
+  "name": "chess-unlimited-review",
+  "version": "1.0.0",
+  "description": "Unlimited Chess.com game review extension powered by Stockfish",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "chess.js": "^1.4.0",
+    "stockfish": "^19.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

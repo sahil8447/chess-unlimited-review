@@ -1,0 +1,1308 @@
+
+/* Chess Unlimited Review — Dashboard UI */
+
+#chess-unlimited-review-panel {
+  position: fixed !important;
+  top: 48px !important;
+  right: 16px !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  width: min(720px, calc(100vw - 32px)) !important;
+  max-width: calc(100vw - 32px) !important;
+  height: min(790px, calc(100vh - 64px)) !important;
+  max-height: calc(100vh - 64px) !important;
+
+  box-sizing: border-box !important;
+  padding: 20px !important;
+  margin: 0 !important;
+
+  background: #242320 !important;
+  color: #f4f4f2 !important;
+  border: 1px solid #484641 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,.65) !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  resize: both !important;
+  z-index: 2147483647 !important;
+
+  font-family: Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+#chess-unlimited-review-panel *,
+#chess-unlimited-review-panel *::before,
+#chess-unlimited-review-panel *::after {
+  box-sizing: border-box;
+}
+
+#chess-unlimited-review-panel h2 {
+  color: #81b64c !important;
+  font-size: 21px !important;
+  font-weight: 700 !important;
+  margin: 0 0 16px !important;
+}
+
+#chess-unlimited-review-panel h3 {
+  font-size: 16px !important;
+  color: #f4f4f2 !important;
+  margin: 0 0 10px !important;
+}
+
+/* Collapsible PGN editor */
+
+.chess-pgn-details {
+  background: #302f2c;
+  border: 1px solid #45433f;
+  border-radius: 9px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.chess-pgn-details summary {
+  cursor: pointer;
+  color: #d8d8d4;
+  font-weight: 600;
+  user-select: none;
+}
+
+#chess-review-pgn {
+  display: block !important;
+  width: 100% !important;
+  min-height: 110px !important;
+  margin-top: 10px !important;
+  padding: 12px !important;
+
+  background: #171715 !important;
+  color: #fff !important;
+  border: 1px solid #555 !important;
+  border-radius: 8px !important;
+
+  font: 12px/1.6 Consolas, monospace !important;
+  resize: vertical !important;
+}
+
+#chess-review-import {
+  width: 100% !important;
+  padding: 12px !important;
+  margin: 0 0 16px !important;
+
+  background: #81b64c !important;
+  color: white !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+#chess-review-import:hover {
+  background: #94c65c !important;
+}
+
+#chess-review-import:disabled {
+  opacity: .6 !important;
+  cursor: wait !important;
+}
+
+/* Results */
+
+#chess-review-result {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: #eee !important;
+
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 14px !important;
+}
+
+.chess-accuracy-summary {
+  background: #302f2c;
+  color: #fff;
+  padding: 14px 16px;
+  margin: 10px 0 16px;
+  border-radius: 9px;
+  white-space: pre-line;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+/* Main two-column dashboard */
+
+.chess-review-dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  margin: 12px 0;
+}
+
+.chess-dashboard-left,
+.chess-dashboard-right {
+  min-width: 0;
+}
+
+/* Chessboard */
+
+.chess-review-board-section {
+  background: #302f2c;
+  padding: 10px;
+  margin: 0;
+  border-radius: 10px;
+}
+
+.chess-board-info {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.chess-review-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.chess-board-square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  font-family: "Segoe UI Symbol", sans-serif;
+  font-size: clamp(16px, 2.3vw, 34px);
+  user-select: none;
+}
+
+.chess-board-square.light {
+  background: #eeeed2;
+  color: #222;
+}
+
+.chess-board-square.dark {
+  background: #769656;
+  color: #222;
+}
+
+.chess-board-square.last-move {
+  box-shadow: inset 0 0 0 100px rgba(255,235,59,.35);
+}
+
+.chess-best-move-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.chess-board-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chess-board-controls button {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 4px;
+  background: #484641;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chess-board-controls button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+/* Evaluation graph */
+
+.chess-evaluation-graph {
+  background: #302f2c;
+  border: 1px solid #484641;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 0 0 12px;
+}
+
+.chess-evaluation-graph h3 {
+  margin-bottom: 10px !important;
+}
+
+.chess-evaluation-graph svg {
+  display: block;
+  width: 100%;
+  height: 125px;
+  overflow: visible;
+}
+
+.chess-evaluation-graph circle {
+  cursor: pointer;
+}
+
+.chess-evaluation-graph circle:hover {
+  r: 8;
+}
+
+.chess-graph-selection {
+  color: #ccc;
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Move list */
+
+.chess-move-list {
+  background: #302f2c;
+  border: 1px solid #484641;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.chess-move-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 8px;
+  border-bottom: 1px solid #45433f;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chess-move-row:hover {
+  background: #3d3b36;
+}
+
+.chess-move-selected {
+  background: #454b35 !important;
+  border-left: 3px solid #81b64c;
+  border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+  .chess-review-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .chess-board-square {
+    font-size: clamp(20px, 6vw, 38px);
+  }
+}
+
+.chess-board-with-eval {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.chess-board-with-eval .chess-review-board {
+  flex: 1;
+  min-width: 0;
+}
+
+.chess-eval-bar {
+  position: relative;
+  width: 22px;
+  flex: 0 0 22px;
+  background: #262626;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.chess-eval-white {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: #f2f2ef;
+  transition: height 0.25s ease;
+}
+
+.chess-eval-text {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #81b64c;
+  font-size: 10px;
+  font-weight: 800;
+  writing-mode: vertical-rl;
+  z-index: 2;
+}
+
+.chess-piece-image {
+  display: block;
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.chess-board-square {
+  font-size: 0 !important;
+}
+
+.chess-board-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.chess-board-controls button {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 3px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chess-board-controls button:hover:not(:disabled) {
+  background: #5a584f;
+}
+
+.chess-board-controls button:last-child {
+  background: #526c39;
+}
+
+.chess-board-controls button:last-child:hover {
+  background: #638348;
+}
+
+.chess-review-board-section:focus-visible {
+  outline: 2px solid #81b64c;
+  outline-offset: 3px;
+}
+
+/* FIX: Make the move list visible */
+
+.chess-dashboard-right {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.chess-move-list {
+  display: block !important;
+  width: 100% !important;
+  min-height: 150px !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  background: #302f2c !important;
+  border: 1px solid #555 !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+}
+
+.chess-move-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 8px !important;
+
+  color: #ffffff !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  padding: 10px 6px !important;
+  border-bottom: 1px solid #484641 !important;
+}
+.chess-move-point-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 9;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  max-width: calc(100% - 8px);
+  padding: 2px 6px;
+
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+  pointer-events: none;
+}
+
+.chess-move-point-symbol {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.chess-move-point-text {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Grade colors */
+.chess-grade-brilliant {
+  background: #1baca6;
+}
+
+.chess-grade-great {
+  background: #5c8bb0;
+}
+
+.chess-grade-best {
+  background: #81b64c;
+}
+
+.chess-grade-excellent {
+  background: #6aa84f;
+}
+
+.chess-grade-good {
+  background: #96af8b;
+  color: #1f1f1f;
+}
+
+.chess-grade-inaccuracy {
+  background: #f0c15c;
+  color: #1f1f1f;
+}
+
+.chess-grade-mistake {
+  background: #e69b50;
+}
+
+.chess-grade-blunder {
+  background: #e05252;
+}
+
+/* Small Chess.com-style classification markers */
+
+.chess-move-point-badge {
+  position: absolute !important;
+  top: auto !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  left: auto !important;
+
+  width: 23px !important;
+  height: 23px !important;
+  max-width: none !important;
+  padding: 0 !important;
+
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  border-radius: 50% !important;
+  border: 2px solid rgba(255,255,255,.85) !important;
+
+  color: white !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,.45) !important;
+
+  z-index: 12 !important;
+  pointer-events: none !important;
+}
+
+.chess-move-point-symbol {
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.chess-move-point-text {
+  display: none !important;
+}
+
+/* Prevent pieces from touching square edges */
+
+.chess-piece-image {
+  width: 88% !important;
+  height: 88% !important;
+  object-fit: contain !important;
+}
+
+/* Make arrows less distracting */
+
+.chess-best-move-overlay {
+  opacity: .6 !important;
+}
+
+/* Clean board edges */
+
+.chess-review-board {
+  border-radius: 5px !important;
+  overflow: hidden !important;
+}
+
+.chess-review-board-section {
+  padding: 14px !important;
+}
+
+/* STEP 35 — Larger review dashboard */
+
+#chess-unlimited-review-panel {
+  width: min(880px, calc(100vw - 32px)) !important;
+  height: min(820px, calc(100vh - 64px)) !important;
+  padding: 18px !important;
+}
+
+/* Give more space to the chessboard */
+
+#chess-unlimited-review-panel .chess-review-dashboard {
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 1.3fr)
+    minmax(0, 1fr) !important;
+  gap: 18px !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+#chess-unlimited-review-panel .chess-dashboard-left,
+#chess-unlimited-review-panel .chess-dashboard-right {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* Board container */
+
+#chess-unlimited-review-panel .chess-review-board-section {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 14px !important;
+
+  background: #302f2c !important;
+  border: 1px solid #484641 !important;
+  border-radius: 12px !important;
+}
+
+/* Board heading */
+
+#chess-unlimited-review-panel .chess-board-info {
+  padding: 4px 4px 14px !important;
+  text-align: center !important;
+  color: #f5f5f5 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+}
+
+/* Board and evaluation bar */
+
+#chess-unlimited-review-panel .chess-board-with-eval {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+#chess-unlimited-review-panel .chess-review-board {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+
+  overflow: hidden !important;
+  border-radius: 6px !important;
+}
+
+/* Evaluation bar */
+
+#chess-unlimited-review-panel .chess-eval-bar {
+  position: relative !important;
+  flex: 0 0 26px !important;
+  width: 26px !important;
+  align-self: stretch !important;
+
+  overflow: hidden !important;
+  border-radius: 5px !important;
+  background: #252525 !important;
+  border: 1px solid #555 !important;
+}
+
+#chess-unlimited-review-panel .chess-eval-white {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+
+  background: #f2f2ef !important;
+  transition: height .2s ease !important;
+}
+
+#chess-unlimited-review-panel .chess-eval-text {
+  position: absolute !important;
+  top: 8px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #81b64c !important;
+  z-index: 3 !important;
+}
+
+/* More polished navigation */
+
+#chess-unlimited-review-panel .chess-board-controls {
+  display: flex !important;
+  gap: 6px !important;
+  margin-top: 14px !important;
+}
+
+#chess-unlimited-review-panel .chess-board-controls button {
+  flex: 1 !important;
+  min-width: 0 !important;
+  padding: 11px 4px !important;
+
+  border-radius: 7px !important;
+  background: #484641 !important;
+  color: white !important;
+  font-size: 12px !important;
+
+  cursor: pointer !important;
+}
+
+#chess-unlimited-review-panel
+.chess-board-controls button:last-child {
+  background: #526c39 !important;
+}
+
+/* Graph column */
+
+#chess-unlimited-review-panel .chess-evaluation-graph {
+  width: 100% !important;
+  margin: 0 0 12px !important;
+  padding: 14px !important;
+  border-radius: 12px !important;
+}
+
+#chess-unlimited-review-panel .chess-evaluation-graph svg {
+  width: 100% !important;
+  height: 160px !important;
+}
+
+/* Keep smaller screens usable */
+
+@media (max-width: 700px) {
+  #chess-unlimited-review-panel
+  .chess-review-dashboard {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* Clean chess pieces and grade markers */
+
+#chess-unlimited-review-panel .chess-board-square {
+  position: relative !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#chess-unlimited-review-panel .chess-piece-image {
+  display: block !important;
+  width: 92% !important;
+  height: 92% !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+}
+
+/* Compact move classification badges */
+
+#chess-unlimited-review-panel .chess-move-point-badge {
+  position: absolute !important;
+  top: auto !important;
+  left: auto !important;
+  right: 1px !important;
+  bottom: 1px !important;
+
+  width: 23px !important;
+  height: 23px !important;
+  padding: 0 !important;
+
+  border-radius: 50% !important;
+  z-index: 12 !important;
+}
+
+#chess-unlimited-review-panel .chess-move-point-text {
+  display: none !important;
+}
+
+/* Less distracting Stockfish arrows */
+
+#chess-unlimited-review-panel .chess-best-move-overlay {
+  opacity: .55 !important;
+  pointer-events: none !important;
+}
+
+/* STEP 36 — Move Information Card */
+
+#chess-unlimited-review-panel .chess-move-info-card {
+  margin-top: 14px;
+  padding: 16px;
+  background: #302f2c;
+  border: 1px solid #484641;
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+.chess-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chess-info-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  flex-wrap: wrap;
+}
+
+.chess-info-title small {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.chess-info-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.chess-info-evaluation {
+  font-size: 19px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.chess-info-explanation {
+  margin: 14px 0;
+  color: #d4d3cf;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.chess-info-recommendation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #252520;
+  font-size: 12px;
+}
+
+.chess-info-recommendation span {
+  color: #bdbcb7;
+}
+
+.chess-info-recommendation strong {
+  color: #81b64c;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.chess-info-footer {
+  margin-top: 12px;
+  color: #a9a89f;
+  font-size: 11px;
+  line-height: 1.5;
+}
+/* Interactive review board: append to src/content.css */
+#chess-unlimited-review-panel .chess-board-square {
+  cursor: pointer;
+}
+
+#chess-unlimited-review-panel .chess-piece-image[draggable="true"] {
+  cursor: grab;
+}
+
+#chess-unlimited-review-panel .chess-piece-image[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+#chess-unlimited-review-panel .chess-square-selected {
+  box-shadow: inset 0 0 0 100px rgba(255, 204, 0, .48) !important;
+}
+
+#chess-unlimited-review-panel .chess-square-legal::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 25%;
+  height: 25%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(20, 20, 20, .25);
+  pointer-events: none;
+  z-index: 8;
+}
+
+#chess-unlimited-review-panel .chess-square-legal-capture::after {
+  content: "";
+  position: absolute;
+  inset: 3%;
+  border: 5px solid rgba(20, 20, 20, .32);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 8;
+}
+
+#chess-unlimited-review-panel .chess-variation-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+#chess-unlimited-review-panel .chess-variation-controls button {
+  flex: 1;
+  padding: 9px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: #526c39;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#chess-unlimited-review-panel .chess-variation-controls button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+#chess-unlimited-review-panel .chess-interaction-hint {
+  margin-top: 9px;
+  font-size: 11px;
+  color: #b8b6ad;
+  text-align: center;
+}
+
+#chess-unlimited-review-panel .chess-promotion-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #81b64c;
+  background: #252520;
+  color: #fff;
+}
+
+#chess-unlimited-review-panel .chess-promotion-picker[hidden] {
+  display: none !important;
+}
+
+#chess-unlimited-review-panel .chess-promotion-picker button {
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: #484641;
+  color: white;
+  cursor: pointer;
+}
+/* ===== FIX BOARD SHRINKING ===== */
+
+/* Give the left side a stable layout */
+#chess-unlimited-review-panel .chess-dashboard-left {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+}
+
+/* Keep the board section centered */
+#chess-unlimited-review-panel .chess-review-board-section {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+/* Prevent board + eval bar from collapsing */
+#chess-unlimited-review-panel .chess-board-with-eval {
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 10px !important;
+
+  width: min(100%, 520px) !important;
+  max-width: 520px !important;
+  flex: 0 0 auto !important;
+  margin: 0 auto !important;
+}
+
+/* MAIN FIX: constant board size */
+#chess-unlimited-review-panel .chess-review-board {
+  width: 480px !important;
+  height: 480px !important;
+  max-width: calc(100vw - 120px) !important;
+  max-height: calc(100vw - 120px) !important;
+
+  flex: 0 0 auto !important;
+  aspect-ratio: 1 / 1 !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(8, 1fr) !important;
+  grid-template-rows: repeat(8, 1fr) !important;
+
+  overflow: hidden !important;
+  border-radius: 6px !important;
+}
+
+/* Keep eval bar stable too */
+#chess-unlimited-review-panel .chess-eval-bar {
+  width: 26px !important;
+  min-width: 26px !important;
+  max-width: 26px !important;
+  flex: 0 0 26px !important;
+}
+
+/* Prevent square compression */
+#chess-unlimited-review-panel .chess-board-square {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+/* Keep piece size visually stable */
+#chess-unlimited-review-panel .chess-piece-image {
+  width: 86% !important;
+  height: 86% !important;
+  object-fit: contain !important;
+}
+
+/* Tablet/smaller screens */
+@media (max-width: 900px) {
+  #chess-unlimited-review-panel .chess-review-board {
+    width: 420px !important;
+    height: 420px !important;
+  }
+
+  #chess-unlimited-review-panel .chess-board-with-eval {
+    width: min(100%, 460px) !important;
+    max-width: 460px !important;
+  }
+}
+
+/* Mobile-ish width */
+@media (max-width: 700px) {
+  #chess-unlimited-review-panel .chess-review-board {
+    width: 340px !important;
+    height: 340px !important;
+  }
+
+  #chess-unlimited-review-panel .chess-board-with-eval {
+    width: min(100%, 380px) !important;
+    max-width: 380px !important;
+  }
+}
+
+/* Close button */
+
+#chess-unlimited-review-panel {
+  position: fixed !important;
+}
+
+#chess-unlimited-review-panel .chess-review-close {
+  position: sticky !important;
+  top: 0 !important;
+  float: right !important;
+
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  margin: 0 0 4px 8px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #484641 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 7px !important;
+
+  font-size: 18px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  z-index: 100 !important;
+}
+
+#chess-unlimited-review-panel .chess-review-close:hover {
+  background: #dc5353 !important;
+}
+
+/* =========================================
+   CHESS UNLIMITED REVIEW — FLOATING BUTTON
+   ========================================= */
+
+#chess-unlimited-review-btn {
+  position: fixed !important;
+
+  /* Keep it in the top-right corner */
+  top: 85px !important;
+  right: 20px !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  /* Prevent Chess.com from shrinking the button */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+
+  padding: 0 14px !important;
+  margin: 0 !important;
+
+  box-sizing: border-box !important;
+  flex: none !important;
+  flex-shrink: 0 !important;
+
+  /* Text styling */
+  font-family: Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+
+  /* Appearance */
+  background: #81b64c !important;
+  color: #ffffff !important;
+  border: 1px solid #6e9e3e !important;
+  border-radius: 9px !important;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.4) !important;
+
+  /* Always above Chess.com UI */
+  z-index: 2147483646 !important;
+
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  transition: background 0.2s ease !important;
+}
+
+#chess-unlimited-review-btn:hover {
+  background: #94c65c !important;
+}
+
+/* Keep the button usable on narrow screens */
+@media (max-width: 600px) {
+  #chess-unlimited-review-btn {
+    top: 60px !important;
+    right: 10px !important;
+
+    width: 170px !important;
+    min-width: 170px !important;
+    max-width: 170px !important;
+
+    font-size: 12px !important;
+  }
+}
+
+/* Move classification summary */
+
+#chess-unlimited-review-panel .chess-grade-summary {
+  margin: 14px 0;
+  padding: 14px;
+  background: #302f2c;
+  border: 1px solid #484641;
+  border-radius: 10px;
+}
+
+#chess-unlimited-review-panel .chess-grade-summary h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+#chess-unlimited-review-panel .chess-grade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  color: #fff;
+}
+
+#chess-unlimited-review-panel .chess-grade-table th,
+#chess-unlimited-review-panel .chess-grade-table td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #484641;
+}
+
+#chess-unlimited-review-panel .chess-grade-table th {
+  color: #bdbcb7;
+  font-weight: 700;
+}
+
+#chess-unlimited-review-panel .chess-grade-table td:not(:first-child),
+#chess-unlimited-review-panel .chess-grade-table th:not(:first-child) {
+  text-align: center;
+}
+
+.chess-debug-section {
+  margin: 14px 0;
+  padding: 12px;
+  background: #302f2c;
+  border: 1px solid #484641;
+  border-radius: 10px;
+}
+
+.chess-debug-section summary {
+  cursor: pointer;
+  color: #81b64c;
+  font-weight: 700;
+  padding: 5px;
+}
+
+.chess-debug-table {
+  display: block;
+  width: 100%;
+  max-height: 350px;
+  overflow: auto;
+  border-collapse: collapse;
+  color: #eee;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.chess-debug-table th,
+.chess-debug-table td {
+  padding: 8px;
+  border-bottom: 1px solid #484641;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Stockfish principal variation */
+
+#chess-unlimited-review-panel .chess-pv-section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #484641;
+}
+
+#chess-unlimited-review-panel .chess-pv-section h4 {
+  margin: 0 0 12px;
+  color: #f5f5f2;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#chess-unlimited-review-panel .chess-pv-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+#chess-unlimited-review-panel .chess-pv-move {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: #45433f;
+  color: #f4f4f0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#chess-unlimited-review-panel
+.chess-pv-move:first-child {
+  background: #526c39;
+  color: white;
+}
+
+#chess-unlimited-review-panel
+.chess-pv-section p {
+  color: #aaa9a2;
+  font-size: 12px;
+}
+/* Step 45 — click-to-preview Stockfish principal variations */
+#chess-unlimited-review-panel .chess-pv-clickable {
+  appearance: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+#chess-unlimited-review-panel .chess-pv-clickable:hover {
+  background: #5c7043;
+  border-color: #9bca67;
+}
+#chess-unlimited-review-panel .chess-pv-clickable:focus-visible {
+  outline: 2px solid #a6d76a;
+  outline-offset: 2px;
+}
+#chess-unlimited-review-panel .chess-pv-clickable.chess-pv-active {
+  background: #526c39;
+  border-color: #81b64c;
+  color: white;
+}
+
