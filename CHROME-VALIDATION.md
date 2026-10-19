@@ -8,7 +8,7 @@ Chromium 154 with Playwright launched successfully. Command-line extension loadi
 Loading of unpacked extensions is disabled by the administrator.
 ```
 
-This is an environment policy blocker. No browser review, real Chess.com fetch, board interaction, or UI pass is claimed. The policy was not modified. Actual-engine offscreen/background transport tests pass separately; those do not replace Chrome validation.
+Real Chromium component tests now verify local fixture navigation/import/cancellation and actual Stockfish WASM execution in a native browser Worker; see `RELEASE-VALIDATION.md`. Those checks do not establish an installed-extension review on live Chess.com. This is an environment policy blocker. No installed-extension review or real Chess.com fetch is claimed. Board/UI component passes are limited to the local fixtures. The policy was not modified. Actual-engine offscreen/background transport tests pass separately; those do not replace Chrome validation.
 
 ## Prepare a manual run
 

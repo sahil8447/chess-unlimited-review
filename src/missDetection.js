@@ -79,7 +79,7 @@ export function detectMissedOpportunity({
         typeof uci !== "string" ||
         !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)
       ) {
-        break;
+        return null;
       }
 
       let move;
@@ -91,10 +91,10 @@ export function detectMissedOpportunity({
           promotion: uci[4] || undefined
         });
       } catch {
-        break;
+        return null;
       }
 
-      if (!move) break;
+      if (!move) return null;
 
       playedMoves++;
 

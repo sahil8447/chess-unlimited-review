@@ -46,6 +46,10 @@ test('offscreen bridge: actual engine, paired searches, cache separation and inp
    const invalid=await send({fen,depth:8,searchmoves:pool,multiPV});
    assert.equal(invalid.success,false);assert.match(invalid.error,/Invalid MultiPV/);
   }
+  const interrupted=send({fen,depth:10});await new Promise(resolve=>setImmediate(resolve));
+  workers[0].onerror({message:'simulated worker interruption'});
+  const failed=await interrupted;assert.equal(failed.success,false);assert.match(failed.error,/interruption/);
+  const recovered=await send({fen,depth:10});assert.equal(recovered.success,true);assert.equal(workers.length,2);
  }finally{for(const worker of workers)worker.terminate();}
 });
 

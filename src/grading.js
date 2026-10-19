@@ -359,86 +359,10 @@ if (
  * Rating affects permitted evaluation loss.
  * These thresholds are our own heuristics.
  */
-export function classifyBrilliantMove({
-  baseGrade,
-  isVerifiedSacrifice = false,
-  beforeCp,
-  afterCp,
-  bestMovePlayed = false,
-  rating = null
-}) {
-  // Requirement 1: actual verified sacrifice.
-  if (!isVerifiedSacrifice) return baseGrade;
-
-  if (
-    !Number.isFinite(beforeCp) ||
-    !Number.isFinite(afterCp)
-  ) {
-    return baseGrade;
-  }
-
-  const hasRating =
-    Number.isFinite(rating) &&
-    rating > 0;
-
-  const beginner =
-    hasRating && rating < 1200;
-
-  const intermediate =
-    hasRating &&
-    rating >= 1200 &&
-    rating < 1800;
-
-  // Optional rating lenience.
-  // Unknown rating gets the standard thresholds.
-  const maxLoss = beginner
-    ? 0.045
-    : intermediate
-      ? 0.030
-      : 0.020;
-
-  const minAfterCp = beginner
-    ? -150
-    : intermediate
-      ? -125
-      : -100;
-
-  // Requirement 2:
-  // The sacrifice must not leave us clearly losing.
-  if (afterCp < minAfterCp) {
-    return baseGrade;
-  }
-
-  // Requirement 3:
-  // No Brilliant for an already overwhelmingly
-  // winning position.
-  if (beforeCp > 300) {
-    return baseGrade;
-  }
-
-  // Requirement 4:
-  // The move must be best or close to best.
-  const evaluationLoss = Math.max(
-    0,
-    winChance(beforeCp) - winChance(afterCp)
-  );
-
-  const nearBest =
-    bestMovePlayed ||
-    evaluationLoss <= maxLoss;
-
-  if (!nearBest) return baseGrade;
-
-  // Avoid promoting an obvious engine blunder.
-  if (
-    baseGrade === "blunder" ||
-    baseGrade === "mistake" ||
-    baseGrade === "inaccuracy"
-  ) {
-    return baseGrade;
-  }
-
-  return "brilliant";
+// Compatibility export only. A caller-supplied boolean and child/root scores
+// cannot replace the structured audit in brilliantRules.js. Awards stay off.
+export function classifyBrilliantMove({ baseGrade }) {
+  return baseGrade;
 }
 
 /*
@@ -455,14 +379,16 @@ export function calculateAlternativeLoss(candidates) {
 
   if (!best || !second) return null;
 
-  if (best.depth !== second.depth) return null;
+  if (!Number.isInteger(best.depth) || best.depth < 1 ||
+      best.depth !== second.depth || best.bound || second.bound) return null;
 
   function score(candidate) {
     if (
       candidate.mate !== null &&
       candidate.mate !== undefined
     ) {
-      return Math.sign(candidate.mate) * 10000;
+      return Number.isFinite(candidate.mate) && candidate.mate !== 0
+        ? Math.sign(candidate.mate) * 10000 : null;
     }
 
     return candidate.scoreCp;

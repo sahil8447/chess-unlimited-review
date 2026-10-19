@@ -1,5 +1,7 @@
 # Sacrifice recognition and counterfactual winning positions
 
+This document records the 65-test recognition phase. The subsequent master-task product fixes, expanded browser/component tests and GitHub delivery are recorded in `RELEASE-VALIDATION.md`.
+
 Automatic Brilliant awards remain **diagnostic-only**. Sound-sacrifice recognition is separate from final eligibility, and neither changes the displayed grade. No proprietary Chess.com labels are asserted for the new fixtures.
 
 ## Source changes

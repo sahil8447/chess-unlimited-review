@@ -48,7 +48,7 @@ function decodeTcnMove(encoded) {
   };
 }
 
-export async function fetchCurrentChessComPgn() {
+export async function fetchCurrentChessComPgn({signal} = {}) {
   const match = location.pathname.match(
     /^\/(?:analysis\/)?game\/(live|daily)\/(\d+)(?:\/|$)/
   );
@@ -64,6 +64,7 @@ export async function fetchCurrentChessComPgn() {
   const response = await fetch(
     `/callback/${gameType}/game/${gameId}`,
     {
+      signal,
       credentials: "same-origin",
       cache: "no-store",
       headers: {

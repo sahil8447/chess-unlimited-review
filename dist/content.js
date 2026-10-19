@@ -3485,7 +3485,7 @@
       ...promotion ? { promotion } : {}
     };
   }
-  async function fetchCurrentChessComPgn() {
+  async function fetchCurrentChessComPgn({ signal } = {}) {
     const match = location.pathname.match(
       /^\/(?:analysis\/)?game\/(live|daily)\/(\d+)(?:\/|$)/
     );
@@ -3498,6 +3498,7 @@
     const response = await fetch(
       `/callback/${gameType}/game/${gameId}`,
       {
+        signal,
         credentials: "same-origin",
         cache: "no-store",
         headers: {
@@ -3621,7 +3622,7 @@
       let playedMoves = 0;
       for (const uci of bestVariation.slice(0, 10)) {
         if (typeof uci !== "string" || !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)) {
-          break;
+          return null;
         }
         let move;
         try {
@@ -3631,9 +3632,9 @@
             promotion: uci[4] || void 0
           });
         } catch {
-          break;
+          return null;
         }
-        if (!move) break;
+        if (!move) return null;
         playedMoves++;
         if (move.captured) captures++;
       }
@@ -4143,10 +4144,10 @@
     const best = candidates.find((c) => c.rank === 1);
     const second = candidates.find((c) => c.rank === 2);
     if (!best || !second) return null;
-    if (best.depth !== second.depth) return null;
+    if (!Number.isInteger(best.depth) || best.depth < 1 || best.depth !== second.depth || best.bound || second.bound) return null;
     function score(candidate) {
       if (candidate.mate !== null && candidate.mate !== void 0) {
-        return Math.sign(candidate.mate) * 1e4;
+        return Number.isFinite(candidate.mate) && candidate.mate !== 0 ? Math.sign(candidate.mate) * 1e4 : null;
       }
       return candidate.scoreCp;
     }
@@ -4173,6 +4174,7 @@
       replay.move(move.san);
       positions.push(replay.fen());
     }
+    let destroyed = false;
     let currentPly = positions.length - 1;
     let flipped = false;
     let selectedSquare = null;
@@ -4212,7 +4214,7 @@
     }
     function requestLiveEvaluation() {
       invalidateLiveEvaluation();
-      if (!isExploring()) return;
+      if (destroyed || !container.isConnected || !isExploring()) return;
       const fen = currentFen();
       const requestVersion = liveRequestVersion;
       const cached = liveEvaluationCache.get(fen);
@@ -4231,6 +4233,7 @@
           bestMove: null
         };
         liveEvaluationCache.set(fen, liveEvaluation);
+        if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
         render(false);
         return;
       }
@@ -4245,7 +4248,7 @@
         liveDebounceTimer = null;
         try {
           const result = await evaluateLivePosition(fen, 12);
-          if (requestVersion !== liveRequestVersion || currentFen() !== fen || !isExploring()) return;
+          if (destroyed || requestVersion !== liveRequestVersion || currentFen() !== fen || !isExploring()) return;
           const positionTurn = fen.split(" ")[1];
           let whiteCp;
           if (result.mate !== null && result.mate !== void 0) {
@@ -4263,12 +4266,13 @@
             bestMove: result.bestMove ?? null
           };
           liveEvaluationCache.set(fen, evaluation);
+          if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
           liveEvaluation = evaluation;
           liveEvaluationPending = false;
           liveEvaluationError = "";
           render(false);
         } catch (error) {
-          if (requestVersion !== liveRequestVersion || !isExploring() || currentFen() !== fen) return;
+          if (destroyed || requestVersion !== liveRequestVersion || !isExploring() || currentFen() !== fen) return;
           liveEvaluationPending = false;
           liveEvaluationError = error?.message || "Engine request failed";
           console.error("[Chess Review] Live evaluation:", error);
@@ -4545,6 +4549,7 @@
       return badge;
     }
     function render(notify = true) {
+      if (destroyed) return;
       const chess = new Chess(currentFen());
       const squares = chess.board();
       const exploring = isExploring();
@@ -4634,7 +4639,7 @@
         }
       } else {
         const gradeInfo = currentReview && GRADES[currentReview.grade];
-        const moveTitle = currentPly === 0 ? "Starting Position" : `${Math.ceil(currentPly / 2)}${currentPly % 2 ? "." : "..."} ${moves[currentPly - 1].san}`;
+        const moveTitle = currentPly === 0 ? "Starting Position" : `${moves[currentPly - 1].before.split(" ")[5]}${moves[currentPly - 1].color === "w" ? "." : "..."} ${moves[currentPly - 1].san}`;
         const evalCp = graphData[currentPly]?.whiteCp;
         const evalLabel = Number.isFinite(evalCp) ? `${evalCp >= 0 ? "+" : ""}${(evalCp / 100).toFixed(2)}` : "N/A";
         info.textContent = `${moveTitle}${gradeInfo ? ` \xB7 ${gradeInfo.symbol} ${gradeInfo.label}` : ""} | Eval: ${evalLabel}`;
@@ -4678,7 +4683,12 @@
       }
     });
     render();
-    return { element: container, goToMove, showEngineVariation };
+    function destroy() {
+      destroyed = true;
+      invalidateLiveEvaluation();
+      liveEvaluationCache.clear();
+    }
+    return { element: container, goToMove, showEngineVariation, destroy };
   }
 
   // src/sacrificeMaterial.js
@@ -4987,6 +4997,15 @@
   (() => {
     const BUTTON_ID = "chess-unlimited-review-btn";
     const PANEL_ID = "chess-unlimited-review-panel";
+    const panelSessions = /* @__PURE__ */ new WeakMap();
+    function closePanel(panel) {
+      const session = panelSessions.get(panel);
+      session?.controller.abort();
+      session?.review?.abort();
+      session?.board?.destroy();
+      panelSessions.delete(panel);
+      panel.remove();
+    }
     function isGamePage() {
       return /^\/(game|analysis|games)(?:\/|$)/.test(
         location.pathname
@@ -5008,7 +5027,7 @@
       button.disabled = true;
       result.textContent = "Fetching game from Chess.com...";
       try {
-        const pgn2 = await fetchCurrentChessComPgn();
+        const pgn2 = await fetchCurrentChessComPgn({ signal: panelSessions.get(panel)?.controller.signal });
         if (!panel.isConnected) return;
         const testGame = new Chess();
         testGame.loadPgn(pgn2);
@@ -5039,11 +5058,12 @@
     function openPanel() {
       const existing = document.getElementById(PANEL_ID);
       if (existing) {
-        existing.remove();
+        closePanel(existing);
         return;
       }
       const panel = document.createElement("div");
       panel.id = PANEL_ID;
+      panelSessions.set(panel, { controller: new AbortController(), review: null, board: null });
       panel.innerHTML = `
     <h2>\u265F Unlimited Review</h2>
     <textarea
@@ -5062,14 +5082,14 @@
       closeButton.title = "Close Review";
       closeButton.setAttribute("aria-label", "Close Review");
       closeButton.addEventListener("click", () => {
-        panel.remove();
+        closePanel(panel);
       });
       panel.prepend(closeButton);
       panel.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
           event.preventDefault();
           event.stopPropagation();
-          panel.remove();
+          closePanel(panel);
         }
       });
       const pgnInput = panel.querySelector("#chess-review-pgn");
@@ -5103,6 +5123,7 @@
       }
     }
     async function evaluatePosition(fen, depth = 12, options = {}) {
+      options.signal?.throwIfAborted();
       const result = await chrome.runtime.sendMessage({
         type: "ANALYZE_POSITION",
         fen,
@@ -5110,6 +5131,7 @@
         searchmoves: options.searchmoves,
         multiPV: options.multiPV
       });
+      options.signal?.throwIfAborted();
       if (!result?.success) {
         throw new Error(
           result?.error || "Stockfish analysis failed"
@@ -5130,10 +5152,28 @@
       const button = document.getElementById("chess-review-import");
       if (!input || !result || !button) return;
       if (button.disabled) return;
+      const panel = input.closest(`#${PANEL_ID}`);
+      const session = panelSessions.get(panel);
+      if (!session) return;
+      session.review?.abort();
+      session.board?.destroy();
+      session.board = null;
+      const controller = new AbortController();
+      session.review = controller;
+      const signal = AbortSignal.any([session.controller.signal, controller.signal]);
+      const assertActive = () => {
+        if (!result.isConnected || session.review !== controller) controller.abort();
+        signal.throwIfAborted();
+      };
+      const evaluateReviewPosition = async (fen, depth, options = {}) => {
+        assertActive();
+        return evaluatePosition(fen, depth, { ...options, signal });
+      };
+      const pgn2 = input.value.trim();
       result.replaceChildren();
       const chess = new Chess();
       try {
-        chess.loadPgn(input.value.trim());
+        chess.loadPgn(pgn2);
       } catch (error) {
         result.textContent = "Invalid PGN: " + error.message;
         return;
@@ -5330,9 +5370,10 @@
           const position = new Chess(positionFens[i]);
           try {
             evaluations.push(
-              terminalEvaluation(position) || await evaluatePosition(positionFens[i], 12)
+              terminalEvaluation(position) || await evaluateReviewPosition(positionFens[i], 12)
             );
           } catch (error) {
+            if (signal.aborted) throw error;
             throw new Error(
               `Initial analysis failed at position ${i}/${moves.length}: ${error.message}`
             );
@@ -5358,11 +5399,12 @@
             const position = new Chess(positionFens[positionIndex]);
             if (position.isGameOver()) continue;
             try {
-              const deeper = await evaluatePosition(positionFens[positionIndex], 18);
+              const deeper = await evaluateReviewPosition(positionFens[positionIndex], 18);
               if (Number.isFinite(deeper.score) || deeper.mate != null) {
                 evaluations[positionIndex] = deeper;
               }
             } catch (error) {
+              if (signal.aborted) throw error;
               console.warn(
                 `[Deep Verification] Position ${positionIndex}: ${error.message}`
               );
@@ -5380,6 +5422,7 @@
         let brilliantAuditCount = 0;
         for (let i = 0; i < moves.length; i++) {
           await new Promise((resolve) => setTimeout(resolve, 0));
+          assertActive();
           const move = moves[i];
           const player = move.color;
           const before = evaluations[i];
@@ -5423,9 +5466,10 @@
                 beforeCp: beforePlayerCp,
                 afterCp: afterPlayerCp,
                 bestMovePlayed,
-                evaluatePosition,
+                evaluatePosition: evaluateReviewPosition,
                 depth: 18
               });
+              assertActive();
               const decision = classifyBrilliantMove({
                 baseGrade: classification.grade,
                 verification,
@@ -5434,8 +5478,9 @@
                 alternatives: before.candidates || []
               });
               brilliantDiagnostic = decision.reason;
-              console.info(`[Brilliant audit] ${Math.floor(i / 2) + 1}${player === "w" ? "." : "..."} ${move.san}: ${decision.reason}`, { verification, decision });
+              console.info(`[Brilliant audit] ${Number(beforeFen.split(" ")[5])}${player === "w" ? "." : "..."} ${move.san}: ${decision.reason}`, { verification, decision });
             } catch (error) {
+              if (signal.aborted) throw error;
               brilliantDiagnostic = `Verification error: ${error.message}`;
               console.warn(`[Brilliant verification] ${move.san}:`, error);
             }
@@ -5452,7 +5497,7 @@
             classification.grade = "miss";
           }
           reviewedMoves.push({
-            number: Math.floor(i / 2) + 1,
+            number: Number(beforeFen.split(" ")[5]),
             color: player,
             san: move.san,
             grade: classification.grade,
@@ -5480,6 +5525,7 @@
             result.textContent = `Classifying ${i + 1}/${moves.length} moves...`;
           }
         }
+        assertActive();
         const whiteAccuracy = calculateAccuracy(reviewedMoves, "w");
         const blackAccuracy = calculateAccuracy(reviewedMoves, "b");
         const gradeCounts = {
@@ -5604,7 +5650,7 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
           blunder: "This move caused a major loss of winning chances."
         };
         const reviewBoard = createReviewBoard(
-          input.value.trim(),
+          pgn2,
           reviewedMoves,
           graphData,
           (ply) => {
@@ -5619,6 +5665,7 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
           },
           evaluatePosition
         );
+        session.board = reviewBoard;
         result.appendChild(reviewBoard.element);
         const graph = createEvaluationGraph(
           graphData,
@@ -5654,7 +5701,7 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
           reviewBoard.element,
           moveInfoCard
         );
-        rightColumn.appendChild(graph, moveList);
+        rightColumn.append(graph, moveList);
         dashboard.append(leftColumn, rightColumn);
         result.appendChild(dashboard);
         for (const move of reviewedMoves) {
@@ -5676,17 +5723,21 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
         }
         updateMoveInfo(reviewedMoves.length);
       } catch (error) {
+        if (signal.aborted) return;
         console.error("[Chess Review]", error);
         result.textContent = "Analysis failed: " + error.message;
       } finally {
-        button.disabled = false;
-        button.textContent = "Analyze Game";
+        if (session.review === controller && button.isConnected) {
+          button.disabled = false;
+          button.textContent = "Analyze Game";
+        }
       }
     }
     function update() {
       if (!isGamePage()) {
         document.getElementById(BUTTON_ID)?.remove();
-        document.getElementById(PANEL_ID)?.remove();
+        const panel = document.getElementById(PANEL_ID);
+        if (panel) closePanel(panel);
         return;
       }
       createButton();

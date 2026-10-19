@@ -1,0 +1,59 @@
+{
+  "branch": "codex/complete-review-20261019",
+  "recoveredCommit": "5373e07f5546b57ca98a723e31404f6850b33e9e",
+  "workspace": "/workspace/chess-unlimited-review",
+  "windowsFolderDirectlyModified": false,
+  "platform": "Linux",
+  "node": "24.19.0",
+  "chromium": "154.0.8037.57",
+  "commands": [
+    "npm test (node --test test/*.test.mjs)",
+    "npm run build"
+  ],
+  "results": {
+    "tests": 102,
+    "pass": 101,
+    "fail": 0,
+    "skipped": 1
+  },
+  "build": "passed",
+  "skippedTest": {
+    "name": "genuine unpacked extension loading",
+    "reason": "Loading of unpacked extensions is disabled by the administrator."
+  },
+  "browserEvidence": "Local Chromium component fixtures and actual standalone WASM Worker; installed-extension/live Chess.com review remains unverified",
+  "brilliant": {
+    "automaticAwards": false,
+    "soundRecognitionCases": 13,
+    "soundRecognized": 13,
+    "eligibleSoundCases": 11,
+    "negativeMoveCases": 9,
+    "negativeEligible": 0,
+    "rxd7": {
+      "grade": "inaccuracy",
+      "eligible": true,
+      "reason": "Verified candidate; automatic Brilliant awards remain disabled",
+      "isSacrifice": true,
+      "sacrificeType": "forcing-temporary",
+      "bestMovePlayed": true,
+      "nearBest": true,
+      "depth": 18,
+      "playedMove": "d1d7",
+      "bestMove": "d1d7",
+      "beforeCp": 1003,
+      "playedCp": 1003,
+      "cpGap": 0,
+      "winChanceGap": 0,
+      "compensationVerified": true,
+      "alreadyCompletelyWinning": false,
+      "counterfactualVerified": true,
+      "bestNonSacrificingCp": 169,
+      "alternativeUpperBoundCp": 169,
+      "ratingUsed": 1037
+    }
+  },
+  "engineSha256": {
+    "engine/stockfish-19-lite-single.js": "ccb130d7ff29408531c47d859a49f91d59d4f482d05a53eb1a3231a4f624c91a",
+    "engine/stockfish-19-lite-single.wasm": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de"
+  }
+}
