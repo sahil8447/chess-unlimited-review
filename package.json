@@ -7,8 +7,12 @@
     "build": "node build.mjs",
     "test": "node --test test/*.test.mjs",
     "review": "node tools/review-report.mjs",
-    "benchmark": "node tools/benchmark-reviews.mjs",
-    "book:build": "node tools/build-book.mjs"
+    "benchmark": "node tools/benchmark-v12.mjs after",
+    "book:build": "node tools/build-book.mjs",
+    "benchmark:v1": "node tools/benchmark-reviews.mjs",
+    "benchmark:before": "node tools/benchmark-v12.mjs before",
+    "import:review": "node tools/import-review-export.mjs",
+    "probe:evidence": "node tools/probe-v12.mjs"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

@@ -1,0 +1,33 @@
+{
+  "version": "1.2",
+  "baseCommit": "e5c16022e20f1206441a5db7c62cb44be0c7ab0d",
+  "branch": "codex/chess-review-v1-2-evidence-fixes",
+  "tests": {
+    "command": "node --test test/*.test.mjs",
+    "total": 182,
+    "passed": 181,
+    "failed": 0,
+    "skipped": 1,
+    "durationMs": 107749.049479,
+    "skipReason": "Administrator policy disables loading unpacked Chrome extensions"
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true
+  },
+  "rawBrowserExportReceived": false,
+  "evidenceSource": "Supplied PGN, repository V1.1 reproduction, new real Stockfish WASM runs; not the missing browser export",
+  "automaticBrilliantAwardsEnabled": false,
+  "accuracy": {
+    "white": 68.4232404076921,
+    "black": 67.62576348609826,
+    "coefficientsChanged": false
+  },
+  "windowsRepositoryModified": false,
+  "limitations": [
+    "Original exported JSON not attached",
+    "Live installed-extension acceptance pending browser policy",
+    "Finite-depth evidence is not proof of ultimate game outcome",
+    "No multi-game labeled reference corpus to justify accuracy retuning"
+  ]
+}

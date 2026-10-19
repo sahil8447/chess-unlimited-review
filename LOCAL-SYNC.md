@@ -1,6 +1,6 @@
 # Synchronize the cloud work into the existing Windows project
 
-The prepared source is on GitHub branch **`codex/chess-review-v1-1-optimized`** in `sahil8447/chess-unlimited-review`. The cloud workspace is `/workspace/chess-unlimited-review`. No Windows drive is mounted here; nothing in this task directly writes `D:\Chess-Unlimited-review`.
+The prepared source is on GitHub branch **`codex/chess-review-v1-2-evidence-fixes`** in `sahil8447/chess-unlimited-review`. The cloud workspace is `/workspace/chess-unlimited-review`. No Windows drive is mounted here; nothing in this task directly writes `D:\Chess-Unlimited-review`.
 
 The earlier development existed only as uncommitted cloud files. It is now committed and pushed, including source, tests, historical PGNs, calibration evidence and the complete rebuilt `dist`. The remote `main` is not overwritten or force-pushed.
 
@@ -26,14 +26,14 @@ if ($hadChanges) {
 
 git fetch origin
 if ($LASTEXITCODE -ne 0) { throw 'Fetch failed; local backup and stash are retained.' }
-git switch --create review-v11-20261020 --track origin/codex/chess-review-v1-1-optimized
+git switch --create review-v12-20261020 --track origin/codex/chess-review-v1-2-evidence-fixes
 if ($LASTEXITCODE -ne 0) { throw 'Branch switch failed; inspect status rather than forcing it.' }
 git status --short
 git log -2 --oneline
 code 'D:\Chess-Unlimited-review'
 ```
 
-If `review-v11-20261020` already exists, the create command safely fails: inspect it with `git branch -vv`, then use `git switch review-v11-20261020` and `git pull --ff-only`. Do not reset or force it to match the remote.
+If `review-v12-20261020` already exists, the create command safely fails: inspect it with `git branch -vv`, then use `git switch review-v12-20261020` and `git pull --ff-only`. Do not reset or force it to match the remote.
 
 If `git status` says this is not a Git repository, or the remote differs, stop before switching and retain the backup. Do not initialize, replace or overwrite an unknown local project blindly. The published GitHub branch remains available for comparison and synchronization.
 

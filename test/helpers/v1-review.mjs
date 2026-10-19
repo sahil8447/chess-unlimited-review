@@ -1,9 +1,9 @@
 // Frozen extraction of V1 content pipeline at 25cd750; DOM writes suppressed only.
 import {Chess} from 'chess.js';
-import {detectSacrificeCandidate,verifyBrilliantCandidate} from '../../src/tactics.js';
-import {classifyBrilliantMove} from '../../src/brilliantRules.js';
+import {detectSacrificeCandidate,verifyBrilliantCandidate} from './v11/tactics.js';
+import {classifyBrilliantMove} from './v11/brilliantRules.js';
 import {classifyMove,calculateAccuracy,classifyTacticalMove,calculateAlternativeLoss,calculateMoveAccuracy,winChance} from './v1-grading.mjs';
-import {generateMoveExplanation} from '../../src/moveExplanation.js';
+import {generateMoveExplanation} from './v11/moveExplanation.js';
 import {detectMissedOpportunity} from './v1-miss.mjs';
 export async function runV1Review(pgn,evaluatePosition,{onPhase=()=>{}}={}) {
 const chess=new Chess();chess.loadPgn(pgn);

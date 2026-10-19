@@ -1,3 +1,4 @@
+import {formatEvaluation} from './evaluation.js';
 
 import { Chess } from "chess.js";
 
@@ -44,7 +45,7 @@ export function generateMoveExplanation({
   bestMove,
   bestMovePlayed,
   beforePlayerCp,
-  afterPlayerCp
+  afterPlayerCp,beforeEvaluation,afterEvaluation,mateEvidence
 }) {
   const after = new Chess(afterFen);
   const player = move.color === "w" ? "White" : "Black";
@@ -55,6 +56,14 @@ export function generateMoveExplanation({
   // 1. Checkmate by the player.
   if (after.isCheckmate()) {
     return `${move.san} delivers checkmate and ends the game.`;
+  }
+
+  if(mateEvidence && mateEvidence.kind!=='ordinary'){
+    const preferred=bestSan?` Stockfish preferred ${bestSan}.`:'';
+    if(mateEvidence.kind==='allows-forced-mate')return `This allows a forced mate (${formatEvaluation(afterEvaluation)} in the played root line). The best legal alternative did not have a forced-mate score at the verified depth.${preferred}`;
+    if(mateEvidence.kind==='unverified-mate-transition')return `Stockfish reports a mate-state change. Alternatives require deeper verification; this is not a centipawn loss.${preferred}`;
+    if(mateEvidence.kind==='misses-forced-mate')return `The verified best line had a forced mate; this continuation gives it up. The resulting evaluation is ${formatEvaluation(afterEvaluation)}.${preferred}`;
+    if(['best-mate-defense','shortens-existing-mate','already-forced-loss'].includes(mateEvidence.kind))return `${mateEvidence.forced?'This is the only legal move. ':''}The verified best defense was already subject to forced mate. ${mateEvidence.kind==='shortens-existing-mate'?'This line shortens the mate; it does not newly lose a defensible position.':'No escape from mate was found among the legal alternatives at the searched depth.'}${preferred}`;
   }
 
   // 2. Identify immediate checkmate opportunities

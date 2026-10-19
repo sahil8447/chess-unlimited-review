@@ -27,12 +27,44 @@ export function findMaterialOffers(chess,move,beforeFen=move?.before) {
     baseline-materialCp(after(chess,capture),move.color) >= MATERIAL_LIMITS.minimumCost);
 }
 
+// Static threat comparison, NOT a legal pass or a claimed game continuation.
+// Changing the turn lets chess.js test the attacker's king safety and pins.
+function threatPosition(position,color) {
+  if(position.turn()===color)return new Chess(position.fen());
+  const fields=position.fen().split(' ');fields[1]=color;fields[3]='-';
+  return new Chess(fields.join(' '));
+}
+function offerCausality({before,chess,move,capture,offeredSquare,materialCostCp}) {
+  if(offeredSquare===move.to)return {supported:true,kind:'moved-unit',beforeCapturable:false,reason:'The move placed the offered unit on its captured square'};
+  const unit=before.get(offeredSquare),present=chess.get(offeredSquare),opponent=chess.turn();
+  if(!unit || !present || unit.color!==move.color || unit.type!==present.type)return {supported:false,kind:'unknown',reason:'Offered-unit identity is not established'};
+  const previous=threatPosition(before,opponent);
+  const previousCaptures=previous.moves({verbose:true}).filter(reply=>reply.captured && reply.to===offeredSquare && reply.captured===unit.type);
+  if(!previousCaptures.length)return {supported:true,kind:'new-legal-offer',beforeCapturable:false,reason:'No king-safe capture of this unit was available in the before-position threat comparison'};
+  const prior=previousCaptures.map(oldCapture=>inspectMaterialOffer({before,chess:previous,move,capture:oldCapture,causalCheck:false}));
+  if(prior.some(item=>!item.materialTraceComplete))return {supported:false,kind:'unknown',beforeCapturable:true,reason:'Before-position exchange evidence exhausted its budget'};
+  const beforeCostCp=Math.max(...prior.map(item=>item.materialCostCp));
+  if(materialCostCp-beforeCostCp>=MATERIAL_LIMITS.minimumCost)return {supported:true,kind:'increased-investment',beforeCapturable:true,beforeCostCp,reason:'The move materially increased the loss after legal acceptance'};
+  // Narrow maintained-offer case: a voluntary pawn move opens a previously
+  // unavailable home-bishop development route while declining a legal central
+  // pawn exchange that removes the threat. Compensation is still engine-gated.
+  // Check evasions and arbitrary quiet moves do not satisfy this relation.
+  const canExchange=before.moves({verbose:true}).some(reply=>reply.from===offeredSquare && reply.to===capture.from && reply.captured==='p');
+  if(!before.isCheck() && !chess.isCheck() && move.piece==='p' && unit.type==='p' && capture.piece==='p' && canExchange){
+    const home=move.color==='w'?'1':'8';
+    const development=position=>position.moves({verbose:true}).filter(reply=>reply.piece==='b' && reply.from[1]===home && reply.to[1]!==home && !reply.captured).map(uciOf);
+    const oldRoutes=new Set(development(before)),newRoutes=development(threatPosition(chess,move.color)).filter(uci=>!oldRoutes.has(uci));
+    if(newRoutes.length)return {supported:true,kind:'maintained-development-gambit',beforeCapturable:true,beforeCostCp,newDevelopmentMoves:newRoutes,reason:'Voluntary development preparation maintains a central pawn investment instead of exchanging the attacker'};
+  }
+  return {supported:false,kind:'pre-existing-unrelated-threat',beforeCapturable:true,beforeCostCp,reason:'The same unit was already capturable for comparable material; the move supplies no supported offer causality'};
+}
+
 // Resolve direct recaptures, then at most one additional opponent-initiated
 // exchange on another square (e.g. ...Nxd5 Nxe5 Nxe5 Rxe5 in the Marshall).
 // Both sides may stop an exchange when not in check. All recorded continuations
 // are legal. This local material minimax is NOT a full tactical engine or proof
 // that its chosen line is forced. Stockfish separately verifies compensation.
-export function inspectMaterialOffer({before,chess,move,capture}) {
+export function inspectMaterialOffer({before,chess,move,capture,causalCheck=true}) {
   const mover=move.color,baseline=materialCp(before,mover),taken=after(chess,capture);
   let nodes=0,complete=true;
   const leaf = position => ({cp:materialCp(position,mover),line:[],trace:[]});
@@ -93,12 +125,14 @@ export function inspectMaterialOffer({before,chess,move,capture}) {
     if(next.isCheck())tacticalReplies.push({san:reply.san,captured:reply.captured,check:true});
   }
   const offeredSquare=capture.flags.includes('e') ? capture.to[0]+(mover==='w' ? '4' : '5') : capture.to;
-  return {capture:capture.san,captureUci:uciOf(capture),offeredSquare,
-    newlyExposed:!before.isAttacked(offeredSquare,mover==='w' ? 'b' : 'w'),
-    offeredPiece:capture.captured,discovered:capture.to!==move.to,
-    immediateCostCp,delayedCostCp,materialCostCp,materialTraceComplete:complete,exchangeNodes:nodes,
+  const causality=causalCheck ? offerCausality({before,chess,move,capture,offeredSquare,materialCostCp}) : {supported:true,kind:'internal-material-comparison'};
+  return {capture:capture.san,captureUci:uciOf(capture),offeredSquare,causality,
+    newlyExposed:causalCheck?causality.beforeCapturable===false:!before.isAttacked(offeredSquare,mover==='w'?'b':'w'),
+    geometricallyAttackedBefore:before.isAttacked(offeredSquare,mover==='w'?'b':'w'),
+    offeredPiece:capture.captured,discovered:offeredSquare!==move.to,
+    immediateCostCp,delayedCostCp,exposureCostCp:materialCostCp,materialCostCp:causality.supported?materialCostCp:0,materialTraceComplete:complete,exchangeNodes:nodes,
     materialContinuation:settled.line,materialTrace:settled.trace,
     tacticalReplies,ordinaryRecaptures:recaptures.map(reply=>({san:reply.san,captured:reply.captured})),
     forcingCompensation:tacticalReplies.length>0,
-    isSacrifice:materialCostCp>=MATERIAL_LIMITS.minimumCost || tacticalReplies.length>0};
+    isSacrifice:causality.supported && (materialCostCp>=MATERIAL_LIMITS.minimumCost || tacticalReplies.length>0)};
 }

@@ -1,4 +1,4 @@
-import { calculateMoveAccuracy } from './grading.js';
+import { calculateReviewedMoveAccuracy } from './grading.js';
 
 export const PERFORMANCE_MODEL = Object.freeze({ minRating: 400, maxRating: 2800, minMoves: 10, minEffective: 6 });
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
@@ -14,10 +14,12 @@ export function estimatePerformance({ moves, color, headers = {}, complete = fal
   if (own.length < PERFORMANCE_MODEL.minMoves) return insufficient('Too few moves');
   let weight = 0, quality = 0, errors = 0;
   for (const m of own) {
-    if (!Number.isFinite(m.beforePlayerCp) || !Number.isFinite(m.afterPlayerCp) || !Number.isInteger(m.legalChoices)) return insufficient('Missing analysis evidence');
+    const moveAccuracy=calculateReviewedMoveAccuracy(m);
+    if (moveAccuracy===null || !Number.isInteger(m.legalChoices)) return insufficient('Missing analysis evidence');
     // Forced moves, obvious recaptures, opening moves and decided positions contribute little/no evidence.
-    const w = m.legalChoices <= 1 || m.obviousRecapture || Math.abs(m.beforePlayerCp) >= 600 ? 0 : m.number <= 6 ? 0.25 : 1;
-    const accuracy = calculateMoveAccuracy(m.beforePlayerCp, m.afterPlayerCp);
+    const matePosition=m.beforeEvaluation && m.beforeEvaluation.kind!=='cp' && m.beforeEvaluation.kind!=='draw';
+    const w = matePosition || m.legalChoices <= 1 || m.obviousRecapture || Math.abs(m.beforePlayerCp) >= 600 ? 0 : m.number <= 6 ? 0.25 : 1;
+    const accuracy = moveAccuracy;
     weight += w;
     quality += w * accuracy;
     errors += w * (['blunder', 'miss'].includes(m.grade) ? 2 : m.grade === 'mistake' ? 1 : 0);

@@ -1,4 +1,66 @@
 (() => {
+  // src/evaluation.js
+  function normalizeEvaluation(raw, { turn = "w", pov = turn, terminal = false } = {}) {
+    const sign = turn === pov ? 1 : -1, depth = Number.isInteger(raw?.depth) ? raw.depth : null;
+    if (!raw || raw.error || raw.success === false) return { kind: "unknown", depth, reason: "Missing or failed engine result" };
+    if (raw.kind) {
+      if (raw.kind === "cp" && Number.isFinite(raw.cp)) return { ...raw, cp: raw.cp * sign, depth };
+      if (raw.kind === "mate" && Number.isInteger(raw.moves) && raw.moves !== 0) return { ...raw, moves: raw.moves * sign, depth };
+      if (raw.kind === "checkmate" && [-1, 1].includes(raw.outcome)) return { ...raw, outcome: raw.outcome * sign, depth };
+      if (raw.kind === "draw") return { ...raw, depth };
+      return { kind: "unknown", depth, reason: "Invalid typed evaluation" };
+    }
+    if (terminal) {
+      if (raw.mate != null) return { kind: "checkmate", outcome: -sign, depth: 0 };
+      return { kind: "draw", depth: 0 };
+    }
+    const cp = raw.scoreCp ?? raw.score;
+    if (raw.mate != null) {
+      if (!Number.isInteger(raw.mate) || raw.mate === 0 || cp != null) return { kind: "unknown", depth, reason: "Contradictory or invalid mate result" };
+      return { kind: "mate", moves: sign * raw.mate, depth };
+    }
+    return Number.isFinite(cp) ? { kind: "cp", cp: sign * cp, depth } : { kind: "unknown", depth, reason: "Missing finite score" };
+  }
+  var evaluationCp = (e) => e?.kind === "cp" ? e.cp : e?.kind === "draw" ? 0 : null;
+  function evaluationChance(e) {
+    if (e?.kind === "mate") return Number.isInteger(e.moves) && e.moves !== 0 && e.cp == null ? e.moves > 0 ? 1 : 0 : null;
+    if (e?.kind === "checkmate") return [-1, 1].includes(e.outcome) && e.cp == null ? e.outcome > 0 ? 1 : 0 : null;
+    if (e?.kind === "draw") return e.cp == null && e.moves == null ? 0.5 : null;
+    if (e?.kind === "cp" && Number.isFinite(e.cp) && e.moves == null) return 1 / (1 + Math.exp(-368208e-8 * Math.max(-1e4, Math.min(1e4, e.cp))));
+    return null;
+  }
+  function formatEvaluation(e) {
+    if (evaluationChance(e) === null) return "Unknown";
+    if (e?.kind === "cp") return `${e.cp >= 0 ? "+" : ""}${(e.cp / 100).toFixed(2)}`;
+    if (e?.kind === "mate") return `${e.moves > 0 ? "+" : "\u2212"}M${Math.abs(e.moves)}`;
+    if (e?.kind === "checkmate") return e.outcome > 0 ? "Checkmate delivered" : "Checkmated";
+    if (e?.kind === "draw") return "Draw";
+    return "Unknown";
+  }
+  function evaluationLoss(before, after2) {
+    const a = evaluationChance(before), b = evaluationChance(after2);
+    return a == null || b == null ? null : Math.max(0, a - b);
+  }
+  function classifyMateTransition({ before, after: after2, bestMovePlayed, verified = false, legalChoices }) {
+    const beforeMated = before?.kind === "mate" && before.moves < 0;
+    const afterMated = after2?.kind === "mate" && after2.moves < 0 || after2?.kind === "checkmate" && after2.outcome < 0;
+    if (before?.kind === "unknown" || after2?.kind === "unknown") return { kind: "unknown", forced: false };
+    if (after2?.kind === "checkmate" && after2.outcome > 0) return { kind: "delivers-checkmate", forced: false };
+    if (beforeMated && afterMated) return { kind: bestMovePlayed ? "best-mate-defense" : Math.abs(after2.moves || 0) < Math.abs(before.moves) ? "shortens-existing-mate" : "already-forced-loss", forced: legalChoices === 1 };
+    if (!beforeMated && afterMated) return { kind: verified ? "allows-forced-mate" : "unverified-mate-transition", forced: false };
+    if (before?.kind === "mate" && before.moves > 0 && !(after2?.kind === "mate" && after2.moves > 0) && !(after2?.kind === "checkmate" && after2.outcome > 0)) return { kind: verified ? "misses-forced-mate" : "unverified-mate-transition", forced: false };
+    return { kind: "ordinary", forced: false };
+  }
+  function compareEvaluations(a, b) {
+    if (evaluationChance(a) == null || evaluationChance(b) == null) return null;
+    const tier = (e) => e.kind === "checkmate" ? 3 * e.outcome : e.kind === "mate" ? 2 * Math.sign(e.moves) : 0;
+    const difference = tier(a) - tier(b);
+    if (difference) return Math.sign(difference);
+    if (a.kind === "mate" && b.kind === "mate") return Math.sign(a.moves > 0 ? b.moves - a.moves : Math.abs(a.moves) - Math.abs(b.moves));
+    if (a.kind === "checkmate") return 0;
+    return Math.sign((evaluationCp(a) ?? 0) - (evaluationCp(b) ?? 0));
+  }
+
   // node_modules/chess.js/dist/esm/chess.js
   function rootNode(comment) {
     return comment !== null ? { comment, variations: [] } : { variations: [] };
@@ -3513,32 +3575,40 @@
   function classifyMove({
     beforeCp,
     afterCp,
-    bestMovePlayed
+    bestMovePlayed,
+    beforeEvaluation,
+    afterEvaluation,
+    qualityVerified = false,
+    legalChoices
   }) {
-    if (!Number.isFinite(beforeCp) || !Number.isFinite(afterCp)) {
-      return { grade: "good", loss: 0 };
+    const typed = Boolean(beforeEvaluation && afterEvaluation);
+    const mateEvidence = typed ? classifyMateTransition({ before: beforeEvaluation, after: afterEvaluation, bestMovePlayed, verified: qualityVerified, legalChoices }) : null;
+    if (!typed && (!Number.isFinite(beforeCp) || !Number.isFinite(afterCp))) return { grade: "good", loss: 0 };
+    const loss = typed ? evaluationLoss(beforeEvaluation, afterEvaluation) : clamp(winChance(beforeCp) - winChance(afterCp), 0, 1);
+    if (loss == null) return { grade: "good", loss: null, mateEvidence };
+    if (mateEvidence && mateEvidence.kind !== "ordinary") {
+      let grade;
+      if (mateEvidence.kind === "delivers-checkmate") grade = "best";
+      else if (["best-mate-defense", "shortens-existing-mate", "already-forced-loss"].includes(mateEvidence.kind)) grade = bestMovePlayed || legalChoices === 1 ? "best" : "good";
+      else if (mateEvidence.kind === "allows-forced-mate") grade = loss >= 0.2 ? "blunder" : "mistake";
+      if (grade) return { grade, loss, mateEvidence };
     }
-    const loss = clamp(
-      winChance(beforeCp) - winChance(afterCp),
-      0,
-      1
-    );
     if (loss >= 0.2) {
-      return { grade: "blunder", loss };
+      return { grade: "blunder", loss, ...mateEvidence ? { mateEvidence } : {} };
     }
     if (loss >= 0.1) {
-      return { grade: "mistake", loss };
+      return { grade: "mistake", loss, ...mateEvidence ? { mateEvidence } : {} };
     }
     if (loss >= 0.05) {
-      return { grade: "inaccuracy", loss };
+      return { grade: "inaccuracy", loss, ...mateEvidence ? { mateEvidence } : {} };
     }
     if (bestMovePlayed) {
-      return { grade: "best", loss };
+      return { grade: "best", loss, ...mateEvidence ? { mateEvidence } : {} };
     }
     if (loss <= 5e-3) {
-      return { grade: "excellent", loss };
+      return { grade: "excellent", loss, ...mateEvidence ? { mateEvidence } : {} };
     }
-    return { grade: "good", loss };
+    return { grade: "good", loss, ...mateEvidence ? { mateEvidence } : {} };
   }
   function moveAccuracyFromWinLoss(winLoss) {
     if (!Number.isFinite(winLoss)) return null;
@@ -3555,6 +3625,13 @@
     const loss = Math.max(0, beforeWin - afterWin);
     return moveAccuracyFromWinLoss(loss);
   }
+  function calculateReviewedMoveAccuracy(move) {
+    if (move.beforeEvaluation && move.afterEvaluation) {
+      const loss = evaluationLoss(move.beforeEvaluation, move.afterEvaluation);
+      return loss == null ? null : moveAccuracyFromWinLoss(loss * 100);
+    }
+    return calculateMoveAccuracy(move.beforePlayerCp, move.afterPlayerCp);
+  }
   function standardDeviation(values) {
     if (values.length < 2) return 0;
     const mean = values.reduce((sum, n) => sum + n, 0) / values.length;
@@ -3569,7 +3646,7 @@
       return null;
     }
     if (reviewedMoves.some(
-      (move) => !Number.isFinite(move.beforePlayerCp) || !Number.isFinite(move.afterPlayerCp)
+      (move) => calculateReviewedMoveAccuracy(move) === null
     )) {
       console.warn(
         "[Accuracy] Missing evaluation data"
@@ -3584,7 +3661,9 @@
         (move) => move.color === "w" ? move.afterPlayerCp : -move.afterPlayerCp
       )
     ];
-    const winPercents = whiteCps.map((cp) => winChance(cp) * 100);
+    const typedPositions = reviewedMoves.every((m) => m.positionBeforeEvaluation && m.positionAfterEvaluation);
+    const winPercents = typedPositions ? [evaluationChance(first.positionBeforeEvaluation) * 100, ...reviewedMoves.map((m) => evaluationChance(m.positionAfterEvaluation) * 100)] : whiteCps.map((cp) => winChance(cp) * 100);
+    if (winPercents.some((n) => !Number.isFinite(n))) return null;
     const windowSize = clamp(
       Math.floor(reviewedMoves.length / 10),
       2,
@@ -3615,10 +3694,7 @@
     for (let i = 0; i < reviewedMoves.length; i++) {
       const move = reviewedMoves[i];
       if (move.color !== color) continue;
-      const accuracy = calculateMoveAccuracy(
-        move.beforePlayerCp,
-        move.afterPlayerCp
-      );
+      const accuracy = calculateReviewedMoveAccuracy(move);
       if (accuracy === null) return null;
       accuracies.push(accuracy);
       contributions.push({ index: i, accuracy, weight: weights[i] });
@@ -3665,21 +3741,10 @@
     const second = candidates.find((c) => c.rank === 2);
     if (!best || !second) return null;
     if (!Number.isInteger(best.depth) || best.depth < 1 || best.depth !== second.depth || best.bound || second.bound) return null;
-    function score(candidate) {
-      if (candidate.mate !== null && candidate.mate !== void 0) {
-        return Number.isFinite(candidate.mate) && candidate.mate !== 0 ? Math.sign(candidate.mate) * 1e4 : null;
-      }
-      return candidate.scoreCp;
-    }
-    const bestCp = score(best);
-    const secondCp = score(second);
-    if (!Number.isFinite(bestCp) || !Number.isFinite(secondCp)) {
-      return null;
-    }
-    return Math.max(
-      0,
-      winChance(bestCp) - winChance(secondCp)
-    );
+    const bestChance = evaluationChance(normalizeEvaluation(best));
+    const secondChance = evaluationChance(normalizeEvaluation(second));
+    if (bestChance == null || secondChance == null) return null;
+    return Math.max(0, bestChance - secondChance);
   }
 
   // src/sacrificeMaterial.js
@@ -3708,7 +3773,34 @@
     const baseline = materialCp(new Chess(beforeFen), move.color);
     return chess.moves({ verbose: true }).filter((capture) => capture.captured && baseline - materialCp(after(chess, capture), move.color) >= MATERIAL_LIMITS.minimumCost);
   }
-  function inspectMaterialOffer({ before, chess, move, capture }) {
+  function threatPosition(position, color) {
+    if (position.turn() === color) return new Chess(position.fen());
+    const fields = position.fen().split(" ");
+    fields[1] = color;
+    fields[3] = "-";
+    return new Chess(fields.join(" "));
+  }
+  function offerCausality({ before, chess, move, capture, offeredSquare, materialCostCp }) {
+    if (offeredSquare === move.to) return { supported: true, kind: "moved-unit", beforeCapturable: false, reason: "The move placed the offered unit on its captured square" };
+    const unit = before.get(offeredSquare), present = chess.get(offeredSquare), opponent = chess.turn();
+    if (!unit || !present || unit.color !== move.color || unit.type !== present.type) return { supported: false, kind: "unknown", reason: "Offered-unit identity is not established" };
+    const previous = threatPosition(before, opponent);
+    const previousCaptures = previous.moves({ verbose: true }).filter((reply) => reply.captured && reply.to === offeredSquare && reply.captured === unit.type);
+    if (!previousCaptures.length) return { supported: true, kind: "new-legal-offer", beforeCapturable: false, reason: "No king-safe capture of this unit was available in the before-position threat comparison" };
+    const prior = previousCaptures.map((oldCapture) => inspectMaterialOffer({ before, chess: previous, move, capture: oldCapture, causalCheck: false }));
+    if (prior.some((item) => !item.materialTraceComplete)) return { supported: false, kind: "unknown", beforeCapturable: true, reason: "Before-position exchange evidence exhausted its budget" };
+    const beforeCostCp = Math.max(...prior.map((item) => item.materialCostCp));
+    if (materialCostCp - beforeCostCp >= MATERIAL_LIMITS.minimumCost) return { supported: true, kind: "increased-investment", beforeCapturable: true, beforeCostCp, reason: "The move materially increased the loss after legal acceptance" };
+    const canExchange = before.moves({ verbose: true }).some((reply) => reply.from === offeredSquare && reply.to === capture.from && reply.captured === "p");
+    if (!before.isCheck() && !chess.isCheck() && move.piece === "p" && unit.type === "p" && capture.piece === "p" && canExchange) {
+      const home = move.color === "w" ? "1" : "8";
+      const development = (position) => position.moves({ verbose: true }).filter((reply) => reply.piece === "b" && reply.from[1] === home && reply.to[1] !== home && !reply.captured).map(uciOf);
+      const oldRoutes = new Set(development(before)), newRoutes = development(threatPosition(chess, move.color)).filter((uci) => !oldRoutes.has(uci));
+      if (newRoutes.length) return { supported: true, kind: "maintained-development-gambit", beforeCapturable: true, beforeCostCp, newDevelopmentMoves: newRoutes, reason: "Voluntary development preparation maintains a central pawn investment instead of exchanging the attacker" };
+    }
+    return { supported: false, kind: "pre-existing-unrelated-threat", beforeCapturable: true, beforeCostCp, reason: "The same unit was already capturable for comparable material; the move supplies no supported offer causality" };
+  }
+  function inspectMaterialOffer({ before, chess, move, capture, causalCheck = true }) {
     const mover = move.color, baseline = materialCp(before, mover), taken = after(chess, capture);
     let nodes = 0, complete = true;
     const leaf = (position) => ({ cp: materialCp(position, mover), line: [], trace: [] });
@@ -3772,16 +3864,20 @@
       if (next.isCheck()) tacticalReplies.push({ san: reply.san, captured: reply.captured, check: true });
     }
     const offeredSquare = capture.flags.includes("e") ? capture.to[0] + (mover === "w" ? "4" : "5") : capture.to;
+    const causality = causalCheck ? offerCausality({ before, chess, move, capture, offeredSquare, materialCostCp }) : { supported: true, kind: "internal-material-comparison" };
     return {
       capture: capture.san,
       captureUci: uciOf(capture),
       offeredSquare,
-      newlyExposed: !before.isAttacked(offeredSquare, mover === "w" ? "b" : "w"),
+      causality,
+      newlyExposed: causalCheck ? causality.beforeCapturable === false : !before.isAttacked(offeredSquare, mover === "w" ? "b" : "w"),
+      geometricallyAttackedBefore: before.isAttacked(offeredSquare, mover === "w" ? "b" : "w"),
       offeredPiece: capture.captured,
-      discovered: capture.to !== move.to,
+      discovered: offeredSquare !== move.to,
       immediateCostCp,
       delayedCostCp,
-      materialCostCp,
+      exposureCostCp: materialCostCp,
+      materialCostCp: causality.supported ? materialCostCp : 0,
       materialTraceComplete: complete,
       exchangeNodes: nodes,
       materialContinuation: settled.line,
@@ -3789,7 +3885,7 @@
       tacticalReplies,
       ordinaryRecaptures: recaptures.map((reply) => ({ san: reply.san, captured: reply.captured })),
       forcingCompensation: tacticalReplies.length > 0,
-      isSacrifice: materialCostCp >= MATERIAL_LIMITS.minimumCost || tacticalReplies.length > 0
+      isSacrifice: causality.supported && (materialCostCp >= MATERIAL_LIMITS.minimumCost || tacticalReplies.length > 0)
     };
   }
 
@@ -3839,13 +3935,16 @@
     }
   }
   var lineScore = (line) => scoreForMover({ score: line.scoreCp, mate: line.mate }, "w", "w");
-  async function auditCaptureResponses({ before, chess, move, evaluatePosition, depth }) {
+  async function auditCaptureResponses({ before, chess, move, evaluatePosition, depth, prepared }) {
     const captures = findMaterialOffers(chess, move, before.fen());
     if (!captures.length) return { verified: true, isSacrifice: false, reason: "No legal net material offer", acceptedLines: [], materialCostCp: 0, offeredCaptureCount: 0 };
     if (captures.length > MATERIAL_LIMITS.maxCaptures) return { verified: false, reason: "Capture audit budget exceeded" };
+    const local = prepared || captures.map((capture) => inspectMaterialOffer({ before, chess, move, capture }));
+    const causalityComplete = local.every((line) => line.causality.supported || line.exposureCostCp < 75);
+    if (!local.some((line) => line.isSacrifice)) return { verified: true, isSacrifice: false, reason: causalityComplete ? "No material investment survives the legal exchange" : "Pre-existing unrelated threat; sacrifice causality unsupported", acceptedLines: local, causalityComplete, materialTraceComplete: local.every((line) => line.materialTraceComplete), materialCostCp: Math.max(...local.map((line) => line.materialCostCp)), offeredCaptureCount: local.length };
     const acceptedLines = [];
-    for (const capture of captures) {
-      const evidence = inspectMaterialOffer({ before, chess, move, capture });
+    for (const [index, capture] of captures.entries()) {
+      const evidence = local[index];
       const taken = new Chess(chess.fen());
       playUci(taken, uciOf(capture));
       const score = await engineScore(taken, move.color, evaluatePosition, depth);
@@ -3855,11 +3954,12 @@
     const materialCostCp = Math.max(...acceptedLines.map((line) => line.materialCostCp));
     const primaryOffer = acceptedLines.filter((line) => line.isSacrifice).sort((a, b) => b.materialCostCp - a.materialCostCp || Number(a.discovered) - Number(b.discovered))[0];
     const delayed = primaryOffer?.immediateCostCp < 75 && primaryOffer?.delayedCostCp >= 75;
-    const forcingCompensation = acceptedLines.some((line) => line.forcingCompensation);
+    const forcingCompensation = acceptedLines.some((line) => line.isSacrifice && line.forcingCompensation);
     return {
       verified: true,
       reason: "Audited legal offers and bounded material continuations",
       acceptedLines,
+      causalityComplete,
       isSacrifice: acceptedLines.some((line) => line.isSacrifice),
       materialCostCp,
       sacrificeType: primaryOffer?.forcingCompensation ? "forcing-temporary" : primaryOffer?.discovered ? "discovered-material" : delayed ? "delayed-material" : materialCostCp >= 75 ? "material" : "equal-exchange",
@@ -3910,6 +4010,7 @@
       if (iteration === 2) return fail("Counterfactual sacrifice-exclusion budget exceeded");
       const audit = await auditCaptureResponses({ before, chess: position, move: altMove, evaluatePosition, depth });
       if (!audit.verified || !audit.materialTraceComplete) return fail("Alternative material evidence incomplete or budget exhausted");
+      if (!audit.isSacrifice && !audit.causalityComplete) return fail("Winning alternative only leaves a persistent unrelated offer; exclusion is ambiguous");
       if (!audit.isSacrifice) {
         entry.nonSacrificing = true;
         return finish(true, "An alternative recovers its material and maintains a decisive advantage", alternative, true);
@@ -3931,7 +4032,7 @@
   async function verifyBrilliantCandidate({ chess, beforeFen, move, evaluatePosition, depth = 18 }) {
     const reject = (reason, data = {}) => ({ verified: false, reason, ...data });
     if (!chess || !beforeFen || !move || typeof evaluatePosition !== "function") return reject("Missing position or engine");
-    let before;
+    let before, prepared;
     try {
       before = new Chess(beforeFen);
       const replay = new Chess(beforeFen);
@@ -3940,6 +4041,8 @@
       const offers = findMaterialOffers(chess, move, beforeFen);
       if (!offers.length) return reject("No legal net material offer");
       if (offers.length > MATERIAL_LIMITS.maxCaptures) return reject("Capture audit budget exceeded");
+      prepared = offers.map((capture) => inspectMaterialOffer({ before, chess, move, capture }));
+      if (!prepared.some((line) => line.isSacrifice)) return auditCaptureResponses({ before, chess, move, evaluatePosition, depth, prepared });
     } catch (error) {
       return reject(`Invalid position: ${error.message}`);
     }
@@ -3957,7 +4060,7 @@
       const mateCompatible = bestLine?.mate == null ? playedLine?.mate == null : bestLine.mate > 0 && playedLine?.mate > 0 && playedLine.mate <= bestLine.mate + 1;
       const qualityVerified = Boolean(bestLine && playedLine && mateCompatible);
       const playedCp = qualityVerified ? lineScore(playedLine) : null, beforeCp = qualityVerified ? lineScore(bestLine) : null;
-      const audit = await auditCaptureResponses({ before, chess, move, evaluatePosition, depth });
+      const audit = await auditCaptureResponses({ before, chess, move, evaluatePosition, depth, prepared });
       if (!audit.verified) return reject(audit.reason);
       const counterfactual = qualityVerified && audit.isSacrifice && playedCp >= -100 && deepAfter >= -100 && audit.worstAcceptedCp >= -100 ? await analyzeCounterfactual({ before, move, root: unrestricted, evaluatePosition, depth }) : { verified: false, alreadyCompletelyWinning: null, reason: "Sacrifice or quality/soundness gates not established" };
       return {
@@ -3988,8 +4091,8 @@
   function detectMissedOpportunity({ beforeFen, bestVariation, bestMovePlayed, beforePlayerCp, afterPlayerCp, color, evidence }) {
     if (bestMovePlayed || !beforeFen || !Array.isArray(bestVariation) || bestVariation.length < 3 || !["w", "b"].includes(color)) return null;
     if (!Number.isFinite(beforePlayerCp) || !Number.isFinite(afterPlayerCp)) return null;
-    const loss = winChance(beforePlayerCp) - winChance(afterPlayerCp), evaluationLoss = beforePlayerCp - afterPlayerCp;
-    if (evaluationLoss < 150 || loss < 0.1 || beforePlayerCp < 100 || afterPlayerCp >= 100) return null;
+    const loss = winChance(beforePlayerCp) - winChance(afterPlayerCp), evaluationLoss2 = beforePlayerCp - afterPlayerCp;
+    if (evaluationLoss2 < 150 || loss < 0.1 || beforePlayerCp < 100 || afterPlayerCp >= 100) return null;
     const { root, quality, minDepth = 18 } = evidence || {};
     const primary = root?.candidates?.find((line) => line.rank === 1 && line.move === root.bestMove);
     if (!quality || quality.source !== "same-root" || quality.depth < Math.max(18, minDepth) || root?.depth !== quality.depth || quality.beforeCp !== beforePlayerCp || quality.afterCp !== afterPlayerCp || !completeRootLine(primary, beforeFen, root.depth) || bestVariation.join(" ") !== primary.pv.join(" ")) return null;
@@ -4011,7 +4114,7 @@
         if (move.captured) captures++;
         if (i < 2 || game.turn() === color) continue;
         const gain = materialBalance(game, color) - baseline;
-        if (game.isCheckmate()) return { grade: "miss", materialGain: gain, evaluationLoss, winChanceLoss: loss, depth: root.depth, plies: i + 1, explanation: "The verified best line forces checkmate; the played move loses that winning opportunity." };
+        if (game.isCheckmate()) return { grade: "miss", materialGain: gain, evaluationLoss: evaluationLoss2, winChanceLoss: loss, depth: root.depth, plies: i + 1, explanation: "The verified best line forces checkmate; the played move loses that winning opportunity." };
         if (!captures || gain < 2 || future.slice(i).some((value) => value < 2)) continue;
         const replies = game.moves({ verbose: true });
         if (replies.some((reply) => {
@@ -4023,7 +4126,7 @@
         return {
           grade: "miss",
           materialGain: gain,
-          evaluationLoss,
+          evaluationLoss: evaluationLoss2,
           winChanceLoss: loss,
           depth: root.depth,
           plies: i + 1,
@@ -4128,7 +4231,10 @@
     bestMove,
     bestMovePlayed,
     beforePlayerCp,
-    afterPlayerCp
+    afterPlayerCp,
+    beforeEvaluation,
+    afterEvaluation,
+    mateEvidence
   }) {
     const after2 = new Chess(afterFen);
     const player = move.color === "w" ? "White" : "Black";
@@ -4136,6 +4242,13 @@
     const bestSan = getBestMoveSan(beforeFen, bestMove);
     if (after2.isCheckmate()) {
       return `${move.san} delivers checkmate and ends the game.`;
+    }
+    if (mateEvidence && mateEvidence.kind !== "ordinary") {
+      const preferred = bestSan ? ` Stockfish preferred ${bestSan}.` : "";
+      if (mateEvidence.kind === "allows-forced-mate") return `This allows a forced mate (${formatEvaluation(afterEvaluation)} in the played root line). The best legal alternative did not have a forced-mate score at the verified depth.${preferred}`;
+      if (mateEvidence.kind === "unverified-mate-transition") return `Stockfish reports a mate-state change. Alternatives require deeper verification; this is not a centipawn loss.${preferred}`;
+      if (mateEvidence.kind === "misses-forced-mate") return `The verified best line had a forced mate; this continuation gives it up. The resulting evaluation is ${formatEvaluation(afterEvaluation)}.${preferred}`;
+      if (["best-mate-defense", "shortens-existing-mate", "already-forced-loss"].includes(mateEvidence.kind)) return `${mateEvidence.forced ? "This is the only legal move. " : ""}The verified best defense was already subject to forced mate. ${mateEvidence.kind === "shortens-existing-mate" ? "This line shortens the mate; it does not newly lose a defensible position." : "No escape from mate was found among the legal alternatives at the searched depth."}${preferred}`;
     }
     if (["blunder", "mistake"].includes(grade)) {
       const replies = after2.moves({ verbose: true });
@@ -4220,9 +4333,11 @@
     if (own.length < PERFORMANCE_MODEL.minMoves) return insufficient("Too few moves");
     let weight = 0, quality = 0, errors = 0;
     for (const m of own) {
-      if (!Number.isFinite(m.beforePlayerCp) || !Number.isFinite(m.afterPlayerCp) || !Number.isInteger(m.legalChoices)) return insufficient("Missing analysis evidence");
-      const w = m.legalChoices <= 1 || m.obviousRecapture || Math.abs(m.beforePlayerCp) >= 600 ? 0 : m.number <= 6 ? 0.25 : 1;
-      const accuracy = calculateMoveAccuracy(m.beforePlayerCp, m.afterPlayerCp);
+      const moveAccuracy = calculateReviewedMoveAccuracy(m);
+      if (moveAccuracy === null || !Number.isInteger(m.legalChoices)) return insufficient("Missing analysis evidence");
+      const matePosition = m.beforeEvaluation && m.beforeEvaluation.kind !== "cp" && m.beforeEvaluation.kind !== "draw";
+      const w = matePosition || m.legalChoices <= 1 || m.obviousRecapture || Math.abs(m.beforePlayerCp) >= 600 ? 0 : m.number <= 6 ? 0.25 : 1;
+      const accuracy = moveAccuracy;
       weight += w;
       quality += w * accuracy;
       errors += w * (["blunder", "miss"].includes(m.grade) ? 2 : m.grade === "mistake" ? 1 : 0);
@@ -4245,20 +4360,14 @@
     if (position.isGameOver()) return { bestMove: null, score: 0, mate: null, candidates: [], terminal: true };
     return null;
   }
-  function whiteScore(evaluation, turn) {
-    const cp = scoreForMover(evaluation, turn, "w");
-    if (!Number.isFinite(cp)) throw Error("Missing finite engine score");
-    return cp;
-  }
   function rootQuality(root, move, depth) {
     if (root?.depth !== depth || root.error || root.success === false) return null;
     const lines = (root.candidates || []).filter((line) => completeRootLine(line, move.before, depth));
     const best = lines.find((line) => line.rank === 1 && line.move === root.bestMove);
     const played = lines.find((line) => line.move === uciOf(move));
     if (!best || !played) return null;
-    const score = (line) => scoreForMover({ score: line.scoreCp, mate: line.mate }, "w", "w");
-    if (score(played) > score(best)) return null;
-    return { beforeCp: score(best), afterCp: score(played), bestMove: best.move, depth, source: "same-root", bestMate: best.mate ?? null, playedMate: played.mate ?? null, playedPV: played.pv };
+    if (compareEvaluations(normalizeEvaluation(played), normalizeEvaluation(best)) > 0) return null;
+    return { beforeEvaluation: { ...normalizeEvaluation(best), basis: "root-best-line" }, afterEvaluation: { ...normalizeEvaluation(played), basis: "root-played-line" }, beforeCp: evaluationCp(normalizeEvaluation(best)), afterCp: evaluationCp(normalizeEvaluation(played)), bestMove: best.move, depth, source: "same-root", bestMate: best.mate ?? null, playedMate: played.mate ?? null, playedPV: played.pv, rootBestLine: best, playedLine: played };
   }
   function validatePrimary(result, fen, depth) {
     const primary = result?.candidates?.find((line) => line.rank === 1 && line.move === result.bestMove);
@@ -4277,13 +4386,33 @@
     return entry && Number.isInteger(ply) && ply <= entry[2] ? { eco: entry[0], name: entry[1], source: "lichess-org/chess-openings (CC0)" } : null;
   }
 
+  // src/reviewSnapshot.js
+  function snapshotReview(report, { state = "complete", elapsedMs = report.metrics?.totalMs || 0, gameResult = report.headers?.Result } = {}) {
+    const final = state === "complete", copy = structuredClone(report);
+    copy.schemaVersion = 2;
+    copy.complete = final;
+    copy.lifecycle = {
+      state,
+      fullGameImported: ["1-0", "0-1", "1/2-1/2"].includes(gameResult),
+      initialAnalysisComplete: Boolean(report.reviewedMoves?.length),
+      criticalVerificationComplete: ["diagnostics-running", "complete", "partial"].includes(state) || report.lifecycle?.criticalVerificationComplete === true,
+      finalAnalysisComplete: final,
+      diagnosticsRequested: Boolean(report.options?.audits),
+      errors: copy.metrics?.errors?.length || 0
+    };
+    copy.metrics = { ...copy.metrics, totalMs: Math.max(0, elapsedMs) };
+    copy.timingDefinitions = { totalMs: "Wall time from review start to this snapshot; excludes PGN fetch and final DOM render", engineMs: "Sum of actual non-cached search durations, nested in requestMs", requestMs: "Serial awaited request time including IPC/cache/initialization; nested in baseMs/criticalMs/brilliantMs", initializationMs: "Engine readiness wait inside requestMs; not additive", criticalMs: "Critical-root and reply verification wall time, including requests, yields and progressive update callbacks (nested assembly/render work)", missMs: "Subset of classificationMs", classificationMs: "All report assembly time; not additive with missMs", engineSearches: "Known successful uncached engine requests; unknownRequestCount identifies failed or uninstrumented requests", fetchMs: "Separate import wall time, if measured in browser", renderMs: "Separate rendering work; initial rendering may also be nested in totalMs" };
+    return copy;
+  }
+
   // src/reviewEngine.js
-  var REVIEW_LIMITS = Object.freeze({ baseDepth: 12, criticalDepth: 18, maxCritical: 12, maxGreat: 4, maxReplyChecks: 4, maxAudits: 4, maxPlies: 2e3 });
+  var REVIEW_LIMITS = Object.freeze({ baseDepth: 12, criticalDepth: 18, maxCritical: 12, maxGreat: 4, maxReplyChecks: 4, maxMateChecks: 4, maxAudits: 4, maxPlies: 2e3 });
   var now = () => globalThis.performance.now();
   var yieldPage = () => new Promise((resolve) => setTimeout(resolve, 0));
   async function runReview(pgn2, evaluatePosition, { signal, onProgress = () => {
   }, onInitial = () => {
-  }, book = true, audits = false, baseDepth = 12, criticalDepth = 18 } = {}) {
+  }, onUpdate, onState = () => {
+  }, book = true, audits = false, baseDepth = 12, criticalDepth = 18, detailed = false } = {}) {
     if (!Number.isInteger(baseDepth) || baseDepth < 8 || baseDepth > 18 || !Number.isInteger(criticalDepth) || criticalDepth < baseDepth || criticalDepth > 20) throw Error("Unsupported review depths");
     const started = now(), game = new Chess();
     game.loadPgn(pgn2);
@@ -4297,7 +4426,8 @@
       terminals.push(historyReplay.isThreefoldRepetition() && !(i === moves.length - 1 && headers.Result === "1/2-1/2") ? terminalEvaluation(new Chess(historyReplay.fen())) : terminalEvaluation(historyReplay));
     }
     const metrics = { requests: 0, localCacheHits: 0, transportCacheHits: 0, engineMs: 0, initializationMs: 0, requestMs: 0, baseMs: 0, criticalMs: 0, brilliantMs: 0, missMs: 0, classificationMs: 0, initialMs: 0, totalMs: 0, criticalMoves: 0, greatVerifications: 0, replyChecks: 0, audits: 0, errors: [] };
-    const cache = /* @__PURE__ */ new Map();
+    const cache = /* @__PURE__ */ new Map(), searchLog = [], verifications = [];
+    let workContext = { stage: "base", ply: null }, latestReport = null;
     const active = () => signal?.throwIfAborted();
     const evaluate = async (fen, depth, options = {}) => {
       active();
@@ -4308,11 +4438,14 @@
       }
       const start = now();
       metrics.requests++;
+      const request = { id: metrics.requests, ...workContext, fen, depth, multiPV: options.multiPV ?? 3, searchmoves: options.searchmoves || [], status: "running" };
+      searchLog.push(request);
       try {
         const promise = Promise.resolve(evaluatePosition(fen, depth, options));
         cache.set(key, promise);
         const value = await promise;
         active();
+        Object.assign(request, { status: "complete", cacheHit: value.cacheHit ?? null, engineMs: value.cacheHit ? 0 : value.engineMs ?? null });
         if (value.cacheHit) metrics.transportCacheHits++;
         else {
           metrics.engineMs += value.engineMs || 0;
@@ -4320,198 +4453,269 @@
         }
         return value;
       } catch (error) {
+        request.status = "failed";
+        request.error = error.message;
         cache.delete(key);
         throw error;
       } finally {
-        metrics.requestMs += now() - start;
+        request.elapsedMs = now() - start;
+        metrics.requestMs += request.elapsedMs;
       }
     };
-    const evaluations = [], quality = /* @__PURE__ */ new Map(), deepRoots = /* @__PURE__ */ new Map();
-    let phaseStart = now();
-    for (let i = 0; i < positions.length; i++) {
-      active();
-      const position = positions[i];
-      const result = terminals[i] || await evaluate(position.fen(), baseDepth, { multiPV: 1 });
-      evaluations.push(terminals[i] || validatePrimary(result, position.fen(), baseDepth));
-      onProgress({ stage: "Evaluating positions", done: i + 1, total: positions.length });
-    }
-    metrics.baseMs = now() - phaseStart;
-    function assemble(final) {
-      const graphData = evaluations.map((e, i) => ({ ply: i, whiteCp: whiteScore(e, positions[i].turn()) }));
-      const reviewedMoves = moves.map((move, i) => {
-        const before = evaluations[i], after2 = evaluations[i + 1], beforeFen = move.before;
-        const sign = move.color === "w" ? 1 : -1;
-        const positionBeforeCp = sign * graphData[i].whiteCp, positionAfterCp = sign * graphData[i + 1].whiteCp;
-        const root = deepRoots.get(i) || before;
-        const coherent = quality.get(i) || rootQuality(before, move, baseDepth);
-        const beforePlayerCp = coherent?.beforeCp ?? positionBeforeCp, afterPlayerCp = coherent?.afterCp ?? positionAfterCp;
-        const bestMovePlayed = root.bestMove === uciOf(move);
-        const classification = classifyMove({ beforeCp: beforePlayerCp, afterCp: afterPlayerCp, bestMovePlayed });
-        const initialGrade = classifyMove({ beforeCp: positionBeforeCp, afterCp: positionAfterCp, bestMovePlayed: before.bestMove === uciOf(move) }).grade;
-        const alternativeLoss = coherent?.source === "same-root" && root.depth >= Math.max(18, criticalDepth) ? calculateAlternativeLoss(root.candidates) : null;
-        let grade = classifyTacticalMove({ baseGrade: classification.grade, bestMovePlayed, beforeCp: beforePlayerCp, afterCp: afterPlayerCp, alternativeLoss });
-        const missStart = now();
-        const miss = final && ["inaccuracy", "mistake", "blunder"].includes(grade) ? detectMissedOpportunity({ beforeFen, bestVariation: root.pv, bestMovePlayed, beforePlayerCp, afterPlayerCp, color: move.color, evidence: { root, quality: coherent, minDepth: criticalDepth } }) : null;
-        metrics.missMs += now() - missStart;
-        if (miss) grade = "miss";
-        const opening = !headers.FEN ? lookupBook(beforeFen, uciOf(move)) : null;
-        if (book && opening && ["best", "excellent", "good"].includes(grade)) grade = "book";
-        const previous = moves[i - 1];
+    try {
+      let assemble = function(final) {
+        const graphData = evaluations.map((e, i) => {
+          const evaluation = normalizeEvaluation(e, { turn: positions[i].turn(), pov: "w", terminal: Boolean(terminals[i]) });
+          return { ply: i, whiteCp: evaluationCp(evaluation), evaluation };
+        });
+        const reviewedMoves = moves.map((move, i) => {
+          const before = evaluations[i], after2 = evaluations[i + 1], beforeFen = move.before;
+          const sign = move.color === "w" ? 1 : -1;
+          const positionBeforeEvaluation = graphData[i].evaluation, positionAfterEvaluation = graphData[i + 1].evaluation;
+          const baseBefore = normalizeEvaluation(before, { turn: positions[i].turn(), pov: move.color, terminal: Boolean(terminals[i]) });
+          const baseAfter = normalizeEvaluation(after2, { turn: positions[i + 1].turn(), pov: move.color, terminal: Boolean(terminals[i + 1]) });
+          const positionBeforeCp = evaluationCp(baseBefore), positionAfterCp = evaluationCp(baseAfter);
+          const root = deepRoots.get(i) || before;
+          const coherent = quality.get(i) || rootQuality(before, move, baseDepth);
+          const beforeEvaluation = coherent?.beforeEvaluation ?? baseBefore, afterEvaluation = terminals[i + 1] ? baseAfter : coherent?.afterEvaluation ?? baseAfter;
+          const beforePlayerCp = evaluationCp(beforeEvaluation), afterPlayerCp = evaluationCp(afterEvaluation);
+          const bestMovePlayed = root.bestMove === uciOf(move), legalChoices = positions[i].moves().length;
+          const previous = moves[i - 1], obviousRecapture = Boolean(move.captured && previous?.captured && previous.to === move.to);
+          const classification = classifyMove({ beforeCp: beforePlayerCp, afterCp: afterPlayerCp, beforeEvaluation, afterEvaluation, bestMovePlayed, qualityVerified: quality.has(i), legalChoices });
+          const initialGrade = classifyMove({ beforeCp: positionBeforeCp, afterCp: positionAfterCp, beforeEvaluation: baseBefore, afterEvaluation: baseAfter, bestMovePlayed: before.bestMove === uciOf(move), legalChoices }).grade;
+          const alternativeLoss = coherent?.source === "same-root" && root.depth >= Math.max(18, criticalDepth) ? calculateAlternativeLoss(root.candidates) : null;
+          let grade = legalChoices === 1 || obviousRecapture ? classification.grade : classifyTacticalMove({ baseGrade: classification.grade, bestMovePlayed, beforeCp: beforePlayerCp, afterCp: afterPlayerCp, alternativeLoss });
+          const missStart = now();
+          const miss = final && ["inaccuracy", "mistake", "blunder"].includes(grade) ? detectMissedOpportunity({ beforeFen, bestVariation: root.pv, bestMovePlayed, beforePlayerCp, afterPlayerCp, color: move.color, evidence: { root, quality: coherent, minDepth: criticalDepth } }) : null;
+          metrics.missMs += now() - missStart;
+          if (miss) grade = "miss";
+          const opening = !headers.FEN ? lookupBook(beforeFen, uciOf(move)) : null;
+          if (book && opening && ["best", "excellent", "good"].includes(grade)) grade = "book";
+          return {
+            number: Number(beforeFen.split(" ")[5]),
+            color: move.color,
+            san: move.san,
+            uci: uciOf(move),
+            beforeFen,
+            afterFen: move.after,
+            legalChoices,
+            obviousRecapture,
+            initialGrade,
+            grade,
+            loss: classification.loss,
+            cpLoss: beforeEvaluation.kind === "cp" && afterEvaluation.kind === "cp" ? Math.max(0, beforePlayerCp - afterPlayerCp) : null,
+            beforePlayerCp,
+            afterPlayerCp,
+            beforeEvaluation,
+            afterEvaluation,
+            mateEvidence: classification.mateEvidence ?? null,
+            positionBeforeEvaluation,
+            positionAfterEvaluation,
+            positionBeforeCp,
+            positionAfterCp,
+            positionBeforeWhiteCp: graphData[i].whiteCp,
+            positionAfterWhiteCp: graphData[i + 1].whiteCp,
+            accuracyContribution: calculateReviewedMoveAccuracy({ beforeEvaluation, afterEvaluation }),
+            qualitySource: coherent?.source || "adjacent-position estimate",
+            qualityEvidence: coherent ?? null,
+            depth: coherent?.depth || before.depth || 0,
+            afterDepth: after2.depth || 0,
+            deepVerified: Boolean(quality.get(i)),
+            bestMove: root.bestMove,
+            bestMovePlayed,
+            bestVariation: root.pv || [],
+            evaluation: graphData[i + 1].whiteCp === null ? null : graphData[i + 1].whiteCp / 100,
+            bestMate: coherent?.bestMate ?? null,
+            playedMate: coherent?.playedMate ?? null,
+            book: opening || null,
+            alternativeLoss,
+            missDiagnostic: miss || null,
+            brilliantDiagnostic: audits ? "Pending optional audit" : "Optional diagnostic audit not requested",
+            explanation: grade === "book" ? `Recorded in the local Lichess opening book (source line ${opening.eco}). Accuracy still uses the engine evaluation.` : miss?.explanation || generateMoveExplanation({ move, grade, beforeFen, afterFen: move.after, bestMove: root.bestMove, bestMovePlayed, beforePlayerCp, afterPlayerCp, beforeEvaluation, afterEvaluation, mateEvidence: classification.mateEvidence })
+          };
+        });
         return {
-          number: Number(beforeFen.split(" ")[5]),
-          color: move.color,
-          san: move.san,
-          uci: uciOf(move),
-          beforeFen,
-          afterFen: move.after,
-          legalChoices: positions[i].moves().length,
-          obviousRecapture: Boolean(move.captured && previous?.captured && previous.to === move.to),
-          initialGrade,
-          grade,
-          loss: classification.loss,
-          cpLoss: Math.max(0, beforePlayerCp - afterPlayerCp),
-          beforePlayerCp,
-          afterPlayerCp,
-          positionBeforeCp,
-          positionAfterCp,
-          positionBeforeWhiteCp: graphData[i].whiteCp,
-          positionAfterWhiteCp: graphData[i + 1].whiteCp,
-          accuracyContribution: calculateMoveAccuracy(beforePlayerCp, afterPlayerCp),
-          qualitySource: coherent?.source || "adjacent-position estimate",
-          depth: coherent?.depth || before.depth || 0,
-          afterDepth: after2.depth || 0,
-          deepVerified: Boolean(quality.get(i)),
-          bestMove: root.bestMove,
-          bestMovePlayed,
-          bestVariation: root.pv || [],
-          evaluation: graphData[i + 1].whiteCp / 100,
-          bestMate: coherent?.bestMate ?? null,
-          playedMate: coherent?.playedMate ?? null,
-          book: opening || null,
-          alternativeLoss,
-          missDiagnostic: miss || null,
-          brilliantDiagnostic: audits ? "Pending optional audit" : "Optional diagnostic audit not requested",
-          explanation: grade === "book" ? `Recorded in the local Lichess opening book (source line ${opening.eco}). Accuracy still uses the engine evaluation.` : miss?.explanation || generateMoveExplanation({ move, grade, beforeFen, afterFen: move.after, bestMove: root.bestMove, bestMovePlayed, beforePlayerCp, afterPlayerCp })
+          pgn: pgn2,
+          headers,
+          scorePerspectives: { quality: "mover", position: "white", engine: "side-to-move" },
+          options: { book, audits, baseDepth, criticalDepth, detailed },
+          searchLog,
+          verifications,
+          reviewedMoves,
+          graphData,
+          whiteAccuracy: calculateAccuracy(reviewedMoves, "w"),
+          blackAccuracy: calculateAccuracy(reviewedMoves, "b"),
+          performance: Object.fromEntries(["w", "b"].map((color) => [color, estimatePerformance({ moves: reviewedMoves, color, headers, complete: final && metrics.errors.length === 0, customStart: Boolean(headers.FEN) })])),
+          metrics
         };
-      });
-      return {
-        pgn: pgn2,
-        headers,
-        reviewedMoves,
-        graphData,
-        whiteAccuracy: calculateAccuracy(reviewedMoves, "w"),
-        blackAccuracy: calculateAccuracy(reviewedMoves, "b"),
-        performance: Object.fromEntries(["w", "b"].map((color) => [color, estimatePerformance({ moves: reviewedMoves, color, headers, complete: final && metrics.errors.length === 0, customStart: Boolean(headers.FEN) })])),
-        metrics
       };
-    }
-    phaseStart = now();
-    let initial = assemble(false);
-    metrics.classificationMs += now() - phaseStart;
-    active();
-    metrics.initialMs = now() - started;
-    await onInitial(initial);
-    active();
-    const critical = moves.map((move, i) => {
-      const row = initial.reviewedMoves[i];
-      return { i, loss: Math.max(0, winChance(row.positionBeforeCp) - winChance(row.positionAfterCp)) };
-    }).filter(({ loss }) => loss >= 0.04).sort((a, b) => b.loss - a.loss).slice(0, REVIEW_LIMITS.maxCritical);
-    const greatCandidates = initial.reviewedMoves.map((row, i) => ({ row, i })).filter(
-      ({ row, i }) => row.bestMovePlayed && !row.book && Math.abs(row.positionBeforeCp) < 300 && row.positionAfterCp > -100 && row.legalChoices > 1 && !critical.some((item) => item.i === i)
-    ).slice(0, REVIEW_LIMITS.maxGreat).map(({ i }) => ({ i, great: true }));
-    const verifications = [...critical, ...greatCandidates];
-    phaseStart = now();
-    for (const { i, great } of verifications) {
+      const evaluations = [], quality = /* @__PURE__ */ new Map(), deepRoots = /* @__PURE__ */ new Map();
+      let phaseStart = now();
+      for (let i = 0; i < positions.length; i++) {
+        active();
+        const position = positions[i];
+        workContext = { stage: "base", ply: i };
+        const result = terminals[i] || await evaluate(position.fen(), baseDepth, { multiPV: 1 });
+        evaluations.push(terminals[i] || validatePrimary(result, position.fen(), baseDepth));
+        onProgress({ stage: "Evaluating positions", done: i + 1, total: positions.length });
+      }
+      metrics.baseMs = now() - phaseStart;
+      phaseStart = now();
+      let initial = assemble(false);
+      metrics.classificationMs += now() - phaseStart;
       active();
-      const move = moves[i];
-      try {
-        const root = validatePrimary(await evaluate(move.before, criticalDepth, { multiPV: 2 }), move.before, criticalDepth);
-        deepRoots.set(i, root);
-        let comparison = rootQuality(root, move, criticalDepth);
-        if (!comparison) {
-          const pair = await evaluate(move.before, criticalDepth, { searchmoves: [root.bestMove, uciOf(move)], multiPV: 2 });
-          comparison = rootQuality(pair, move, criticalDepth);
+      metrics.initialMs = now() - started;
+      const updateCounters = () => {
+        metrics.engineSearches = searchLog.filter((r) => r.status === "complete" && r.cacheHit === false).length;
+        metrics.unknownRequestCount = searchLog.filter((r) => typeof r.cacheHit !== "boolean").length;
+        metrics.cacheHitRate = (metrics.transportCacheHits + metrics.localCacheHits) / Math.max(1, metrics.requests + metrics.localCacheHits);
+      };
+      const publish = async (report2, state, callback) => {
+        updateCounters();
+        metrics.totalMs = now() - started;
+        latestReport = snapshotReview(report2, { state, elapsedMs: metrics.totalMs });
+        if (callback) await callback(latestReport);
+        active();
+      };
+      await publish(initial, "initial-ready", onInitial);
+      const progressive = async () => {
+        if (onUpdate) {
+          const start = now(), update = assemble(false);
+          metrics.classificationMs += now() - start;
+          metrics.criticalMs = now() - phaseStart;
+          await publish(update, "critical-running", onUpdate);
         }
-        if (!comparison) throw Error("Played move lacks complete equal-depth root evidence");
-        quality.set(i, comparison);
-        metrics.criticalMoves++;
-        if (great) metrics.greatVerifications++;
-      } catch (error) {
+      };
+      const critical = moves.map((move, i) => {
+        const row = initial.reviewedMoves[i];
+        return { i, reason: "practical-loss", loss: evaluationLoss(normalizeEvaluation(evaluations[i], { turn: positions[i].turn(), pov: move.color, terminal: Boolean(terminals[i]) }), normalizeEvaluation(evaluations[i + 1], { turn: positions[i + 1].turn(), pov: move.color, terminal: Boolean(terminals[i + 1]) })) ?? 0 };
+      }).filter(({ loss }) => loss >= 0.04).sort((a, b) => b.loss - a.loss).slice(0, detailed ? REVIEW_LIMITS.maxCritical * 2 : REVIEW_LIMITS.maxCritical);
+      const greatCandidates = initial.reviewedMoves.map((row, i) => ({ row, i })).filter(
+        ({ row, i }) => row.bestMovePlayed && !row.obviousRecapture && !row.book && Math.abs(row.positionBeforeCp) < 300 && row.positionAfterCp > -100 && row.legalChoices > 1 && !critical.some((item) => item.i === i)
+      ).slice(0, REVIEW_LIMITS.maxGreat).map(({ i }) => ({ i, great: true, reason: "great-candidate" }));
+      const mateCandidates = initial.reviewedMoves.map((row, i) => ({ row, i })).filter(
+        ({ row, i }) => row.legalChoices > 1 && row.beforeEvaluation.kind !== row.afterEvaluation.kind && (row.beforeEvaluation.kind === "mate" || row.afterEvaluation.kind === "mate") && !terminals[i + 1] && !critical.some((item) => item.i === i) && !greatCandidates.some((item) => item.i === i)
+      ).slice(0, REVIEW_LIMITS.maxMateChecks).map(({ i }) => ({ i, reason: "mate-transition" }));
+      const verificationsToRun = [...mateCandidates, ...critical, ...greatCandidates];
+      phaseStart = now();
+      for (const { i, great, reason } of verificationsToRun) {
         active();
-        deepRoots.delete(i);
-        metrics.errors.push({ ply: i + 1, stage: "critical", message: error.message });
+        const move = moves[i];
+        workContext = { stage: reason || "reply-conflict", ply: i + 1 };
+        const task = { ply: i + 1, san: move.san, uci: uciOf(move), reason: reason || "reply-conflict", status: "running", startRequest: metrics.requests };
+        verifications.push(task);
+        try {
+          const root = validatePrimary(await evaluate(move.before, criticalDepth, { multiPV: great || detailed || reason === "mate-transition" ? 2 : 1 }), move.before, criticalDepth);
+          deepRoots.set(i, root);
+          let comparison = rootQuality(root, move, criticalDepth);
+          if (!comparison) {
+            const pair = await evaluate(move.before, criticalDepth, { searchmoves: [root.bestMove, uciOf(move)], multiPV: 2 });
+            comparison = rootQuality(pair, move, criticalDepth);
+          }
+          if (!comparison) throw Error("Played move lacks complete equal-depth root evidence");
+          quality.set(i, comparison);
+          metrics.criticalMoves++;
+          if (great) metrics.greatVerifications++;
+          task.status = "verified";
+          task.beforeEvaluation = comparison.beforeEvaluation;
+          task.afterEvaluation = comparison.afterEvaluation;
+        } catch (error) {
+          active();
+          deepRoots.delete(i);
+          task.status = "failed";
+          task.error = error.message;
+          metrics.errors.push({ ply: i + 1, stage: "critical", message: error.message });
+        }
+        task.requests = metrics.requests - task.startRequest;
+        onProgress({ stage: "Reviewing critical moves", done: verifications.length, total: verificationsToRun.length });
+        if (onUpdate && verifications.length % 3 === 0) await progressive();
+        await yieldPage();
       }
-      onProgress({ stage: "Reviewing critical moves", done: quality.size, total: verifications.length });
-      await yieldPage();
-    }
-    const replyCandidates = [...quality.entries()].filter(
-      ([i, q]) => i + 1 < moves.length && !quality.has(i + 1) && q.playedPV?.[1] && q.playedPV[1] !== evaluations[i + 1].bestMove && evaluations[i + 1].bestMove === uciOf(moves[i + 1])
-    ).slice(0, REVIEW_LIMITS.maxReplyChecks).map(([i]) => i + 1);
-    for (const i of replyCandidates) {
+      const replyCandidates = [...quality.entries()].filter(
+        ([i, q]) => i + 1 < moves.length && !quality.has(i + 1) && q.playedPV?.[1] && q.playedPV[1] !== evaluations[i + 1].bestMove && evaluations[i + 1].bestMove === uciOf(moves[i + 1])
+      ).slice(0, REVIEW_LIMITS.maxReplyChecks).map(([i]) => i + 1);
+      for (const i of replyCandidates) {
+        active();
+        const move = moves[i];
+        workContext = { stage: "reply-conflict", ply: i + 1 };
+        const task = { ply: i + 1, san: move.san, uci: uciOf(move), reason: "reply-conflict", status: "running", startRequest: metrics.requests };
+        verifications.push(task);
+        try {
+          const root = validatePrimary(await evaluate(move.before, criticalDepth, { multiPV: 2 }), move.before, criticalDepth);
+          let comparison = rootQuality(root, move, criticalDepth);
+          if (!comparison) comparison = rootQuality(await evaluate(move.before, criticalDepth, { searchmoves: [root.bestMove, uciOf(move)], multiPV: 2 }), move, criticalDepth);
+          if (!comparison) throw Error("Reply lacks complete equal-depth root evidence");
+          deepRoots.set(i, root);
+          quality.set(i, comparison);
+          metrics.replyChecks++;
+          metrics.criticalMoves++;
+          task.status = "verified";
+          task.beforeEvaluation = comparison.beforeEvaluation;
+          task.afterEvaluation = comparison.afterEvaluation;
+        } catch (error) {
+          active();
+          task.status = "failed";
+          task.error = error.message;
+          metrics.errors.push({ ply: i + 1, stage: "reply consistency", message: error.message });
+        }
+        task.requests = metrics.requests - task.startRequest;
+        onProgress({ stage: "Checking search consistency", done: metrics.replyChecks, total: replyCandidates.length });
+        await yieldPage();
+      }
+      metrics.criticalMs = now() - phaseStart;
+      phaseStart = now();
+      let report = assemble(true);
+      metrics.classificationMs += now() - phaseStart;
+      if (audits) await publish(report, "diagnostics-running", onInitial);
+      phaseStart = now();
+      if (audits) for (let i = 0; i < moves.length; i++) {
+        active();
+        const row = report.reviewedMoves[i], move = moves[i];
+        workContext = { stage: "brilliant", ply: i + 1 };
+        if (metrics.audits >= REVIEW_LIMITS.maxAudits) {
+          row.brilliantDiagnostic = "Optional audit budget exhausted";
+          continue;
+        }
+        if (evaluationChance(row.afterEvaluation) < evaluationChance({ kind: "cp", cp: -100 }) || row.loss > 0.04 || positions[i + 1].isGameOver()) {
+          row.brilliantDiagnostic = "Conservative soundness/quality precheck failed";
+          continue;
+        }
+        if (!detectSacrificeCandidate(positions[i + 1], move)) {
+          row.brilliantDiagnostic = "No bounded material offer";
+          continue;
+        }
+        metrics.audits++;
+        try {
+          const verification = await verifyBrilliantCandidate({ chess: positions[i + 1], beforeFen: move.before, move, evaluatePosition: evaluate, depth: criticalDepth });
+          active();
+          const decision = classifyBrilliantMove({ baseGrade: row.grade, verification, rating: Number(headers[move.color === "w" ? "WhiteElo" : "BlackElo"]) || null });
+          row.brilliantDiagnostic = decision.reason;
+          row.brilliantEvidence = { verification, decision };
+        } catch (error) {
+          active();
+          row.brilliantDiagnostic = error.message;
+          metrics.errors.push({ ply: i + 1, stage: "brilliant", message: error.message });
+        }
+        onProgress({ stage: "Optional Brilliant diagnostics", done: metrics.audits, total: REVIEW_LIMITS.maxAudits });
+        await yieldPage();
+      }
+      metrics.brilliantMs = now() - phaseStart;
       active();
-      const move = moves[i];
+      metrics.totalMs = now() - started;
+      onProgress({ stage: "Review complete", done: moves.length, total: moves.length });
+      await publish(report, metrics.errors.length ? "partial" : "complete");
+      onState(latestReport);
+      return latestReport;
+    } catch (error) {
+      metrics.totalMs = now() - started;
+      const fallback = latestReport || { pgn: pgn2, headers, reviewedMoves: [], graphData: [], metrics };
+      const failed = snapshotReview({ ...fallback, metrics }, { state: signal?.aborted || error.name === "AbortError" ? "canceled" : "failed", elapsedMs: metrics.totalMs });
       try {
-        const root = validatePrimary(await evaluate(move.before, criticalDepth, { multiPV: 2 }), move.before, criticalDepth);
-        let comparison = rootQuality(root, move, criticalDepth);
-        if (!comparison) comparison = rootQuality(await evaluate(move.before, criticalDepth, { searchmoves: [root.bestMove, uciOf(move)], multiPV: 2 }), move, criticalDepth);
-        if (!comparison) throw Error("Reply lacks complete equal-depth root evidence");
-        deepRoots.set(i, root);
-        quality.set(i, comparison);
-        metrics.replyChecks++;
-        metrics.criticalMoves++;
-      } catch (error) {
-        active();
-        metrics.errors.push({ ply: i + 1, stage: "reply consistency", message: error.message });
+        onState(failed);
+      } catch {
       }
-      onProgress({ stage: "Checking search consistency", done: metrics.replyChecks, total: replyCandidates.length });
-      await yieldPage();
+      throw error;
     }
-    metrics.criticalMs = now() - phaseStart;
-    phaseStart = now();
-    let report = assemble(true);
-    metrics.classificationMs += now() - phaseStart;
-    if (audits) {
-      active();
-      await onInitial(report);
-      active();
-    }
-    phaseStart = now();
-    if (audits) for (let i = 0; i < moves.length; i++) {
-      active();
-      const row = report.reviewedMoves[i], move = moves[i];
-      if (metrics.audits >= REVIEW_LIMITS.maxAudits) {
-        row.brilliantDiagnostic = "Optional audit budget exhausted";
-        continue;
-      }
-      if (row.afterPlayerCp < -100 || row.loss > 0.04 || positions[i + 1].isGameOver()) {
-        row.brilliantDiagnostic = "Conservative soundness/quality precheck failed";
-        continue;
-      }
-      if (!detectSacrificeCandidate(positions[i + 1], move)) {
-        row.brilliantDiagnostic = "No bounded material offer";
-        continue;
-      }
-      metrics.audits++;
-      try {
-        const verification = await verifyBrilliantCandidate({ chess: positions[i + 1], beforeFen: move.before, move, evaluatePosition: evaluate, depth: criticalDepth });
-        active();
-        const decision = classifyBrilliantMove({ baseGrade: row.grade, verification, rating: Number(headers[move.color === "w" ? "WhiteElo" : "BlackElo"]) || null });
-        row.brilliantDiagnostic = decision.reason;
-        row.brilliantEvidence = { verification, decision };
-      } catch (error) {
-        active();
-        row.brilliantDiagnostic = error.message;
-      }
-      onProgress({ stage: "Optional Brilliant diagnostics", done: metrics.audits, total: REVIEW_LIMITS.maxAudits });
-      await yieldPage();
-    }
-    metrics.brilliantMs = now() - phaseStart;
-    active();
-    metrics.totalMs = now() - started;
-    metrics.engineSearches = metrics.requests - metrics.transportCacheHits;
-    metrics.cacheHitRate = (metrics.transportCacheHits + metrics.localCacheHits) / Math.max(1, metrics.requests + metrics.localCacheHits);
-    onProgress({ stage: "Review complete", done: moves.length, total: moves.length });
-    return report;
   }
 
   // src/chesscomPgn.js
@@ -4691,9 +4895,10 @@
     }
     const points = graphData.map((point) => ({
       x: x(point.ply),
-      y: y(point.whiteCp),
+      y: point.evaluation && point.evaluation.kind !== "cp" ? height / 2 - ((evaluationChance(point.evaluation) ?? 0.5) * 2 - 1) * (height / 2 - padding) : y(point.whiteCp),
       ply: point.ply,
-      cp: point.whiteCp
+      cp: point.whiteCp,
+      label: point.evaluation ? formatEvaluation(point.evaluation) : `${point.whiteCp >= 0 ? "+" : ""}${(point.whiteCp / 100).toFixed(2)}`
     }));
     const pathData = points.map(
       (point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`
@@ -4730,14 +4935,14 @@
         "stroke-width": 2,
         tabindex: 0,
         role: "button",
-        "aria-label": point.ply === 0 ? "Starting position" : `Move ${point.ply}, evaluation ${(point.cp / 100).toFixed(2)}`
+        "aria-label": point.ply === 0 ? "Starting position" : `Move ${point.ply}, evaluation ${point.label}`
       });
       const select = () => {
         circles.forEach(
           (c) => c.setAttribute("stroke", "#242320")
         );
         circle.setAttribute("stroke", "#ffffff");
-        selectedLabel.textContent = point.ply === 0 ? "Starting position" : `Move ${point.ply}: ${move.san} | Evaluation: ${point.cp >= 0 ? "+" : ""}${(point.cp / 100).toFixed(2)}`;
+        selectedLabel.textContent = point.ply === 0 ? "Starting position" : `Move ${point.ply}: ${move.san} | Evaluation: ${point.label}`;
         onSelectMove?.(point.ply);
       };
       circle.addEventListener("click", select);
@@ -4790,7 +4995,7 @@
       liveEvaluationPending = false;
       liveEvaluationError = "";
     }
-    function formatEvaluation(whiteCp, mate = null) {
+    function formatEvaluation2(whiteCp, mate = null) {
       if (mate !== null && mate !== void 0) {
         return `${whiteCp >= 0 ? "+" : "-"}M${Math.abs(mate)}`;
       }
@@ -4801,7 +5006,16 @@
       if (!Number.isFinite(whiteCp)) return;
       lastShownWhiteCp = whiteCp;
       evalWhite.style.height = `${100 / (1 + Math.exp(-whiteCp / 250))}%`;
-      evalText.textContent = formatEvaluation(whiteCp);
+      evalText.textContent = formatEvaluation2(whiteCp);
+    }
+    function setTypedEvaluation(evaluation) {
+      if (evaluation?.kind === "cp") {
+        setEvaluationBar(evaluation.cp);
+        return;
+      }
+      const chance = evaluationChance(evaluation);
+      evalWhite.style.height = `${chance == null ? 50 : chance * 100}%`;
+      evalText.textContent = formatEvaluation(evaluation);
     }
     function requestLiveEvaluation() {
       invalidateLiveEvaluation();
@@ -4816,13 +5030,8 @@
       }
       const position = new Chess(fen);
       if (position.isGameOver()) {
-        const whiteCp = position.isCheckmate() ? position.turn() === "w" ? -1e4 : 1e4 : 0;
-        liveEvaluation = {
-          fen,
-          whiteCp,
-          mate: position.isCheckmate() ? 0 : null,
-          bestMove: null
-        };
+        const evaluation = normalizeEvaluation(position.isCheckmate() ? { mate: -1 } : { score: 0 }, { turn: position.turn(), pov: "w", terminal: true });
+        liveEvaluation = { fen, evaluation, whiteCp: evaluationCp(evaluation), mate: null, bestMove: null };
         liveEvaluationCache.set(fen, liveEvaluation);
         if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
         render(false);
@@ -4841,21 +5050,9 @@
           const result = await evaluateLivePosition(fen, 12);
           if (destroyed || requestVersion !== liveRequestVersion || currentFen() !== fen || !isExploring()) return;
           const positionTurn = fen.split(" ")[1];
-          let whiteCp;
-          if (result.mate !== null && result.mate !== void 0) {
-            whiteCp = Math.sign(result.mate) * 1e4;
-          } else if (Number.isFinite(result.score)) {
-            whiteCp = result.score;
-          } else {
-            throw new Error("Engine returned no position evaluation");
-          }
-          if (positionTurn === "b") whiteCp = -whiteCp;
-          const evaluation = {
-            fen,
-            whiteCp,
-            mate: result.mate ?? null,
-            bestMove: result.bestMove ?? null
-          };
+          const typed = normalizeEvaluation(result, { turn: positionTurn, pov: "w" });
+          if (typed.kind === "unknown") throw new Error("Engine returned no position evaluation");
+          const evaluation = { fen, evaluation: typed, whiteCp: evaluationCp(typed), mate: null, bestMove: result.bestMove ?? null };
           liveEvaluationCache.set(fen, evaluation);
           if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
           liveEvaluation = evaluation;
@@ -5210,33 +5407,31 @@
         const currentLive = liveEvaluation?.fen === currentFen() ? liveEvaluation : null;
         info.textContent = `Exploring variation: ${last2.san} \xB7 ${variationMoves.length} custom move(s)`;
         if (currentLive) {
-          const evalLabel = formatEvaluation(currentLive.whiteCp, currentLive.mate);
+          const evalLabel = currentLive.evaluation ? formatEvaluation(currentLive.evaluation) : formatEvaluation2(currentLive.whiteCp, currentLive.mate);
           info.textContent += ` | Live eval: ${evalLabel}`;
-          setEvaluationBar(currentLive.whiteCp);
+          if (currentLive.evaluation) setTypedEvaluation(currentLive.evaluation);
+          else setEvaluationBar(currentLive.whiteCp);
           if (currentLive.mate !== null) evalText.textContent = evalLabel;
           if (!selectedSquare) drawBestMoveArrow(currentLive.bestMove);
         } else if (liveEvaluationPending) {
           info.textContent += " | Stockfish analyzing...";
-          setEvaluationBar(lastShownWhiteCp);
           evalText.textContent = "...";
         } else if (liveEvaluationError) {
           info.textContent += ` | Live analysis unavailable: ${liveEvaluationError}`;
-          setEvaluationBar(lastShownWhiteCp);
           evalText.textContent = "!";
         } else {
           info.textContent += " | Waiting for Stockfish...";
-          setEvaluationBar(lastShownWhiteCp);
           evalText.textContent = "...";
         }
       } else {
         const gradeInfo = currentReview && GRADES[currentReview.grade];
         const moveTitle = currentPly === 0 ? "Starting Position" : `${moves[currentPly - 1].before.split(" ")[5]}${moves[currentPly - 1].color === "w" ? "." : "..."} ${moves[currentPly - 1].san}`;
-        const evalCp = graphData[currentPly]?.whiteCp;
-        const evalLabel = Number.isFinite(evalCp) ? `${evalCp >= 0 ? "+" : ""}${(evalCp / 100).toFixed(2)}` : "N/A";
+        const point = graphData[currentPly], evalCp = point?.whiteCp;
+        const evalLabel = point?.evaluation ? formatEvaluation(point.evaluation) : Number.isFinite(evalCp) ? formatEvaluation2(evalCp) : "N/A";
         info.textContent = `${moveTitle}${gradeInfo ? ` \xB7 ${gradeInfo.symbol} ${gradeInfo.label}` : ""} | Eval: ${evalLabel}`;
-        if (Number.isFinite(evalCp)) {
-          setEvaluationBar(evalCp);
-        } else {
+        if (point?.evaluation) setTypedEvaluation(point.evaluation);
+        else if (Number.isFinite(evalCp)) setEvaluationBar(evalCp);
+        else {
           evalWhite.style.height = "50%";
           evalText.textContent = "\u2014";
         }
@@ -5379,6 +5574,7 @@
     </button>
     <label><input id="chess-review-book" type="checkbox" checked> Opening book</label>
     <label><input id="chess-review-audits" type="checkbox"> Slow Brilliant diagnostics (badges disabled)</label>
+    <label><input id="chess-review-detailed" type="checkbox"> More detailed verification (slower)</label>
     <button id="chess-review-fetch" type="button">Retry current game import</button>
     <button id="chess-review-cancel" type="button">Cancel analysis</button>
     <div id="chess-review-result" role="status" aria-live="polite"></div>
@@ -5510,7 +5706,9 @@
         return;
       }
       const initialFen = chess.header().FEN;
-      const renderReview = (report, final) => {
+      session.renderMs = 0;
+      const renderReview = (report) => {
+        const final = report.complete === true;
         const renderStart = globalThis.performance.now();
         report.metrics.fetchMs = session.importedPgn === pgn2 ? session.fetchMs ?? null : null;
         const { reviewedMoves, graphData, whiteAccuracy, blackAccuracy, performance } = report;
@@ -5524,19 +5722,10 @@
         }
         console.log("[Chess Review Grade Counts]");
         console.table(gradeCounts);
-        window.chessReviewResults = {
-          pgn: pgn2,
-          headers: chess.header(),
-          performance,
-          reviewedMoves,
-          graphData,
-          whiteAccuracy,
-          blackAccuracy,
-          metrics: report.metrics,
-          complete: final
-        };
+        session.currentReport = report;
+        window.chessReviewResults = report;
         const heading = document.createElement("h3");
-        heading.textContent = final ? "Game Review Complete" : "Initial review \u2014 verifying critical moves";
+        heading.textContent = final ? "Game Review Complete" : report.lifecycle?.state === "partial" ? "Review has unverified checks" : report.lifecycle?.state === "diagnostics-running" ? "Move review ready \u2014 optional diagnostics running" : "Initial review \u2014 verifying critical moves";
         const progress = document.createElement("p");
         progress.id = "chess-review-progress";
         progress.setAttribute("role", "status");
@@ -5562,7 +5751,7 @@ Estimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? "N/A"}%`;
         const download = document.createElement("button");
         download.textContent = "Download review JSON";
         download.addEventListener("click", () => {
-          const url = URL.createObjectURL(new Blob([JSON.stringify({ ...report, complete: final }, null, 2)], { type: "application/json" }));
+          const url = URL.createObjectURL(new Blob([JSON.stringify(structuredClone(session.currentReport), null, 2)], { type: "application/json" }));
           const link = document.createElement("a");
           link.href = url;
           link.download = "chess-review.json";
@@ -5645,9 +5834,9 @@ Estimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? "N/A"}%`;
           const cells = [
             `${move.number}${move.color === "w" ? "." : "..."} ${move.san}`,
             `${GRADES[move.initialGrade]?.label || move.initialGrade} \u2192 ${GRADES[move.grade]?.label || move.grade}`,
-            Number.isFinite(move.beforePlayerCp) ? (move.beforePlayerCp / 100).toFixed(2) : "N/A",
-            Number.isFinite(move.afterPlayerCp) ? (move.afterPlayerCp / 100).toFixed(2) : "N/A",
-            Number.isFinite(move.cpLoss) ? move.cpLoss.toFixed(0) : "N/A",
+            move.beforeEvaluation ? formatEvaluation(move.beforeEvaluation) : "N/A",
+            move.afterEvaluation ? formatEvaluation(move.afterEvaluation) : "N/A",
+            Number.isFinite(move.cpLoss) ? move.cpLoss.toFixed(0) : "Mate state",
             Number.isFinite(move.loss) ? `${(move.loss * 100).toFixed(1)}%` : "N/A",
             Number.isFinite(move.accuracyContribution) ? move.accuracyContribution.toFixed(1) + "%" : "N/A",
             `${move.depth}${move.deepVerified ? " verified" : ""} / ${move.qualitySource}`,
@@ -5751,8 +5940,7 @@ Estimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? "N/A"}%`;
           title.append(badge, name, gradeName);
           const evaluation = document.createElement("strong");
           evaluation.className = "chess-info-evaluation";
-          const value = move.evaluation;
-          evaluation.textContent = Number.isFinite(value) ? `${value >= 0 ? "+" : ""}${value.toFixed(2)}` : "N/A";
+          evaluation.textContent = move.positionAfterEvaluation ? formatEvaluation(move.positionAfterEvaluation) : "N/A";
           header.append(title, evaluation);
           const explanation = document.createElement("p");
           explanation.className = "chess-info-explanation";
@@ -5892,20 +6080,33 @@ Estimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? "N/A"}%`;
           moveList.appendChild(row);
         }
         handleMoveChange(reviewBoard.getCurrentPly());
-        report.metrics.renderMs = (report.metrics.renderMs || 0) + globalThis.performance.now() - renderStart;
+        session.renderMs += globalThis.performance.now() - renderStart;
+        report.metrics.renderMs = session.renderMs;
       };
       button.disabled = true;
       button.textContent = "Analyzing...";
       const book = panel.querySelector("#chess-review-book").checked;
       const audits = panel.querySelector("#chess-review-audits").checked;
+      const detailed = panel.querySelector("#chess-review-detailed").checked;
       try {
         const report = await runReview(pgn2, evaluateReviewPosition, {
           signal,
           book,
           audits,
+          detailed,
           onInitial: (initial) => {
             assertActive();
-            renderReview(initial, false);
+            renderReview(initial);
+          },
+          onUpdate: (snapshot) => {
+            assertActive();
+            renderReview(snapshot);
+          },
+          onState: (snapshot) => {
+            if (!signal.aborted && session.review === controller) {
+              session.currentReport = snapshot;
+              window.chessReviewResults = snapshot;
+            }
           },
           onProgress: (progress) => {
             assertActive();
@@ -5916,7 +6117,7 @@ Estimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? "N/A"}%`;
           }
         });
         assertActive();
-        renderReview(report, true);
+        renderReview(report);
         const finalStatus = panel.querySelector("#chess-review-progress");
         if (finalStatus) finalStatus.textContent = report.metrics.errors.length ? `${report.metrics.errors.length} critical checks unavailable; see depth/evidence in Detailed Move Analysis.` : "Verified review complete. All values are unofficial estimates.";
       } catch (error) {

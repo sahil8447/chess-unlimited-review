@@ -1,0 +1,12 @@
+{
+  "source": "Transcribed from the user's task text, not loaded from the missing chess-review (1).json attachment",
+  "rawExportReceived": false,
+  "claims": {
+    "complete": false,
+    "reviewedPlies": 42,
+    "whiteAccuracy": 68.34474981611713,
+    "blackAccuracy": 68.84142934672248,
+    "metrics": {"totalMs":0,"engineMs":114225,"requestMs":115846.1,"initialMs":1271.9,"criticalMs":84556.6,"criticalMoves":18,"requests":79},
+    "Kh3": {"number":20,"color":"w","grade":"good","beforePlayerCp":-1003,"afterPlayerCp":-10000,"cpLoss":8997}
+  }
+}

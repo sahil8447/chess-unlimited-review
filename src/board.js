@@ -1,3 +1,4 @@
+import {normalizeEvaluation,evaluationCp,evaluationChance,formatEvaluation as formatTypedEvaluation} from './evaluation.js';
 import { GRADES } from "./grading.js";
 import { Chess } from "chess.js";
 
@@ -68,6 +69,13 @@ export function createReviewBoard(
     evalText.textContent = formatEvaluation(whiteCp);
   }
 
+  function setTypedEvaluation(evaluation) {
+    if(evaluation?.kind==='cp'){setEvaluationBar(evaluation.cp);return;}
+    const chance=evaluationChance(evaluation);
+    evalWhite.style.height=`${chance==null?50:chance*100}%`;
+    evalText.textContent=formatTypedEvaluation(evaluation);
+  }
+
   function requestLiveEvaluation() {
     invalidateLiveEvaluation();
     if (destroyed || !container.isConnected || !isExploring()) return;
@@ -84,15 +92,8 @@ export function createReviewBoard(
     const position = new Chess(fen);
     if (position.isGameOver()) {
       // No engine search is needed for a checkmate or a drawn terminal position.
-      const whiteCp = position.isCheckmate()
-        ? position.turn() === "w" ? -10000 : 10000
-        : 0;
-      liveEvaluation = {
-        fen,
-        whiteCp,
-        mate: position.isCheckmate() ? 0 : null,
-        bestMove: null
-      };
+      const evaluation=normalizeEvaluation(position.isCheckmate()?{mate:-1}:{score:0},{turn:position.turn(),pov:'w',terminal:true});
+      liveEvaluation={fen,evaluation,whiteCp:evaluationCp(evaluation),mate:null,bestMove:null};
       liveEvaluationCache.set(fen, liveEvaluation);
       if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
       render(false);
@@ -114,24 +115,10 @@ export function createReviewBoard(
         const result = await evaluateLivePosition(fen, 12);
         if (destroyed || requestVersion !== liveRequestVersion || currentFen() !== fen || !isExploring()) return;
 
-        const positionTurn = fen.split(" ")[1];
-        let whiteCp;
-        if (result.mate !== null && result.mate !== undefined) {
-          whiteCp = Math.sign(result.mate) * 10000;
-        } else if (Number.isFinite(result.score)) {
-          whiteCp = result.score;
-        } else {
-          throw new Error("Engine returned no position evaluation");
-        }
-        // Stockfish UCI score is always relative to the side to move.
-        if (positionTurn === "b") whiteCp = -whiteCp;
-
-        const evaluation = {
-          fen,
-          whiteCp,
-          mate: result.mate ?? null,
-          bestMove: result.bestMove ?? null
-        };
+        const positionTurn=fen.split(' ')[1];
+        const typed=normalizeEvaluation(result,{turn:positionTurn,pov:'w'});
+        if(typed.kind==='unknown')throw new Error('Engine returned no position evaluation');
+        const evaluation={fen,evaluation:typed,whiteCp:evaluationCp(typed),mate:null,bestMove:result.bestMove??null};
         liveEvaluationCache.set(fen, evaluation);
         if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
         liveEvaluation = evaluation;
@@ -545,24 +532,21 @@ export function createReviewBoard(
       info.textContent = `Exploring variation: ${last.san} · ${variationMoves.length} custom move(s)`;
 
       if (currentLive) {
-        const evalLabel = formatEvaluation(currentLive.whiteCp, currentLive.mate);
+        const evalLabel = currentLive.evaluation ? formatTypedEvaluation(currentLive.evaluation) : formatEvaluation(currentLive.whiteCp,currentLive.mate);
         info.textContent += ` | Live eval: ${evalLabel}`;
-        setEvaluationBar(currentLive.whiteCp);
+        if(currentLive.evaluation)setTypedEvaluation(currentLive.evaluation);else setEvaluationBar(currentLive.whiteCp);
         if (currentLive.mate !== null) evalText.textContent = evalLabel;
         if (!selectedSquare) drawBestMoveArrow(currentLive.bestMove);
       } else if (liveEvaluationPending) {
         info.textContent += " | Stockfish analyzing...";
         // Preserve the last bar height while Stockfish analyzes this position;
         // it is NOT a current-position evaluation until the response arrives.
-        setEvaluationBar(lastShownWhiteCp);
         evalText.textContent = "...";
       } else if (liveEvaluationError) {
         info.textContent += ` | Live analysis unavailable: ${liveEvaluationError}`;
-        setEvaluationBar(lastShownWhiteCp);
         evalText.textContent = "!";
       } else {
         info.textContent += " | Waiting for Stockfish...";
-        setEvaluationBar(lastShownWhiteCp);
         evalText.textContent = "...";
       }
     } else {
@@ -570,17 +554,12 @@ export function createReviewBoard(
       const moveTitle = currentPly === 0
         ? "Starting Position"
         : `${moves[currentPly - 1].before.split(" ")[5]}${moves[currentPly - 1].color === "w" ? "." : "..."} ${moves[currentPly - 1].san}`;
-      const evalCp = graphData[currentPly]?.whiteCp;
-      const evalLabel = Number.isFinite(evalCp)
-        ? `${evalCp >= 0 ? "+" : ""}${(evalCp / 100).toFixed(2)}`
-        : "N/A";
-      info.textContent = `${moveTitle}${gradeInfo ? ` · ${gradeInfo.symbol} ${gradeInfo.label}` : ""} | Eval: ${evalLabel}`;
-      if (Number.isFinite(evalCp)) {
-        setEvaluationBar(evalCp);
-      } else {
-        evalWhite.style.height = "50%";
-        evalText.textContent = "—";
-      }
+      const point=graphData[currentPly],evalCp=point?.whiteCp;
+      const evalLabel=point?.evaluation?formatTypedEvaluation(point.evaluation):Number.isFinite(evalCp)?formatEvaluation(evalCp):'N/A';
+      info.textContent=`${moveTitle}${gradeInfo?` · ${gradeInfo.symbol} ${gradeInfo.label}`:''} | Eval: ${evalLabel}`;
+      if(point?.evaluation)setTypedEvaluation(point.evaluation);
+      else if(Number.isFinite(evalCp))setEvaluationBar(evalCp);
+      else{evalWhite.style.height='50%';evalText.textContent='—';}
       // This arrow describes the recommended NEXT game move.
       // No arrow at move 0, while selecting a piece, or during exploration.
       if (currentPly > 0 && !selectedSquare) {

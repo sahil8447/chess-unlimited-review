@@ -52,8 +52,15 @@ Estimated Performance Rating is an unofficial model estimate. Short, unfinished,
 
 ## V1.1: profiling and comparison
 
-The current optimization branch is `codex/chess-review-v1-1-optimized`; see [V1.1 investigation and validation](V1.1-VALIDATION.md). Reviews expose a provisional interactive board after base analysis, verify critical moves with same-root evidence, and keep slow Brilliant diagnostics optional (badges disabled). Book lookup uses a committed, legally replayed CC0 opening resource; no runtime opening API is needed.
+The V1.1 checkpoint branch is `codex/chess-review-v1-1-optimized`; see [V1.1 investigation and validation](V1.1-VALIDATION.md). Reviews expose a provisional interactive board after base analysis, verify critical moves with same-root evidence, and keep slow Brilliant diagnostics optional (badges disabled). Book lookup uses a committed, legally replayed CC0 opening resource; no runtime opening API is needed.
 
 For another game: `npm run review -- game.pgn report.json --csv report.csv`. Add `--reference reference.json` for explicitly aggregate-only or identity-checked per-move comparisons. `npm run benchmark` runs cold sequential actual-WASM V1/V1.1 profiles. These benchmarks are intentionally separate from routine tests. `npm run book:build` reproduces the local lookup from attributed TSVs. No paid review data is scraped.
 
 The supplied game's V1 64.5/66.8 estimates were reproduced, but the new evidence does not establish agreement with Chess.com's proprietary accuracy. See the report for exact measurements and trade-offs, including remaining false-negative risks in conservative Miss/Brilliant checks.
+
+
+## V1.2 evidence fixes
+
+Current branch: `codex/chess-review-v1-2-evidence-fixes`. See [V1.2 validation](V1.2-VALIDATION.md) for material-offer causality, explicit mate states, immutable export lifecycle, timing definitions and actual before/after benchmarks. Automatic Brilliant awards remain disabled. The exact browser JSON referenced in the task was not attached; the committed reproduction is explicitly labeled and sanitized.
+
+`npm run import:review -- input.json sanitized-fixture.json` validates/redacts another export. `npm run benchmark:before` profiles the frozen V1.1 pipeline; `npm run benchmark` profiles the current pipeline. `npm run review -- game.pgn report.json --detailed` requests extra bounded verification. Legacy V1 comparisons remain under `npm run benchmark:v1`.

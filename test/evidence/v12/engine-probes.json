@@ -1,0 +1,959 @@
+{
+  "source": "Reproduced from the previously supplied PGN; browser JSON attachment has not been received",
+  "g6": {
+    "before": {
+      "verified": true,
+      "reason": "Audited legal offers and bounded material continuations",
+      "acceptedLines": [
+        {
+          "capture": "Qxg6+",
+          "captureUci": "h5g6",
+          "offeredSquare": "g6",
+          "newlyExposed": false,
+          "offeredPiece": "p",
+          "discovered": false,
+          "immediateCostCp": 0,
+          "delayedCostCp": 0,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [
+            "f7g6"
+          ],
+          "materialTrace": [
+            {
+              "san": "Kxg6",
+              "fen": "r1bq1bnr/pp1pp2p/2n3k1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+              "materialCp": 1030
+            }
+          ],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [
+            {
+              "san": "Kxg6",
+              "captured": "q"
+            },
+            {
+              "san": "hxg6",
+              "captured": "q"
+            }
+          ],
+          "forcingCompensation": false,
+          "isSacrifice": false,
+          "scoreCp": 1041,
+          "approximateMaterialCostCp": 0
+        },
+        {
+          "capture": "Qxh7+",
+          "captureUci": "h5h7",
+          "offeredSquare": "h7",
+          "newlyExposed": false,
+          "offeredPiece": "p",
+          "discovered": true,
+          "immediateCostCp": 0,
+          "delayedCostCp": 0,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [
+            "h8h7"
+          ],
+          "materialTrace": [
+            {
+              "san": "Rxh7",
+              "fen": "r1bq1bn1/pp1ppk1r/2n3p1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+              "materialCp": 1030
+            }
+          ],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [
+            {
+              "san": "Rxh7",
+              "captured": "q"
+            }
+          ],
+          "forcingCompensation": false,
+          "isSacrifice": false,
+          "scoreCp": 1028,
+          "approximateMaterialCostCp": 0
+        },
+        {
+          "capture": "Qxc5",
+          "captureUci": "h5c5",
+          "offeredSquare": "c5",
+          "newlyExposed": false,
+          "offeredPiece": "p",
+          "discovered": true,
+          "immediateCostCp": 100,
+          "delayedCostCp": 100,
+          "materialCostCp": 100,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [],
+          "materialTrace": [],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [],
+          "forcingCompensation": false,
+          "isSacrifice": true,
+          "scoreCp": 398,
+          "approximateMaterialCostCp": 100
+        }
+      ],
+      "isSacrifice": true,
+      "materialCostCp": 100,
+      "sacrificeType": "discovered-material",
+      "materialTraceComplete": true,
+      "opponentCanGainMaterial": true,
+      "forcingCompensation": false,
+      "worstAcceptedCp": 398,
+      "offeredCaptureCount": 3,
+      "deepBefore": 409,
+      "deepAfter": 391,
+      "bestAlternativeCp": 409,
+      "rootBestMove": "g7g6",
+      "playedUci": "g7g6",
+      "deepBestMovePlayed": true,
+      "deepCpGap": 0,
+      "analysisDepth": 18,
+      "rootCandidates": [
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 1,
+          "move": "g7g6",
+          "pv": [
+            "g7g6",
+            "h5c5",
+            "e7e5",
+            "c5c4",
+            "d7d5",
+            "e4d5",
+            "c6d4",
+            "g1f3",
+            "d4f3",
+            "g2f3",
+            "g8h6",
+            "b1c3",
+            "h6f5",
+            "c3e4",
+            "c8d7",
+            "c2c3",
+            "f7g7",
+            "c4e2",
+            "f8e7",
+            "d2d3",
+            "h8f8"
+          ],
+          "scoreCp": 409,
+          "mate": null
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 2,
+          "move": "f7e6",
+          "pv": [
+            "f7e6",
+            "h5d5",
+            "e6f6",
+            "d5f5"
+          ],
+          "scoreCp": null,
+          "mate": -2
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 3,
+          "move": "f7f6",
+          "pv": [
+            "f7f6",
+            "h5f5"
+          ],
+          "scoreCp": null,
+          "mate": -1
+        }
+      ],
+      "qualityVerified": true,
+      "playedCp": 409,
+      "beforeCp": 409,
+      "unrestrictedBeforeCp": 409,
+      "unrestrictedCandidates": [
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 1,
+          "move": "g7g6",
+          "pv": [
+            "g7g6",
+            "h5c5",
+            "e7e5",
+            "c5c4",
+            "d7d5",
+            "e4d5",
+            "c6d4",
+            "g1f3",
+            "d4f3",
+            "g2f3",
+            "g8h6",
+            "b1c3",
+            "h6f5",
+            "c3e4",
+            "c8d7",
+            "c2c3",
+            "f7g7",
+            "c4e2",
+            "f8e7",
+            "d2d3",
+            "h8f8"
+          ],
+          "scoreCp": 409,
+          "mate": null
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 2,
+          "move": "f7e6",
+          "pv": [
+            "f7e6",
+            "h5d5",
+            "e6f6",
+            "d5f5"
+          ],
+          "scoreCp": null,
+          "mate": -2
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 3,
+          "move": "f7f6",
+          "pv": [
+            "f7f6",
+            "h5f5"
+          ],
+          "scoreCp": null,
+          "mate": -1
+        }
+      ],
+      "counterfactual": {
+        "verified": true,
+        "alreadyCompletelyWinning": false,
+        "reason": "All remaining alternatives fall below the decisive threshold",
+        "depth": 18,
+        "allAlternativesCovered": true,
+        "alternativeUpperBoundCp": -10000,
+        "bestNonSacrificingMove": null,
+        "bestNonSacrificingCp": null,
+        "examined": [
+          {
+            "move": "f7e6",
+            "cp": -10000,
+            "mate": -2,
+            "depth": 18,
+            "nonSacrificing": false
+          }
+        ],
+        "excludedSacrifices": []
+      },
+      "bestAlternativeMethod": "same-root MultiPV comparison with bounded paired fallback"
+    },
+    "oldDecision": {
+      "grade": "best",
+      "eligible": true,
+      "reason": "Verified candidate; automatic Brilliant awards remain disabled",
+      "isSacrifice": true,
+      "sacrificeType": "discovered-material",
+      "bestMovePlayed": true,
+      "nearBest": true,
+      "depth": 18,
+      "playedMove": "g7g6",
+      "bestMove": "g7g6",
+      "beforeCp": 409,
+      "playedCp": 409,
+      "cpGap": 0,
+      "winChanceGap": 0,
+      "compensationVerified": true,
+      "alreadyCompletelyWinning": false,
+      "counterfactualVerified": true,
+      "bestNonSacrificingCp": null,
+      "alternativeUpperBoundCp": -10000,
+      "ratingUsed": 1101
+    },
+    "after": {
+      "verified": true,
+      "isSacrifice": false,
+      "reason": "Pre-existing unrelated threat; sacrifice causality unsupported",
+      "acceptedLines": [
+        {
+          "capture": "Qxg6+",
+          "captureUci": "h5g6",
+          "offeredSquare": "g6",
+          "causality": {
+            "supported": true,
+            "kind": "moved-unit",
+            "beforeCapturable": false,
+            "reason": "The move placed the offered unit on its captured square"
+          },
+          "newlyExposed": true,
+          "geometricallyAttackedBefore": true,
+          "offeredPiece": "p",
+          "discovered": false,
+          "immediateCostCp": 0,
+          "delayedCostCp": 0,
+          "exposureCostCp": 0,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [
+            "f7g6"
+          ],
+          "materialTrace": [
+            {
+              "san": "Kxg6",
+              "fen": "r1bq1bnr/pp1pp2p/2n3k1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+              "materialCp": 1030
+            }
+          ],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [
+            {
+              "san": "Kxg6",
+              "captured": "q"
+            },
+            {
+              "san": "hxg6",
+              "captured": "q"
+            }
+          ],
+          "forcingCompensation": false,
+          "isSacrifice": false
+        },
+        {
+          "capture": "Qxh7+",
+          "captureUci": "h5h7",
+          "offeredSquare": "h7",
+          "causality": {
+            "supported": false,
+            "kind": "pre-existing-unrelated-threat",
+            "beforeCapturable": true,
+            "beforeCostCp": 0,
+            "reason": "The same unit was already capturable for comparable material; the move supplies no supported offer causality"
+          },
+          "newlyExposed": false,
+          "geometricallyAttackedBefore": true,
+          "offeredPiece": "p",
+          "discovered": true,
+          "immediateCostCp": 0,
+          "delayedCostCp": 0,
+          "exposureCostCp": 0,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [
+            "h8h7"
+          ],
+          "materialTrace": [
+            {
+              "san": "Rxh7",
+              "fen": "r1bq1bn1/pp1ppk1r/2n3p1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+              "materialCp": 1030
+            }
+          ],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [
+            {
+              "san": "Rxh7",
+              "captured": "q"
+            }
+          ],
+          "forcingCompensation": false,
+          "isSacrifice": false
+        },
+        {
+          "capture": "Qxc5",
+          "captureUci": "h5c5",
+          "offeredSquare": "c5",
+          "causality": {
+            "supported": false,
+            "kind": "pre-existing-unrelated-threat",
+            "beforeCapturable": true,
+            "beforeCostCp": 100,
+            "reason": "The same unit was already capturable for comparable material; the move supplies no supported offer causality"
+          },
+          "newlyExposed": false,
+          "geometricallyAttackedBefore": true,
+          "offeredPiece": "p",
+          "discovered": true,
+          "immediateCostCp": 100,
+          "delayedCostCp": 100,
+          "exposureCostCp": 100,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [],
+          "materialTrace": [],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [],
+          "forcingCompensation": false,
+          "isSacrifice": false
+        }
+      ],
+      "causalityComplete": false,
+      "materialTraceComplete": true,
+      "materialCostCp": 0,
+      "offeredCaptureCount": 3
+    },
+    "newDecision": {
+      "grade": "best",
+      "eligible": false,
+      "reason": "No meaningful material or forcing temporary sacrifice",
+      "isSacrifice": false,
+      "sacrificeType": "unknown",
+      "bestMovePlayed": false,
+      "nearBest": false,
+      "depth": null,
+      "playedMove": null,
+      "bestMove": null,
+      "beforeCp": null,
+      "playedCp": null,
+      "cpGap": null,
+      "winChanceGap": null,
+      "compensationVerified": false,
+      "alreadyCompletelyWinning": null,
+      "counterfactualVerified": false,
+      "bestNonSacrificingCp": null,
+      "alternativeUpperBoundCp": null,
+      "ratingUsed": 1101
+    },
+    "newSearches": 0
+  },
+  "tail": [
+    {
+      "number": 20,
+      "color": "w",
+      "san": "Kh3",
+      "beforeFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1PKP/RNB2R2 w - - 4 20",
+      "afterFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 b - - 5 20",
+      "legalChoices": 34,
+      "root": {
+        "success": true,
+        "bestMove": "b1c3",
+        "scoreCp": -1464,
+        "mate": null,
+        "pv": [
+          "b1c3",
+          "f3e1",
+          "g2g1",
+          "e1d3",
+          "c2d3",
+          "a8f8",
+          "c3e4",
+          "b7e4",
+          "d3e4",
+          "c5f2",
+          "g1g2",
+          "f6f3",
+          "g2h3",
+          "f3e2",
+          "d2d3",
+          "e2f1",
+          "h3g4",
+          "f1e2",
+          "g4g5",
+          "f8g8",
+          "g5f6"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 1,
+            "move": "b1c3",
+            "pv": [
+              "b1c3",
+              "f3e1",
+              "g2g1",
+              "e1d3",
+              "c2d3",
+              "a8f8",
+              "c3e4",
+              "b7e4",
+              "d3e4",
+              "c5f2",
+              "g1g2",
+              "f6f3",
+              "g2h3",
+              "f3e2",
+              "d2d3",
+              "e2f1",
+              "h3g4",
+              "f1e2",
+              "g4g5",
+              "f8g8",
+              "g5f6"
+            ],
+            "scoreCp": -1464,
+            "mate": null
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 2,
+            "move": "d3b3",
+            "pv": [
+              "d3b3",
+              "a8f8",
+              "d2d4",
+              "f3d4",
+              "f2f3",
+              "d4b3",
+              "h2h4",
+              "b7f3",
+              "g2h2",
+              "g5h4",
+              "c2b3",
+              "h4g3",
+              "h2g3"
+            ],
+            "scoreCp": -1492,
+            "mate": null
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 3,
+            "move": "b2b3",
+            "pv": [
+              "b2b3",
+              "f3e1",
+              "g2g1",
+              "e1d3",
+              "c1b2",
+              "f6b2",
+              "c2d3",
+              "b2a1",
+              "b3b4",
+              "c5b4",
+              "h2h4",
+              "g5h4",
+              "d3d4",
+              "a1a2"
+            ],
+            "scoreCp": -1526,
+            "mate": null
+          }
+        ],
+        "engineMs": 7484,
+        "initializationMs": 0,
+        "depth": 18,
+        "cacheHit": false,
+        "score": -1464
+      },
+      "played": {
+        "bound": false,
+        "depth": 18,
+        "rank": 2,
+        "move": "g2h3",
+        "pv": [
+          "g2h3",
+          "f6h6",
+          "h3g2",
+          "h6h2"
+        ],
+        "scoreCp": null,
+        "mate": -2
+      },
+      "deeper": {
+        "success": true,
+        "bestMove": "d3e2",
+        "scoreCp": -1632,
+        "mate": null,
+        "pv": [
+          "d3e2",
+          "f3d4",
+          "f2f3",
+          "d4e2",
+          "d2d3",
+          "a8f8",
+          "b1d2",
+          "g5g4",
+          "d2e4",
+          "b7e4",
+          "d3e4",
+          "g4f3",
+          "g2h3",
+          "f3f2",
+          "c1d2",
+          "e2g1",
+          "f1g1",
+          "f2g1n",
+          "a1g1",
+          "c5g1",
+          "d2c3",
+          "g1d4"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 20,
+            "rank": 1,
+            "move": "d3e2",
+            "pv": [
+              "d3e2",
+              "f3d4",
+              "f2f3",
+              "d4e2",
+              "d2d3",
+              "a8f8",
+              "b1d2",
+              "g5g4",
+              "d2e4",
+              "b7e4",
+              "d3e4",
+              "g4f3",
+              "g2h3",
+              "f3f2",
+              "c1d2",
+              "e2g1",
+              "f1g1",
+              "f2g1n",
+              "a1g1",
+              "c5g1",
+              "d2c3",
+              "g1d4"
+            ],
+            "scoreCp": -1632,
+            "mate": null
+          }
+        ],
+        "engineMs": 1102,
+        "initializationMs": 0,
+        "depth": 20,
+        "cacheHit": false,
+        "score": -1632
+      }
+    },
+    {
+      "number": 20,
+      "color": "b",
+      "san": "Qh6+",
+      "beforeFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 b - - 5 20",
+      "afterFen": "r6k/pb1p3p/1p2p2q/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 w - - 6 21",
+      "legalChoices": 50,
+      "root": {
+        "success": true,
+        "bestMove": "f6h6",
+        "scoreCp": null,
+        "mate": 2,
+        "pv": [
+          "f6h6",
+          "h3g2",
+          "h6h2"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 1,
+            "move": "f6h6",
+            "pv": [
+              "f6h6",
+              "h3g2",
+              "h6h2"
+            ],
+            "scoreCp": null,
+            "mate": 2
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 2,
+            "move": "g5g4",
+            "pv": [
+              "g5g4",
+              "h3g2",
+              "f3e1",
+              "g2g1",
+              "e1d3",
+              "c2d3",
+              "f6f3",
+              "b1c3",
+              "f3h1"
+            ],
+            "scoreCp": null,
+            "mate": 5
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 3,
+            "move": "f3g1",
+            "pv": [
+              "f3g1",
+              "h3g4",
+              "b7f3",
+              "d3f3",
+              "f6f3",
+              "g4g5",
+              "f3f5",
+              "g5h4",
+              "c5e7"
+            ],
+            "scoreCp": null,
+            "mate": 5
+          }
+        ],
+        "engineMs": 172,
+        "initializationMs": 0,
+        "depth": 18,
+        "cacheHit": false,
+        "score": null
+      },
+      "played": {
+        "bound": false,
+        "depth": 18,
+        "rank": 1,
+        "move": "f6h6",
+        "pv": [
+          "f6h6",
+          "h3g2",
+          "h6h2"
+        ],
+        "scoreCp": null,
+        "mate": 2
+      },
+      "deeper": {
+        "success": true,
+        "bestMove": "f6h6",
+        "scoreCp": null,
+        "mate": 2,
+        "pv": [
+          "f6h6",
+          "h3g2",
+          "h6h2"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 20,
+            "rank": 1,
+            "move": "f6h6",
+            "pv": [
+              "f6h6",
+              "h3g2",
+              "h6h2"
+            ],
+            "scoreCp": null,
+            "mate": 2
+          }
+        ],
+        "engineMs": 7,
+        "initializationMs": 0,
+        "depth": 20,
+        "cacheHit": false,
+        "score": null
+      }
+    },
+    {
+      "number": 21,
+      "color": "w",
+      "san": "Kg4",
+      "beforeFen": "r6k/pb1p3p/1p2p2q/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 w - - 6 21",
+      "afterFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q1nP1/PPPP1P1P/RNB2R2 b - - 7 21",
+      "legalChoices": 2,
+      "root": {
+        "success": true,
+        "bestMove": "h3g2",
+        "scoreCp": null,
+        "mate": -1,
+        "pv": [
+          "h3g2",
+          "h6h2"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 1,
+            "move": "h3g2",
+            "pv": [
+              "h3g2",
+              "h6h2"
+            ],
+            "scoreCp": null,
+            "mate": -1
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 2,
+            "move": "h3g4",
+            "pv": [
+              "h3g4",
+              "f3h2"
+            ],
+            "scoreCp": null,
+            "mate": -1
+          }
+        ],
+        "engineMs": 2,
+        "initializationMs": 0,
+        "depth": 18,
+        "cacheHit": false,
+        "score": null
+      },
+      "played": {
+        "bound": false,
+        "depth": 18,
+        "rank": 2,
+        "move": "h3g4",
+        "pv": [
+          "h3g4",
+          "f3h2"
+        ],
+        "scoreCp": null,
+        "mate": -1
+      },
+      "deeper": {
+        "success": true,
+        "bestMove": "h3g2",
+        "scoreCp": null,
+        "mate": -1,
+        "pv": [
+          "h3g2",
+          "h6h2"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 20,
+            "rank": 1,
+            "move": "h3g2",
+            "pv": [
+              "h3g2",
+              "h6h2"
+            ],
+            "scoreCp": null,
+            "mate": -1
+          }
+        ],
+        "engineMs": 2,
+        "initializationMs": 0,
+        "depth": 20,
+        "cacheHit": false,
+        "score": null
+      }
+    },
+    {
+      "number": 21,
+      "color": "b",
+      "san": "Nxh2#",
+      "beforeFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q1nP1/PPPP1P1P/RNB2R2 b - - 7 21",
+      "afterFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q2P1/PPPP1P1n/RNB2R2 w - - 0 22",
+      "legalChoices": 42,
+      "root": {
+        "success": true,
+        "bestMove": "f3h2",
+        "scoreCp": null,
+        "mate": 1,
+        "pv": [
+          "f3h2"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 1,
+            "move": "f3h2",
+            "pv": [
+              "f3h2"
+            ],
+            "scoreCp": null,
+            "mate": 1
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 2,
+            "move": "f3e5",
+            "pv": [
+              "f3e5"
+            ],
+            "scoreCp": null,
+            "mate": 1
+          },
+          {
+            "bound": false,
+            "depth": 18,
+            "rank": 3,
+            "move": "h6f6",
+            "pv": [
+              "h6f6",
+              "h2h4",
+              "f3e5",
+              "g4h3",
+              "e5d3",
+              "f2f3",
+              "a8g8",
+              "c2d3",
+              "g5h4",
+              "a2a3",
+              "g8g3",
+              "h3h2",
+              "g3f3",
+              "f1f3",
+              "f6f3"
+            ],
+            "scoreCp": 1666,
+            "mate": null
+          }
+        ],
+        "engineMs": 176,
+        "initializationMs": 0,
+        "depth": 18,
+        "cacheHit": false,
+        "score": null
+      },
+      "played": {
+        "bound": false,
+        "depth": 18,
+        "rank": 1,
+        "move": "f3h2",
+        "pv": [
+          "f3h2"
+        ],
+        "scoreCp": null,
+        "mate": 1
+      },
+      "deeper": {
+        "success": true,
+        "bestMove": "f3h2",
+        "scoreCp": null,
+        "mate": 1,
+        "pv": [
+          "f3h2"
+        ],
+        "candidates": [
+          {
+            "bound": false,
+            "depth": 20,
+            "rank": 1,
+            "move": "f3h2",
+            "pv": [
+              "f3h2"
+            ],
+            "scoreCp": null,
+            "mate": 1
+          }
+        ],
+        "engineMs": 1,
+        "initializationMs": 0,
+        "depth": 20,
+        "cacheHit": false,
+        "score": null
+      }
+    }
+  ]
+}

@@ -162,6 +162,31 @@ test('Chromium product components and standalone WASM worker',{timeout:180000},a
     const ply=board.getCurrentPly();board.destroy();return {before,after,updated,pawn,ply};
    });assert.equal(result.updated,true);assert.equal(result.before,result.after);assert.equal(result.pawn,'Black p');assert.equal(result.ply,1);
   });
+  await t.test('mate states display as mate on board and graph, never as 100 pawn scores',async()=>{
+   await browser.navigate('/analysis');
+   const result=await browser.evaluate(()=>{
+    const g=new ChessReviewTest.Chess();g.loadPgn('1. f3 e5 2. g4 Qh4# 0-1');
+    const rows=g.history({verbose:true}).map(m=>({grade:'good'}));
+    const points=Array.from({length:5},(_,ply)=>({ply,whiteCp:ply===4?null:0,...(ply===4?{evaluation:{kind:'checkmate',outcome:-1}}:{})}));
+    const board=ChessReviewTest.createReviewBoard(g.pgn(),rows,points);document.body.append(board.element);
+    const label=board.element.querySelector('.chess-eval-text').textContent;
+    const graph=ChessReviewTest.createEvaluationGraph(points,g.history().map(san=>({san,grade:'good'})),()=>{});document.body.append(graph);
+    const circles=graph.querySelectorAll('circle');circles[4].dispatchEvent(new MouseEvent('click',{bubbles:true}));
+    const text=graph.textContent;board.destroy();return {label,text,invalid:graph.querySelector('path').getAttribute('d').includes('NaN')};
+   });assert.equal(result.label,'Checkmated');assert.match(result.text,/Checkmated/);assert.doesNotMatch(result.text,/100\.00/);assert.equal(result.invalid,false);
+  });
+  await t.test('final JSON download captures authoritative lifecycle and elapsed time',async()=>{
+   await browser.navigate('/analysis?content');
+   const result=await browser.evaluate(async()=>{
+    document.getElementById('chess-unlimited-review-btn').click();document.getElementById('chess-review-pgn').value='1. f3 e5 2. g4 Qh4# 0-1';document.getElementById('chess-review-import').click();
+    const output=document.getElementById('chess-review-result');for(let i=0;i<300&&!window.chessReviewResults?.complete;i++)await new Promise(r=>setTimeout(r,10));
+    let blob;const originalCreate=URL.createObjectURL,originalClick=HTMLAnchorElement.prototype.click;
+    URL.createObjectURL=value=>{blob=value;return 'blob:test';};HTMLAnchorElement.prototype.click=function(){};
+    [...output.querySelectorAll('button')].find(b=>b.textContent==='Download review JSON').click();
+    const exported=JSON.parse(await blob.text());URL.createObjectURL=originalCreate;HTMLAnchorElement.prototype.click=originalClick;
+    return {complete:exported.complete,state:exported.lifecycle.state,elapsed:exported.metrics.totalMs,plies:exported.reviewedMoves.length,terminal:exported.graphData.at(-1).evaluation.kind};
+   });assert.equal(result.complete,true);assert.equal(result.state,'complete');assert.ok(result.elapsed>0);assert.equal(result.plies,4);assert.equal(result.terminal,'checkmate');
+  });
   await t.test('actual Stockfish 19 Lite browser Worker initializes and searches WASM',async()=>{
    await browser.navigate('/analysis');
    const result=await browser.evaluate(()=>new Promise((resolve,reject)=>{

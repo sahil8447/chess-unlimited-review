@@ -39,13 +39,16 @@ export function completeRootLine(line,fen,depth) {
 }
 const lineScore=line=>scoreForMover({score:line.scoreCp,mate:line.mate},'w','w');
 
-async function auditCaptureResponses({before,chess,move,evaluatePosition,depth}) {
+async function auditCaptureResponses({before,chess,move,evaluatePosition,depth,prepared}) {
   const captures=findMaterialOffers(chess,move,before.fen());
   if(!captures.length)return {verified:true,isSacrifice:false,reason:'No legal net material offer',acceptedLines:[],materialCostCp:0,offeredCaptureCount:0};
   if(captures.length>MATERIAL_LIMITS.maxCaptures)return {verified:false,reason:'Capture audit budget exceeded'};
+  const local=prepared || captures.map(capture=>inspectMaterialOffer({before,chess,move,capture}));
+  const causalityComplete=local.every(line=>line.causality.supported || line.exposureCostCp<75);
+  if(!local.some(line=>line.isSacrifice))return {verified:true,isSacrifice:false,reason:causalityComplete?'No material investment survives the legal exchange':'Pre-existing unrelated threat; sacrifice causality unsupported',acceptedLines:local,causalityComplete,materialTraceComplete:local.every(line=>line.materialTraceComplete),materialCostCp:Math.max(...local.map(line=>line.materialCostCp)),offeredCaptureCount:local.length};
   const acceptedLines=[];
-  for(const capture of captures) {
-    const evidence=inspectMaterialOffer({before,chess,move,capture});
+  for(const [index,capture] of captures.entries()) {
+    const evidence=local[index];
     const taken=new Chess(chess.fen());playUci(taken,uciOf(capture));
     const score=await engineScore(taken,move.color,evaluatePosition,depth);
     if(!Number.isFinite(score))return {verified:false,reason:'Capture evaluation missing'};
@@ -55,8 +58,8 @@ async function auditCaptureResponses({before,chess,move,evaluatePosition,depth})
   const primaryOffer=acceptedLines.filter(line=>line.isSacrifice).sort((a,b)=>
     b.materialCostCp-a.materialCostCp || Number(a.discovered)-Number(b.discovered))[0];
   const delayed=primaryOffer?.immediateCostCp<75 && primaryOffer?.delayedCostCp>=75;
-  const forcingCompensation=acceptedLines.some(line=>line.forcingCompensation);
-  return {verified:true,reason:'Audited legal offers and bounded material continuations',acceptedLines,
+  const forcingCompensation=acceptedLines.some(line=>line.isSacrifice && line.forcingCompensation);
+  return {verified:true,reason:'Audited legal offers and bounded material continuations',acceptedLines,causalityComplete,
     isSacrifice:acceptedLines.some(line=>line.isSacrifice),materialCostCp,
     sacrificeType:primaryOffer?.forcingCompensation ? 'forcing-temporary' : primaryOffer?.discovered ? 'discovered-material' : delayed ? 'delayed-material' : materialCostCp>=75 ? 'material' : 'equal-exchange',
     materialTraceComplete:acceptedLines.every(line=>line.materialTraceComplete),
@@ -103,6 +106,7 @@ export async function analyzeCounterfactual({before,move,root,evaluatePosition,d
     if(iteration===2)return fail('Counterfactual sacrifice-exclusion budget exceeded');
     const audit=await auditCaptureResponses({before,chess:position,move:altMove,evaluatePosition,depth});
     if(!audit.verified || !audit.materialTraceComplete)return fail('Alternative material evidence incomplete or budget exhausted');
+    if(!audit.isSacrifice && !audit.causalityComplete)return fail('Winning alternative only leaves a persistent unrelated offer; exclusion is ambiguous');
     if(!audit.isSacrifice) {
       entry.nonSacrificing=true;
       return finish(true,'An alternative recovers its material and maintains a decisive advantage',alternative,true);
@@ -126,13 +130,15 @@ export async function analyzeCounterfactual({before,move,root,evaluatePosition,d
 export async function verifyBrilliantCandidate({chess,beforeFen,move,evaluatePosition,depth=18}) {
   const reject=(reason,data={})=>({verified:false,reason,...data});
   if(!chess || !beforeFen || !move || typeof evaluatePosition!=='function')return reject('Missing position or engine');
-  let before;
+  let before,prepared;
   try {
     before=new Chess(beforeFen);const replay=new Chess(beforeFen);playUci(replay,uciOf(move));
     if(replay.fen()!==chess.fen() || before.turn()!==move.color)return reject('Move and position do not match');
     const offers=findMaterialOffers(chess,move,beforeFen);
     if(!offers.length)return reject('No legal net material offer');
     if(offers.length>MATERIAL_LIMITS.maxCaptures)return reject('Capture audit budget exceeded');
+    prepared=offers.map(capture=>inspectMaterialOffer({before,chess,move,capture}));
+    if(!prepared.some(line=>line.isSacrifice))return auditCaptureResponses({before,chess,move,evaluatePosition,depth,prepared});
   }catch(error){return reject(`Invalid position: ${error.message}`);}
   try {
     const mover=move.color,playedUci=uciOf(move);
@@ -148,7 +154,7 @@ export async function verifyBrilliantCandidate({chess,beforeFen,move,evaluatePos
     const mateCompatible=bestLine?.mate==null ? playedLine?.mate==null : bestLine.mate>0 && playedLine?.mate>0 && playedLine.mate<=bestLine.mate+1;
     const qualityVerified=Boolean(bestLine && playedLine && mateCompatible);
     const playedCp=qualityVerified ? lineScore(playedLine) : null,beforeCp=qualityVerified ? lineScore(bestLine) : null;
-    const audit=await auditCaptureResponses({before,chess,move,evaluatePosition,depth});
+    const audit=await auditCaptureResponses({before,chess,move,evaluatePosition,depth,prepared});
     if(!audit.verified)return reject(audit.reason);
     // Counterfactual work is only useful for a sound, quality-verified offer.
     const counterfactual=qualityVerified && audit.isSacrifice && playedCp>=-100 && deepAfter>=-100 && audit.worstAcceptedCp>=-100

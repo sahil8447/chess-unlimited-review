@@ -68,3 +68,14 @@ The callback is undocumented and may change or be denied by Chess.com. No access
 - Expand Detailed Move Analysis: verify initial/final grades, before/after quality scores, cp/probability loss, per-move accuracy and depth/evidence. The graph is actual position evaluation, distinct from same-root quality scores.
 - Download review JSON. Check `complete`, exact PGN/headers, every move and `metrics.fetchMs`, `renderMs`, initialization/base/critical/Brilliant/Miss times and cache counters. Manual import of a different PGN must not reuse a previous game's fetch timing or ratings.
 - Re-review the same game to exercise the bounded cache. Confirm no duplicate worker creation and stable grades. Reload extension/tab after building before comparing versions.
+
+
+## V1.2 final browser acceptance (live extension still pending)
+
+- Import the 42-ply supplied game. While base/critical/optional diagnostic stages run, download JSON at each stage; check lifecycle state, complete=false and positive snapshot elapsed time. Earlier snapshots must not gain later requests or audit data.
+- Download after completion: expect schemaVersion=2, lifecycle state=complete, complete=true, 42 legal records and totalMs>0. Check request/engine/phase counters using their exported nesting definitions, not by adding overlapping durations.
+- Verify optional diagnostics reject 4...g6 with pre-existing c5 exposure and zero attributable sacrifice cost. Automatic Brilliant badges remain disabled.
+- Inspect 20.Kh3: finite best-line score versus played mate state, cpLoss=null and a verified mate-concession explanation. Inspect 20...Qh6+, 21.Kg4 and 21...Nxh2#: no +/-100-pawn labels on board, graph, detail table or live exploration.
+- Navigate, explore a PV/custom line and undo during progressive updates; finalizing must preserve that exploration. Cancel/close/reopen/retry and switch games during a search; no prior game may overwrite the current review.
+- Check More detailed verification (slower), rerun and confirm exported options.detailed=true. It must not enable Brilliant awards. Normal initial review stays interactive.
+- The original browser-export file was missing in the task. Import it later through npm run import:review and retain its provenance; do not replace it with a generated report labeled as the original.

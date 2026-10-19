@@ -1,0 +1,373 @@
+{
+  "scope": "Numeric diagnostics, not empirical Elo/Chess.com calibration. Sentinel projection exists only here as a legacy counterfactual, never production display or grading. Nontrivial-only arithmetic is a subset diagnostic, not a replacement game accuracy.",
+  "results": [
+    {
+      "mode": "before",
+      "id": "20",
+      "sides": {
+        "w": {
+          "includedMoves": 10,
+          "selected": 70.23713347992992,
+          "arithmetic": 75.7684191388198,
+          "harmonic": 57.94264140255625,
+          "nontrivialSubsetDiagnostic": null
+        },
+        "b": {
+          "includedMoves": 10,
+          "selected": 68.52414800771818,
+          "arithmetic": 81.7495935776389,
+          "harmonic": 48.87138947700023,
+          "nontrivialSubsetDiagnostic": null
+        }
+      }
+    },
+    {
+      "mode": "before",
+      "id": "42",
+      "sides": {
+        "w": {
+          "includedMoves": 21,
+          "selected": 68.34474981611713,
+          "arithmetic": 78.16549655038958,
+          "harmonic": 66.0675173737331,
+          "nontrivialSubsetDiagnostic": null
+        },
+        "b": {
+          "includedMoves": 21,
+          "selected": 68.84142934672248,
+          "arithmetic": 84.64350407717637,
+          "harmonic": 61.209087242137436,
+          "nontrivialSubsetDiagnostic": null
+        }
+      }
+    },
+    {
+      "mode": "before",
+      "id": "80",
+      "sides": {
+        "w": {
+          "includedMoves": 40,
+          "selected": 98.33220126986319,
+          "arithmetic": 98.57773825171189,
+          "harmonic": 98.4604530420934,
+          "nontrivialSubsetDiagnostic": null
+        },
+        "b": {
+          "includedMoves": 40,
+          "selected": 93.6337292935938,
+          "arithmetic": 95.3695756129642,
+          "harmonic": 94.58339623636817,
+          "nontrivialSubsetDiagnostic": null
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "id": "20",
+      "sides": {
+        "w": {
+          "includedMoves": 10,
+          "selected": 70.66354800312304,
+          "arithmetic": 76.43429871283853,
+          "harmonic": 58.76196864886606,
+          "nontrivialSubsetDiagnostic": {
+            "count": 10,
+            "arithmetic": 76.43429871283853
+          }
+        },
+        "b": {
+          "includedMoves": 10,
+          "selected": 68.34464053776657,
+          "arithmetic": 82.94295509749836,
+          "harmonic": 48.36997092552861,
+          "nontrivialSubsetDiagnostic": {
+            "count": 10,
+            "arithmetic": 82.94295509749836
+          }
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "id": "42",
+      "sides": {
+        "w": {
+          "includedMoves": 21,
+          "selected": 68.4232404076921,
+          "arithmetic": 78.31083681135921,
+          "harmonic": 66.40035157831566,
+          "nontrivialSubsetDiagnostic": {
+            "count": 18,
+            "arithmetic": 74.89089579919438
+          }
+        },
+        "b": {
+          "includedMoves": 21,
+          "selected": 67.62576348609826,
+          "arithmetic": 84.20468260831963,
+          "harmonic": 59.51509815267417,
+          "nontrivialSubsetDiagnostic": {
+            "count": 18,
+            "arithmetic": 81.57214882121065
+          }
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "id": "80",
+      "sides": {
+        "w": {
+          "includedMoves": 40,
+          "selected": 98.36245164088044,
+          "arithmetic": 98.59724547672218,
+          "harmonic": 98.47493761147736,
+          "nontrivialSubsetDiagnostic": {
+            "count": 40,
+            "arithmetic": 98.59724547672218
+          }
+        },
+        "b": {
+          "includedMoves": 40,
+          "selected": 92.22697199222958,
+          "arithmetic": 94.48101459911689,
+          "harmonic": 93.37800913849087,
+          "nontrivialSubsetDiagnostic": {
+            "count": 39,
+            "arithmetic": 94.42525214372502
+          }
+        }
+      }
+    }
+  ],
+  "decomposition": {
+    "w": {
+      "selected": 68.4232404076921,
+      "legacySentinelProjection": 68.4232404076921,
+      "typedVsSentinelDifference": 0,
+      "priorV11": 68.34474981611713,
+      "moveCount": 21,
+      "contributions": [
+        {
+          "index": 0,
+          "accuracy": 99.9998853309735,
+          "weight": 1.4844126080640987
+        },
+        {
+          "index": 2,
+          "accuracy": 84.0366899230695,
+          "weight": 1.4844126080640987
+        },
+        {
+          "index": 4,
+          "accuracy": 22.643726986479308,
+          "weight": 12
+        },
+        {
+          "index": 6,
+          "accuracy": 99.9998853309735,
+          "weight": 12
+        },
+        {
+          "index": 8,
+          "accuracy": 99.9998853309735,
+          "weight": 1.1803272213678282
+        },
+        {
+          "index": 10,
+          "accuracy": 74.34441574216793,
+          "weight": 3.6828685410799555
+        },
+        {
+          "index": 12,
+          "accuracy": 99.9998853309735,
+          "weight": 12
+        },
+        {
+          "index": 14,
+          "accuracy": 99.9998853309735,
+          "weight": 5.417258803726054
+        },
+        {
+          "index": 16,
+          "accuracy": 40.834710578087304,
+          "weight": 7.97487507095807
+        },
+        {
+          "index": 18,
+          "accuracy": 46.136905602492554,
+          "weight": 12
+        },
+        {
+          "index": 20,
+          "accuracy": 48.61267868516551,
+          "weight": 10.885239474741763
+        },
+        {
+          "index": 22,
+          "accuracy": 68.83994045905,
+          "weight": 7.681573134479306
+        },
+        {
+          "index": 24,
+          "accuracy": 69.020670643272,
+          "weight": 5.2983673213178415
+        },
+        {
+          "index": 26,
+          "accuracy": 43.03034601815883,
+          "weight": 8.083852442079296
+        },
+        {
+          "index": 28,
+          "accuracy": 88.34274291661822,
+          "weight": 7.789970347750563
+        },
+        {
+          "index": 30,
+          "accuracy": 99.9998853309735,
+          "weight": 4.906458336583197
+        },
+        {
+          "index": 32,
+          "accuracy": 99.9998853309735,
+          "weight": 1.4523951684507619
+        },
+        {
+          "index": 34,
+          "accuracy": 62.194099514123316,
+          "weight": 8.308199663355179
+        },
+        {
+          "index": 36,
+          "accuracy": 99.9998853309735,
+          "weight": 9.006538096533491
+        },
+        {
+          "index": 38,
+          "accuracy": 96.49167799109745,
+          "weight": 1.6105423294792256
+        },
+        {
+          "index": 40,
+          "accuracy": 99.9998853309735,
+          "weight": 1.0517616103099217
+        }
+      ]
+    },
+    "b": {
+      "selected": 67.62576348609826,
+      "legacySentinelProjection": 67.62576348609825,
+      "typedVsSentinelDifference": 1.4210854715202004e-14,
+      "priorV11": 68.84142934672248,
+      "moveCount": 21,
+      "contributions": [
+        {
+          "index": 1,
+          "accuracy": 95.96114342743246,
+          "weight": 1.4844126080640987
+        },
+        {
+          "index": 3,
+          "accuracy": 96.7442123197653,
+          "weight": 1.5728310605936826
+        },
+        {
+          "index": 5,
+          "accuracy": 99.9998853309735,
+          "weight": 12
+        },
+        {
+          "index": 7,
+          "accuracy": 99.9998853309735,
+          "weight": 1.1185723700454648
+        },
+        {
+          "index": 9,
+          "accuracy": 82.60647770272222,
+          "weight": 1.979374604661646
+        },
+        {
+          "index": 11,
+          "accuracy": 9.760217471891067,
+          "weight": 12
+        },
+        {
+          "index": 13,
+          "accuracy": 59.95994917556108,
+          "weight": 12
+        },
+        {
+          "index": 15,
+          "accuracy": 61.76015738640867,
+          "weight": 8.433323379546867
+        },
+        {
+          "index": 17,
+          "accuracy": 99.9998853309735,
+          "weight": 9.026889428405477
+        },
+        {
+          "index": 19,
+          "accuracy": 99.9998853309735,
+          "weight": 8.282175351901959
+        },
+        {
+          "index": 21,
+          "accuracy": 99.9998853309735,
+          "weight": 6.604056203542499
+        },
+        {
+          "index": 23,
+          "accuracy": 93.25379989386418,
+          "weight": 3.583842481754794
+        },
+        {
+          "index": 25,
+          "accuracy": 28.48769010779143,
+          "weight": 7.850187347283042
+        },
+        {
+          "index": 27,
+          "accuracy": 75.94138576802231,
+          "weight": 8.247410803889563
+        },
+        {
+          "index": 29,
+          "accuracy": 63.82456288054521,
+          "weight": 4.181780982487329
+        },
+        {
+          "index": 31,
+          "accuracy": 99.9998853309735,
+          "weight": 4.497613974222123
+        },
+        {
+          "index": 33,
+          "accuracy": 99.9998853309735,
+          "weight": 1.2691516059832217
+        },
+        {
+          "index": 35,
+          "accuracy": 99.9998853309735,
+          "weight": 10.329217918458165
+        },
+        {
+          "index": 37,
+          "accuracy": 99.9998853309735,
+          "weight": 1.4072965513970204
+        },
+        {
+          "index": 39,
+          "accuracy": 99.9998853309735,
+          "weight": 1.7784980943610984
+        },
+        {
+          "index": 41,
+          "accuracy": 99.9998853309735,
+          "weight": 0.5
+        }
+      ]
+    }
+  }
+}

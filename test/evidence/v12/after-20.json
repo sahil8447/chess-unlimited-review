@@ -1,0 +1,830 @@
+{
+  "id": "20",
+  "mode": "after",
+  "elapsedMs": 22802.244399000003,
+  "metrics": {
+    "requests": 39,
+    "localCacheHits": 0,
+    "transportCacheHits": 0,
+    "engineMs": 22254,
+    "initializationMs": 179,
+    "requestMs": 22441.013835000005,
+    "baseMs": 755.727388,
+    "criticalMs": 21876.283519,
+    "brilliantMs": 0.0011220000014873222,
+    "missMs": 14.433816000004299,
+    "classificationMs": 153.73986799999932,
+    "initialMs": 858.5064390000001,
+    "totalMs": 22800.431084,
+    "criticalMoves": 11,
+    "greatVerifications": 3,
+    "replyChecks": 0,
+    "audits": 0,
+    "errors": [],
+    "engineSearches": 39,
+    "cacheHitRate": 0
+  },
+  "transport": {
+    "requests": 39,
+    "searches": 39,
+    "workerStarts": 1,
+    "initializationMs": 178.83550699999998,
+    "engineMs": 22250.588072,
+    "requestMs": 22440.122550000004,
+    "byDepth": {
+      "12": 21,
+      "18": 18
+    }
+  },
+  "whiteAccuracy": 70.66354800312304,
+  "blackAccuracy": 68.34464053776657,
+  "grades": [
+    {
+      "ply": 1,
+      "san": "e4",
+      "color": "w",
+      "grade": "book",
+      "depth": 12,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 31,
+      "afterPlayerCp": 31,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 31,
+        "depth": 12,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 31,
+        "depth": 12,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 2,
+      "san": "c5",
+      "color": "b",
+      "grade": "book",
+      "depth": 12,
+      "loss": 0.009171050060543473,
+      "cpLoss": 10,
+      "beforePlayerCp": -28,
+      "afterPlayerCp": -38,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -28,
+        "depth": 12
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -38,
+        "depth": 12
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 95.96114342743246
+    },
+    {
+      "ply": 3,
+      "san": "Bc4",
+      "color": "w",
+      "grade": "book",
+      "depth": 12,
+      "loss": 0.03860481739483357,
+      "cpLoss": 42,
+      "beforePlayerCp": 38,
+      "afterPlayerCp": -4,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 38,
+        "depth": 12
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -4,
+        "depth": 12
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 84.0366899230695
+    },
+    {
+      "ply": 4,
+      "san": "Nc6",
+      "color": "b",
+      "grade": "good",
+      "depth": 12,
+      "loss": 0.007364026881329422,
+      "cpLoss": 8,
+      "beforePlayerCp": 4,
+      "afterPlayerCp": -4,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 4,
+        "depth": 12
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -4,
+        "depth": 12
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 96.7442123197653
+    },
+    {
+      "ply": 5,
+      "san": "Bxf7+",
+      "color": "w",
+      "grade": "blunder",
+      "depth": 18,
+      "loss": 0.32810386511305745,
+      "cpLoss": 427,
+      "beforePlayerCp": 0,
+      "afterPlayerCp": -427,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 0,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -427,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 21.55391679711348
+    },
+    {
+      "ply": 6,
+      "san": "Kxf7",
+      "color": "b",
+      "grade": "best",
+      "depth": 12,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 414,
+      "afterPlayerCp": 414,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 414,
+        "depth": 12,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 414,
+        "depth": 12,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 7,
+      "san": "Qh5+",
+      "color": "w",
+      "grade": "best",
+      "depth": 12,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": -398,
+      "afterPlayerCp": -398,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -398,
+        "depth": 12,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -398,
+        "depth": 12,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 8,
+      "san": "g6",
+      "color": "b",
+      "grade": "best",
+      "depth": 12,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 443,
+      "afterPlayerCp": 443,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 443,
+        "depth": 12,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 443,
+        "depth": 12,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 9,
+      "san": "Qxc5",
+      "color": "w",
+      "grade": "best",
+      "depth": 12,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": -388,
+      "afterPlayerCp": -388,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -388,
+        "depth": 12,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -388,
+        "depth": 12,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 10,
+      "san": "Nf6",
+      "color": "b",
+      "grade": "best",
+      "depth": 18,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 412,
+      "afterPlayerCp": 412,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 412,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 412,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 11,
+      "san": "e5",
+      "color": "w",
+      "grade": "inaccuracy",
+      "depth": 18,
+      "loss": 0.06482147342618985,
+      "cpLoss": 142,
+      "beforePlayerCp": -412,
+      "afterPlayerCp": -554,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -412,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -554,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 74.62888514397312
+    },
+    {
+      "ply": 12,
+      "san": "Ne4",
+      "color": "b",
+      "grade": "blunder",
+      "depth": 18,
+      "loss": 0.48039576006242346,
+      "cpLoss": 655,
+      "beforePlayerCp": 547,
+      "afterPlayerCp": -108,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 547,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -108,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 9.569990693137306
+    },
+    {
+      "ply": 13,
+      "san": "Qd5+",
+      "color": "w",
+      "grade": "best",
+      "depth": 18,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 98,
+      "afterPlayerCp": 98,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 98,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 98,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 14,
+      "san": "e6",
+      "color": "b",
+      "grade": "inaccuracy",
+      "depth": 18,
+      "loss": 0.09321017658148395,
+      "cpLoss": 111,
+      "beforePlayerCp": -108,
+      "afterPlayerCp": -219,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -108,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -219,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 65.5827060614663
+    },
+    {
+      "ply": 15,
+      "san": "Qxe4",
+      "color": "w",
+      "grade": "great",
+      "depth": 18,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 232,
+      "afterPlayerCp": 232,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 232,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 232,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 16,
+      "san": "Bc5",
+      "color": "b",
+      "grade": "mistake",
+      "depth": 18,
+      "loss": 0.10701400837463446,
+      "cpLoss": 162,
+      "beforePlayerCp": -240,
+      "afterPlayerCp": -402,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -240,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -402,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 61.57207181831479
+    },
+    {
+      "ply": 17,
+      "san": "Qf3+",
+      "color": "w",
+      "grade": "blunder",
+      "depth": 18,
+      "loss": 0.22112507283694205,
+      "cpLoss": 292,
+      "beforePlayerCp": 382,
+      "afterPlayerCp": 90,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 382,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 90,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 36.22168863575839
+    },
+    {
+      "ply": 18,
+      "san": "Kg7",
+      "color": "b",
+      "grade": "best",
+      "depth": 12,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": -99,
+      "afterPlayerCp": -99,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -99,
+        "depth": 12,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -99,
+        "depth": 12,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    },
+    {
+      "ply": 19,
+      "san": "Ne2",
+      "color": "w",
+      "grade": "mistake",
+      "depth": 18,
+      "loss": 0.16148288687193307,
+      "cpLoss": 177,
+      "beforePlayerCp": 95,
+      "afterPlayerCp": -82,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 95,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -82,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 47.902379973603416
+    },
+    {
+      "ply": 20,
+      "san": "Rf8",
+      "color": "b",
+      "grade": "great",
+      "depth": 18,
+      "loss": 0,
+      "cpLoss": 0,
+      "beforePlayerCp": 87,
+      "afterPlayerCp": 87,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 87,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 87,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "mateEvidence": {
+        "kind": "ordinary",
+        "forced": false
+      },
+      "accuracyContribution": 99.9998853309735
+    }
+  ],
+  "verificationPlan": [
+    {
+      "ply": 12,
+      "san": "Ne4",
+      "uci": "f6e4",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 21,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 547,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -108,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 5,
+      "san": "Bxf7+",
+      "uci": "c4f7",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 23,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 0,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -427,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 17,
+      "san": "Qf3+",
+      "uci": "e4f3",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 25,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 382,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 90,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 19,
+      "san": "Ne2",
+      "uci": "g1e2",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 27,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 95,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -82,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 16,
+      "san": "Bc5",
+      "uci": "f8c5",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 29,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -240,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -402,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 14,
+      "san": "e6",
+      "uci": "e7e6",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 31,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -108,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -219,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 11,
+      "san": "e5",
+      "uci": "e4e5",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 33,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": -412,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": -554,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 2
+    },
+    {
+      "ply": 10,
+      "san": "Nf6",
+      "uci": "g8f6",
+      "reason": "practical-loss",
+      "status": "verified",
+      "startRequest": 35,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 412,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 412,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 1
+    },
+    {
+      "ply": 13,
+      "san": "Qd5+",
+      "uci": "c5d5",
+      "reason": "great-candidate",
+      "status": "verified",
+      "startRequest": 36,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 98,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 98,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 1
+    },
+    {
+      "ply": 15,
+      "san": "Qxe4",
+      "uci": "d5e4",
+      "reason": "great-candidate",
+      "status": "verified",
+      "startRequest": 37,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 232,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 232,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 1
+    },
+    {
+      "ply": 20,
+      "san": "Rf8",
+      "uci": "h8f8",
+      "reason": "great-candidate",
+      "status": "verified",
+      "startRequest": 38,
+      "beforeEvaluation": {
+        "kind": "cp",
+        "cp": 87,
+        "depth": 18,
+        "basis": "root-best-line"
+      },
+      "afterEvaluation": {
+        "kind": "cp",
+        "cp": 87,
+        "depth": 18,
+        "basis": "root-played-line"
+      },
+      "requests": 1
+    }
+  ]
+}

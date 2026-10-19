@@ -1,3 +1,4 @@
+import {formatEvaluation,evaluationChance} from './evaluation.js';
 
 export function createEvaluationGraph(
   graphData,
@@ -70,9 +71,10 @@ export function createEvaluationGraph(
 
   const points = graphData.map(point => ({
     x: x(point.ply),
-    y: y(point.whiteCp),
+    y: point.evaluation && point.evaluation.kind!=='cp' ? height/2-((evaluationChance(point.evaluation)??.5)*2-1)*(height/2-padding) : y(point.whiteCp),
     ply: point.ply,
-    cp: point.whiteCp
+    cp: point.whiteCp,
+    label: point.evaluation?formatEvaluation(point.evaluation):`${point.whiteCp>=0?"+":""}${(point.whiteCp/100).toFixed(2)}`
   }));
 
   const pathData = points.map((point, index) =>
@@ -119,9 +121,7 @@ export function createEvaluationGraph(
       role: "button",
       "aria-label": point.ply === 0
         ? "Starting position"
-        : `Move ${point.ply}, evaluation ${
-            (point.cp / 100).toFixed(2)
-          }`
+        : `Move ${point.ply}, evaluation ${point.label}`
     });
 
     const select = () => {
@@ -135,9 +135,7 @@ export function createEvaluationGraph(
         point.ply === 0
           ? "Starting position"
           : `Move ${point.ply}: ${move.san} | ` +
-            `Evaluation: ${
-              point.cp >= 0 ? "+" : ""
-            }${(point.cp / 100).toFixed(2)}`;
+            `Evaluation: ${point.label}`;
 
       onSelectMove?.(point.ply);
     };

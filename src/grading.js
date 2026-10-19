@@ -1,3 +1,4 @@
+import {evaluationChance,evaluationLoss,classifyMateTransition,normalizeEvaluation} from './evaluation.js';
 
 /*
  * Chess Unlimited Review — Grading System
@@ -81,42 +82,42 @@ export function winChance(cp) {
 export function classifyMove({
   beforeCp,
   afterCp,
-  bestMovePlayed
+  bestMovePlayed, beforeEvaluation, afterEvaluation, qualityVerified=false, legalChoices
 }) {
-  if (
-    !Number.isFinite(beforeCp) ||
-    !Number.isFinite(afterCp)
-  ) {
-    return { grade: "good", loss: 0 };
+  const typed=Boolean(beforeEvaluation && afterEvaluation);
+  const mateEvidence=typed?classifyMateTransition({before:beforeEvaluation,after:afterEvaluation,bestMovePlayed,verified:qualityVerified,legalChoices}):null;
+  if (!typed && (!Number.isFinite(beforeCp)||!Number.isFinite(afterCp)))return {grade:'good',loss:0};
+  const loss=typed?evaluationLoss(beforeEvaluation,afterEvaluation):clamp(winChance(beforeCp)-winChance(afterCp),0,1);
+  if(loss==null)return {grade:'good',loss:null,mateEvidence};
+  if(mateEvidence && mateEvidence.kind!=='ordinary'){
+    let grade;
+    if(mateEvidence.kind==='delivers-checkmate')grade='best';
+    else if(['best-mate-defense','shortens-existing-mate','already-forced-loss'].includes(mateEvidence.kind))grade=bestMovePlayed||legalChoices===1?'best':'good';
+    else if(mateEvidence.kind==='allows-forced-mate')grade=loss>=.20?'blunder':'mistake';
+    if(grade)return {grade,loss,mateEvidence};
   }
 
-  const loss = clamp(
-    winChance(beforeCp) - winChance(afterCp),
-    0,
-    1
-  );
-
   if (loss >= 0.20) {
-    return { grade: "blunder", loss };
+    return { grade: "blunder", loss, ...(mateEvidence?{mateEvidence}:{}) };
   }
 
   if (loss >= 0.10) {
-    return { grade: "mistake", loss };
+    return { grade: "mistake", loss, ...(mateEvidence?{mateEvidence}:{}) };
   }
 
   if (loss >= 0.05) {
-    return { grade: "inaccuracy", loss };
+    return { grade: "inaccuracy", loss, ...(mateEvidence?{mateEvidence}:{}) };
   }
 
   if (bestMovePlayed) {
-    return { grade: "best", loss };
+    return { grade: "best", loss, ...(mateEvidence?{mateEvidence}:{}) };
   }
 
   if (loss <= 0.005) {
-    return { grade: "excellent", loss };
+    return { grade: "excellent", loss, ...(mateEvidence?{mateEvidence}:{}) };
   }
 
-  return { grade: "good", loss };
+  return { grade: "good", loss, ...(mateEvidence?{mateEvidence}:{}) };
 }
 
 /*
@@ -160,6 +161,14 @@ export function calculateMoveAccuracy(
   return moveAccuracyFromWinLoss(loss);
 }
 
+export function calculateReviewedMoveAccuracy(move) {
+  if(move.beforeEvaluation && move.afterEvaluation){
+    const loss=evaluationLoss(move.beforeEvaluation,move.afterEvaluation);
+    return loss==null?null:moveAccuracyFromWinLoss(loss*100);
+  }
+  return calculateMoveAccuracy(move.beforePlayerCp,move.afterPlayerCp);
+}
+
 function standardDeviation(values) {
   if (values.length < 2) return 0;
 
@@ -197,8 +206,7 @@ export function calculateAccuracyDetails(
 
   // Never silently ignore moves with missing scores.
   if (reviewedMoves.some(move =>
-    !Number.isFinite(move.beforePlayerCp) ||
-    !Number.isFinite(move.afterPlayerCp)
+    calculateReviewedMoveAccuracy(move)===null
   )) {
     console.warn(
       "[Accuracy] Missing evaluation data"
@@ -224,8 +232,11 @@ export function calculateAccuracyDetails(
     )
   ];
 
-  const winPercents =
-    whiteCps.map(cp => winChance(cp) * 100);
+  const typedPositions=reviewedMoves.every(m=>m.positionBeforeEvaluation && m.positionAfterEvaluation);
+  const winPercents = typedPositions
+    ? [evaluationChance(first.positionBeforeEvaluation)*100,...reviewedMoves.map(m=>evaluationChance(m.positionAfterEvaluation)*100)]
+    : whiteCps.map(cp=>winChance(cp)*100);
+  if(winPercents.some(n=>!Number.isFinite(n)))return null;
 
   const windowSize = clamp(
     Math.floor(reviewedMoves.length / 10),
@@ -265,10 +276,7 @@ export function calculateAccuracyDetails(
 
     if (move.color !== color) continue;
 
-    const accuracy = calculateMoveAccuracy(
-      move.beforePlayerCp,
-      move.afterPlayerCp
-    );
+    const accuracy = calculateReviewedMoveAccuracy(move);
 
     if (accuracy === null) return null;
 
@@ -381,30 +389,8 @@ export function calculateAlternativeLoss(candidates) {
   if (!Number.isInteger(best.depth) || best.depth < 1 ||
       best.depth !== second.depth || best.bound || second.bound) return null;
 
-  function score(candidate) {
-    if (
-      candidate.mate !== null &&
-      candidate.mate !== undefined
-    ) {
-      return Number.isFinite(candidate.mate) && candidate.mate !== 0
-        ? Math.sign(candidate.mate) * 10000 : null;
-    }
-
-    return candidate.scoreCp;
-  }
-
-  const bestCp = score(best);
-  const secondCp = score(second);
-
-  if (
-    !Number.isFinite(bestCp) ||
-    !Number.isFinite(secondCp)
-  ) {
-    return null;
-  }
-
-  return Math.max(
-    0,
-    winChance(bestCp) - winChance(secondCp)
-  );
+  const bestChance=evaluationChance(normalizeEvaluation(best));
+  const secondChance=evaluationChance(normalizeEvaluation(second));
+  if(bestChance==null||secondChance==null)return null;
+  return Math.max(0,bestChance-secondChance);
 }

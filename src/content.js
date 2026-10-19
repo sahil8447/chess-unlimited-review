@@ -1,3 +1,4 @@
+import {formatEvaluation} from './evaluation.js';
 import {runReview} from "./reviewEngine.js";
 import { detectChessComGame, fetchCurrentChessComPgn } from "./chesscomPgn.js";
 import { createEvaluationGraph } from "./graph.js";
@@ -100,6 +101,7 @@ function openPanel() {
     </button>
     <label><input id="chess-review-book" type="checkbox" checked> Opening book</label>
     <label><input id="chess-review-audits" type="checkbox"> Slow Brilliant diagnostics (badges disabled)</label>
+    <label><input id="chess-review-detailed" type="checkbox"> More detailed verification (slower)</label>
     <button id="chess-review-fetch" type="button">Retry current game import</button>
     <button id="chess-review-cancel" type="button">Cancel analysis</button>
     <div id="chess-review-result" role="status" aria-live="polite"></div>
@@ -237,7 +239,9 @@ async function analyzeGame() {
     return;
   }
   const initialFen = chess.header().FEN;
-  const renderReview = (report, final) => {
+  session.renderMs = 0;
+  const renderReview = (report) => {
+    const final = report.complete === true;
     const renderStart = globalThis.performance.now();
     report.metrics.fetchMs = session.importedPgn === pgn ? session.fetchMs ?? null : null;
     const {reviewedMoves,graphData,whiteAccuracy,blackAccuracy,performance}=report;
@@ -253,16 +257,11 @@ for (const move of reviewedMoves) {
 console.log("[Chess Review Grade Counts]");
 console.table(gradeCounts);
     // Store results for the graph and review UI.
-    window.chessReviewResults = {
-      pgn, headers: chess.header(), performance,
-      reviewedMoves,
-      graphData,
-      whiteAccuracy,
-      blackAccuracy, metrics: report.metrics, complete: final
-    };
+    session.currentReport = report;
+    window.chessReviewResults = report;
     // Render the accuracy summary.
     const heading = document.createElement("h3");
-    heading.textContent = final ? "Game Review Complete" : "Initial review — verifying critical moves";
+    heading.textContent = final ? "Game Review Complete" : report.lifecycle?.state === "partial" ? "Review has unverified checks" : report.lifecycle?.state === "diagnostics-running" ? "Move review ready — optional diagnostics running" : "Initial review — verifying critical moves";
     const progress = document.createElement("p");
     progress.id = "chess-review-progress";
     progress.setAttribute("role", "status");
@@ -287,7 +286,7 @@ console.table(gradeCounts);
     const download = document.createElement('button');
     download.textContent = 'Download review JSON';
     download.addEventListener('click', () => {
-      const url=URL.createObjectURL(new Blob([JSON.stringify({...report,complete:final},null,2)],{type:'application/json'}));
+      const url=URL.createObjectURL(new Blob([JSON.stringify(structuredClone(session.currentReport),null,2)],{type:'application/json'}));
       const link=document.createElement('a');link.href=url;link.download='chess-review.json';link.click();
       setTimeout(()=>URL.revokeObjectURL(url),0);
     });
@@ -362,13 +361,9 @@ for (const move of reviewedMoves) {
   const cells = [
     `${move.number}${move.color === "w" ? "." : "..."} ${move.san}`,
     `${GRADES[move.initialGrade]?.label || move.initialGrade} → ${GRADES[move.grade]?.label || move.grade}`,
-    Number.isFinite(move.beforePlayerCp)
-      ? (move.beforePlayerCp / 100).toFixed(2)
-      : "N/A",
-    Number.isFinite(move.afterPlayerCp)
-      ? (move.afterPlayerCp / 100).toFixed(2)
-      : "N/A",
-    Number.isFinite(move.cpLoss) ? move.cpLoss.toFixed(0) : "N/A",
+    move.beforeEvaluation ? formatEvaluation(move.beforeEvaluation) : "N/A",
+    move.afterEvaluation ? formatEvaluation(move.afterEvaluation) : "N/A",
+    Number.isFinite(move.cpLoss) ? move.cpLoss.toFixed(0) : "Mate state",
     Number.isFinite(move.loss)
       ? `${(move.loss * 100).toFixed(1)}%`
       : "N/A",
@@ -485,10 +480,7 @@ function updateMoveInfo(ply) {
   title.append(badge, name, gradeName);
   const evaluation = document.createElement("strong");
   evaluation.className = "chess-info-evaluation";
-  const value = move.evaluation;
-  evaluation.textContent = Number.isFinite(value)
-    ? `${value >= 0 ? "+" : ""}${value.toFixed(2)}`
-    : "N/A";
+  evaluation.textContent = move.positionAfterEvaluation ? formatEvaluation(move.positionAfterEvaluation) : "N/A";
   header.append(title, evaluation);
   const explanation = document.createElement("p");
   explanation.className = "chess-info-explanation";
@@ -640,16 +632,20 @@ row.addEventListener('keydown', event => {
 moveList.appendChild(row);
 }
 handleMoveChange(reviewBoard.getCurrentPly());
-    report.metrics.renderMs = (report.metrics.renderMs || 0) + globalThis.performance.now() - renderStart;
+    session.renderMs += globalThis.performance.now() - renderStart;
+    report.metrics.renderMs = session.renderMs;
   };
   button.disabled = true;
   button.textContent = "Analyzing...";
   const book = panel.querySelector('#chess-review-book').checked;
   const audits = panel.querySelector('#chess-review-audits').checked;
+  const detailed = panel.querySelector('#chess-review-detailed').checked;
   try {
     const report = await runReview(pgn,evaluateReviewPosition,{
-      signal,book,audits,
-      onInitial: initial => {assertActive();renderReview(initial,false);},
+      signal,book,audits,detailed,
+      onInitial: initial => {assertActive();renderReview(initial);},
+      onUpdate: snapshot => {assertActive();renderReview(snapshot);},
+      onState: snapshot => {if(!signal.aborted && session.review===controller){session.currentReport=snapshot;window.chessReviewResults=snapshot;}},
       onProgress: progress => {
         assertActive();
         const status=panel.querySelector('#chess-review-progress');
@@ -658,7 +654,7 @@ handleMoveChange(reviewBoard.getCurrentPly());
         else result.textContent=text;
       }
     });
-    assertActive();renderReview(report,true);
+    assertActive();renderReview(report);
     const finalStatus=panel.querySelector('#chess-review-progress');
     if(finalStatus)finalStatus.textContent=report.metrics.errors.length ? `${report.metrics.errors.length} critical checks unavailable; see depth/evidence in Detailed Move Analysis.` : 'Verified review complete. All values are unofficial estimates.';
 

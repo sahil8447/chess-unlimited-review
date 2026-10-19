@@ -52,9 +52,9 @@ export function toCsv(report){
  return [keys.join(','),...report.reviewedMoves.map(row=>keys.map(key=>quote(row[key])).join(','))].join('\n')+'\n';
 }
 if(process.argv[1] && import.meta.url===new URL(process.argv[1],'file:').href){
- const args=process.argv.slice(2),input=args[0];if(!input)throw Error('Usage: node tools/review-report.mjs game.pgn report.json [--csv report.csv] [--reference reference.json] [--audits] [--no-book] [--base-depth 12] [--critical-depth 18]');
+ const args=process.argv.slice(2),input=args[0];if(!input)throw Error('Usage: node tools/review-report.mjs game.pgn report.json [--csv report.csv] [--reference reference.json] [--audits] [--detailed] [--no-book] [--base-depth 12] [--critical-depth 18]');
  const value=flag=>args[args.indexOf(flag)+1];
- const report=await createReport(readFileSync(input,'utf8'),{audits:args.includes('--audits'),book:!args.includes('--no-book'),...(args.includes('--base-depth')?{baseDepth:Number(value('--base-depth'))}:{}),...(args.includes('--critical-depth')?{criticalDepth:Number(value('--critical-depth'))}:{})});
+ const report=await createReport(readFileSync(input,'utf8'),{audits:args.includes('--audits'),detailed:args.includes('--detailed'),book:!args.includes('--no-book'),...(args.includes('--base-depth')?{baseDepth:Number(value('--base-depth'))}:{}),...(args.includes('--critical-depth')?{criticalDepth:Number(value('--critical-depth'))}:{})});
  if(args.includes('--reference'))report.comparison=compareReference(report,JSON.parse(readFileSync(value('--reference'),'utf8')));
  writeFileSync(args[1]||'review-report.json',JSON.stringify(report,null,2)+'\n');if(args.includes('--csv'))writeFileSync(value('--csv'),toCsv(report));
  console.log(JSON.stringify({summary:report.summary,metrics:report.metrics,transport:report.transport}));
