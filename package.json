@@ -4,7 +4,8 @@
   "description": "Unlimited Chess.com game review extension powered by Stockfish",
   "private": true,
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

@@ -36,7 +36,9 @@ async function sendToEngine(message) {
       return await chrome.runtime.sendMessage({
         type: "OFFSCREEN_ANALYZE",
         fen: message.fen,
-        depth: message.depth
+        depth: message.depth,
+        searchmoves: message.searchmoves,
+        multiPV: message.multiPV
       });
     } catch (error) {
       if (

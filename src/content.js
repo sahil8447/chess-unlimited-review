@@ -20,6 +20,15 @@ import {
 (() => {
   const BUTTON_ID = "chess-unlimited-review-btn";
   const PANEL_ID = "chess-unlimited-review-panel";
+  const panelSessions = new WeakMap();
+  function closePanel(panel) {
+    const session = panelSessions.get(panel);
+    session?.controller.abort();
+    session?.review?.abort();
+    session?.board?.destroy();
+    panelSessions.delete(panel);
+    panel.remove();
+  }
   function isGamePage() {
     return /^\/(game|analysis|games)(?:\/|$)/.test(
       location.pathname
@@ -41,7 +50,7 @@ async function autoFetchAndReview(panel) {
   button.disabled = true;
   result.textContent = "Fetching game from Chess.com...";
   try {
-    const pgn = await fetchCurrentChessComPgn();
+    const pgn = await fetchCurrentChessComPgn({signal: panelSessions.get(panel)?.controller.signal});
     if (!panel.isConnected) return;
     // Validate before passing it to Stockfish.
     const testGame = new Chess();
@@ -79,12 +88,13 @@ async function autoFetchAndReview(panel) {
 function openPanel() {
   const existing = document.getElementById(PANEL_ID);
   if (existing) {
-    existing.remove();
+    closePanel(existing);
     return;
   }
   // Create the panel FIRST.
   const panel = document.createElement("div");
   panel.id = PANEL_ID;
+  panelSessions.set(panel, {controller: new AbortController(), review: null, board: null});
   panel.innerHTML = `
     <h2>♟ Unlimited Review</h2>
     <textarea
@@ -104,7 +114,7 @@ function openPanel() {
   closeButton.title = "Close Review";
   closeButton.setAttribute("aria-label", "Close Review");
   closeButton.addEventListener("click", () => {
-    panel.remove();
+    closePanel(panel);
   });
   panel.prepend(closeButton);
   // Escape key closes the panel when focus is inside it.
@@ -112,7 +122,7 @@ function openPanel() {
     if (event.key === "Escape") {
       event.preventDefault();
       event.stopPropagation();
-      panel.remove();
+      closePanel(panel);
     }
   });
   // Collapsible PGN editor.
@@ -151,18 +161,23 @@ function openPanel() {
       result.scrollTop = result.scrollHeight;
     }
   }
-async function evaluatePosition(fen, depth = 12) {
+async function evaluatePosition(fen, depth = 12, options = {}) {
+  options.signal?.throwIfAborted();
   const result = await chrome.runtime.sendMessage({
     type: "ANALYZE_POSITION",
     fen,
-    depth
+    depth,
+    searchmoves: options.searchmoves,
+    multiPV: options.multiPV
   });
+  options.signal?.throwIfAborted();
   if (!result?.success) {
     throw new Error(
       result?.error || "Stockfish analysis failed"
     );
   }
   return {
+  depth: result.depth,
   bestMove: result.bestMove,
   score: result.scoreCp,
   mate: result.mate,
@@ -176,10 +191,28 @@ async function analyzeGame() {
   const button = document.getElementById("chess-review-import");
   if (!input || !result || !button) return;
   if (button.disabled) return;
+  const panel = input.closest(`#${PANEL_ID}`);
+  const session = panelSessions.get(panel);
+  if (!session) return;
+  session.review?.abort();
+  session.board?.destroy();
+  session.board = null;
+  const controller = new AbortController();
+  session.review = controller;
+  const signal = AbortSignal.any([session.controller.signal, controller.signal]);
+  const assertActive = () => {
+    if (!result.isConnected || session.review !== controller) controller.abort();
+    signal.throwIfAborted();
+  };
+  const evaluateReviewPosition = async (fen, depth, options = {}) => {
+    assertActive();
+    return evaluatePosition(fen, depth, {...options, signal});
+  };
+  const pgn = input.value.trim();
   result.replaceChildren();
   const chess = new Chess();
   try {
-    chess.loadPgn(input.value.trim());
+    chess.loadPgn(pgn);
   } catch (error) {
     result.textContent = "Invalid PGN: " + error.message;
     return;
@@ -238,9 +271,10 @@ async function analyzeGame() {
       try {
         evaluations.push(
           terminalEvaluation(position) ||
-          await evaluatePosition(positionFens[i], 12)
+          await evaluateReviewPosition(positionFens[i], 12)
         );
       } catch (error) {
+        if (signal.aborted) throw error;
         throw new Error(
           `Initial analysis failed at position ${i}/${moves.length}: ${error.message}`
         );
@@ -273,11 +307,12 @@ async function analyzeGame() {
         const position = new Chess(positionFens[positionIndex]);
         if (position.isGameOver()) continue;
         try {
-          const deeper = await evaluatePosition(positionFens[positionIndex], 18);
+          const deeper = await evaluateReviewPosition(positionFens[positionIndex], 18);
           if (Number.isFinite(deeper.score) || deeper.mate != null) {
             evaluations[positionIndex] = deeper;
           }
         } catch (error) {
+          if (signal.aborted) throw error;
           console.warn(
             `[Deep Verification] Position ${positionIndex}: ${error.message}`
           );
@@ -295,7 +330,11 @@ async function analyzeGame() {
       toWhiteCp(evaluation, positionTurns[i])
     );
     graphData.push(...whiteCps.map((whiteCp, ply) => ({ ply, whiteCp })));
+    let brilliantAuditCount = 0;
     for (let i = 0; i < moves.length; i++) {
+      // Let the page paint between bounded local material audits.
+      await new Promise(resolve => setTimeout(resolve, 0));
+      assertActive();
       const move = moves[i];
       const player = move.color;
       const before = evaluations[i];
@@ -329,7 +368,9 @@ async function analyzeGame() {
       // This lets us inspect near-best offers too, but it never awards a
       // Brilliant without a real legal capture and favorable continuation.
       let brilliantDiagnostic = null;
-      if (sacrificeCandidate && !replay.isGameOver()) {
+      if (sacrificeCandidate && brilliantAuditCount >= 12) brilliantDiagnostic = "Audit budget exceeded; no promotion";
+      if (sacrificeCandidate && !replay.isGameOver() && brilliantAuditCount < 12) {
+        brilliantAuditCount++;
         const eloKey = player === "w" ? "WhiteElo" : "BlackElo";
         const elo = Number(chess.header()[eloKey]);
         const rating = Number.isFinite(elo) && elo > 0 ? elo : null;
@@ -341,9 +382,10 @@ async function analyzeGame() {
             beforeCp: beforePlayerCp,
             afterCp: afterPlayerCp,
             bestMovePlayed,
-            evaluatePosition,
+            evaluatePosition: evaluateReviewPosition,
             depth: 18
           });
+          assertActive();
           const decision = classifyBrilliantMove({
             baseGrade: classification.grade,
             verification,
@@ -354,8 +396,9 @@ async function analyzeGame() {
           brilliantDiagnostic = decision.reason;
           // Diagnostic only: do not promote any grade until engine tests pass.
           // To enable later, add an explicit validated feature flag.
-          console.info(`[Brilliant audit] ${Math.floor(i/2)+1}${player === "w" ? "." : "..."} ${move.san}: ${decision.reason}`, { verification, decision });
+          console.info(`[Brilliant audit] ${Number(beforeFen.split(" ")[5])}${player === "w" ? "." : "..."} ${move.san}: ${decision.reason}`, { verification, decision });
         } catch (error) {
+          if (signal.aborted) throw error;
           brilliantDiagnostic = `Verification error: ${error.message}`;
           console.warn(`[Brilliant verification] ${move.san}:`, error);
         }
@@ -378,7 +421,7 @@ async function analyzeGame() {
       }
 
       reviewedMoves.push({
-        number: Math.floor(i / 2) + 1,
+        number: Number(beforeFen.split(" ")[5]),
         color: player,
         san: move.san,
         grade: classification.grade,
@@ -408,6 +451,7 @@ bestVariation: before.pv || [],
         result.textContent = `Classifying ${i + 1}/${moves.length} moves...`;
       }
     }
+assertActive();
 const whiteAccuracy = calculateAccuracy(reviewedMoves, "w");
 const blackAccuracy = calculateAccuracy(reviewedMoves, "b");
 const gradeCounts = {
@@ -707,7 +751,7 @@ if (variation.length > 0) {
 moveInfoCard.appendChild(variationSection);
 }
 const reviewBoard = createReviewBoard(
-  input.value.trim(),
+  pgn,
   reviewedMoves,
   graphData,
   ply => {
@@ -722,6 +766,7 @@ const reviewBoard = createReviewBoard(
   },
   evaluatePosition
 );
+session.board = reviewBoard;
 result.appendChild(reviewBoard.element);
 const graph = createEvaluationGraph(
   graphData,
@@ -757,7 +802,7 @@ leftColumn.append(
   reviewBoard.element,
   moveInfoCard
 );
-rightColumn.appendChild(graph, moveList);
+rightColumn.append(graph, moveList);
 dashboard.append(leftColumn, rightColumn);
 result.appendChild(dashboard);
     // Render each classified move.
@@ -782,18 +827,22 @@ moveList.appendChild(row);
 }
 updateMoveInfo(reviewedMoves.length);
   } catch (error) {
+    if (signal.aborted) return;
     console.error("[Chess Review]", error);
     result.textContent =
       "Analysis failed: " + error.message;
   } finally {
-    button.disabled = false;
-    button.textContent = "Analyze Game";
+    if (session.review === controller && button.isConnected) {
+      button.disabled = false;
+      button.textContent = "Analyze Game";
+    }
   }
 }
   function update() {
     if (!isGamePage()) {
       document.getElementById(BUTTON_ID)?.remove();
-      document.getElementById(PANEL_ID)?.remove();
+      const panel = document.getElementById(PANEL_ID);
+      if (panel) closePanel(panel);
       return;
     }
     createButton();

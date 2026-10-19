@@ -21,6 +21,7 @@ export function createReviewBoard(
     positions.push(replay.fen());
   }
 
+  let destroyed = false;
   let currentPly = positions.length - 1;
   let flipped = false;
   let selectedSquare = null;
@@ -69,7 +70,7 @@ export function createReviewBoard(
 
   function requestLiveEvaluation() {
     invalidateLiveEvaluation();
-    if (!isExploring()) return;
+    if (destroyed || !container.isConnected || !isExploring()) return;
 
     const fen = currentFen();
     const requestVersion = liveRequestVersion;
@@ -93,6 +94,7 @@ export function createReviewBoard(
         bestMove: null
       };
       liveEvaluationCache.set(fen, liveEvaluation);
+      if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
       render(false);
       return;
     }
@@ -110,7 +112,7 @@ export function createReviewBoard(
       liveDebounceTimer = null;
       try {
         const result = await evaluateLivePosition(fen, 12);
-        if (requestVersion !== liveRequestVersion || currentFen() !== fen || !isExploring()) return;
+        if (destroyed || requestVersion !== liveRequestVersion || currentFen() !== fen || !isExploring()) return;
 
         const positionTurn = fen.split(" ")[1];
         let whiteCp;
@@ -131,12 +133,13 @@ export function createReviewBoard(
           bestMove: result.bestMove ?? null
         };
         liveEvaluationCache.set(fen, evaluation);
+        if (liveEvaluationCache.size > 128) liveEvaluationCache.delete(liveEvaluationCache.keys().next().value);
         liveEvaluation = evaluation;
         liveEvaluationPending = false;
         liveEvaluationError = "";
         render(false);
       } catch (error) {
-        if (requestVersion !== liveRequestVersion || !isExploring() || currentFen() !== fen) return;
+        if (destroyed || requestVersion !== liveRequestVersion || !isExploring() || currentFen() !== fen) return;
         liveEvaluationPending = false;
         liveEvaluationError = error?.message || "Engine request failed";
         console.error("[Chess Review] Live evaluation:", error);
@@ -458,6 +461,7 @@ export function createReviewBoard(
   }
 
   function render(notify = true) {
+    if (destroyed) return;
     const chess = new Chess(currentFen());
     const squares = chess.board();
     const exploring = isExploring();
@@ -565,7 +569,7 @@ export function createReviewBoard(
       const gradeInfo = currentReview && GRADES[currentReview.grade];
       const moveTitle = currentPly === 0
         ? "Starting Position"
-        : `${Math.ceil(currentPly / 2)}${currentPly % 2 ? "." : "..."} ${moves[currentPly - 1].san}`;
+        : `${moves[currentPly - 1].before.split(" ")[5]}${moves[currentPly - 1].color === "w" ? "." : "..."} ${moves[currentPly - 1].san}`;
       const evalCp = graphData[currentPly]?.whiteCp;
       const evalLabel = Number.isFinite(evalCp)
         ? `${evalCp >= 0 ? "+" : ""}${(evalCp / 100).toFixed(2)}`
@@ -618,5 +622,10 @@ export function createReviewBoard(
 
   render();
 
-  return { element: container, goToMove, showEngineVariation };
+  function destroy() {
+    destroyed = true;
+    invalidateLiveEvaluation();
+    liveEvaluationCache.clear();
+  }
+  return { element: container, goToMove, showEngineVariation, destroy };
 }
