@@ -1,0 +1,18 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2026.10.11"]
+[White "Aydenk01"]
+[Black "charan590"]
+[Result "1-0"]
+[WhiteElo "1037"]
+[BlackElo "1020"]
+[TimeControl "600"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"]
+
+1. e4 e5 2. Nf3 d6 3. Bc4 Qf6 4. Nc3 c6 5. d3 Qg6
+6. O-O Be7 7. Be3 Bg4 8. h3 Bxh3 9. Ng5 Bxg5
+10. Qf3 Bxe3 11. fxe3 Be6 12. Bxe6 Qxe6 13. d4 h5
+14. Rf2 h4 15. Raf1 f6 16. dxe5 dxe5 17. Rd1 Nd7
+18. Kf1 h3 19. gxh3 Rxh3 20. Qg2 Rxe3
+21. Qg6+ Ke7 22. Qxg7+ Qf7 23. Rxd7+ 1-0

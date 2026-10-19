@@ -151,11 +151,13 @@ function openPanel() {
       result.scrollTop = result.scrollHeight;
     }
   }
-async function evaluatePosition(fen, depth = 12) {
+async function evaluatePosition(fen, depth = 12, options = {}) {
   const result = await chrome.runtime.sendMessage({
     type: "ANALYZE_POSITION",
     fen,
-    depth
+    depth,
+    searchmoves: options.searchmoves,
+    multiPV: options.multiPV
   });
   if (!result?.success) {
     throw new Error(
@@ -163,6 +165,7 @@ async function evaluatePosition(fen, depth = 12) {
     );
   }
   return {
+  depth: result.depth,
   bestMove: result.bestMove,
   score: result.scoreCp,
   mate: result.mate,
@@ -295,7 +298,10 @@ async function analyzeGame() {
       toWhiteCp(evaluation, positionTurns[i])
     );
     graphData.push(...whiteCps.map((whiteCp, ply) => ({ ply, whiteCp })));
+    let brilliantAuditCount = 0;
     for (let i = 0; i < moves.length; i++) {
+      // Let the page paint between bounded local material audits.
+      await new Promise(resolve => setTimeout(resolve, 0));
       const move = moves[i];
       const player = move.color;
       const before = evaluations[i];
@@ -329,7 +335,9 @@ async function analyzeGame() {
       // This lets us inspect near-best offers too, but it never awards a
       // Brilliant without a real legal capture and favorable continuation.
       let brilliantDiagnostic = null;
-      if (sacrificeCandidate && !replay.isGameOver()) {
+      if (sacrificeCandidate && brilliantAuditCount >= 12) brilliantDiagnostic = "Audit budget exceeded; no promotion";
+      if (sacrificeCandidate && !replay.isGameOver() && brilliantAuditCount < 12) {
+        brilliantAuditCount++;
         const eloKey = player === "w" ? "WhiteElo" : "BlackElo";
         const elo = Number(chess.header()[eloKey]);
         const rating = Number.isFinite(elo) && elo > 0 ? elo : null;

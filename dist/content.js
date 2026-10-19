@@ -3657,54 +3657,55 @@
 
   // src/brilliantRules.js
   function approximateWinChance(cp) {
-    if (!Number.isFinite(cp)) return null;
-    return 1 / (1 + Math.exp(-cp / 220));
+    return Number.isFinite(cp) ? 1 / (1 + Math.exp(-cp / 220)) : null;
   }
-  function classifyBrilliantMove({ baseGrade, verification, rating = null, bestMovePlayed = false }) {
-    const winChanceBefore = approximateWinChance(verification?.bestAlternativeCp);
-    const winChancePlayed = approximateWinChance(verification?.deepAfter);
-    const winChanceGap = winChanceBefore == null || winChancePlayed == null ? null : Math.max(0, winChanceBefore - winChancePlayed);
+  function classifyBrilliantMove({ baseGrade, verification: v, rating }) {
+    const ratingUsed = Number.isFinite(rating) && rating > 0 ? rating : 1500;
+    const tolerance = ratingUsed < 1200 ? 35 : 22;
+    const beforeCp = v?.beforeCp ?? null, playedCp = v?.playedCp ?? null;
+    const cpGap = v?.deepCpGap ?? null;
+    const beforeChance = approximateWinChance(beforeCp);
+    const playedChance = approximateWinChance(playedCp);
+    const winChanceGap = beforeChance == null || playedChance == null ? null : Math.max(0, beforeChance - playedChance);
+    const counterfactual = v?.counterfactual;
+    const counterfactualVerified = counterfactual?.verified === true && typeof counterfactual.alreadyCompletelyWinning === "boolean" && counterfactual.depth === v?.analysisDepth && counterfactual.allAlternativesCovered === true;
+    const alreadyCompletelyWinning = counterfactualVerified ? counterfactual.alreadyCompletelyWinning : null;
     const evidence = {
-      nearBestCpGap: Number.isFinite(verification?.deepCpGap) ? verification.deepCpGap : null,
-      approximateWinChanceGap: winChanceGap,
-      analysisDepth: verification?.analysisDepth ?? null,
-      rootBestMove: verification?.rootBestMove ?? null,
-      deepBestMovePlayed: verification?.deepBestMovePlayed ?? false
+      eligible: false,
+      reason: "",
+      isSacrifice: Boolean(v?.isSacrifice),
+      sacrificeType: v?.sacrificeType ?? "unknown",
+      bestMovePlayed: Boolean(v?.deepBestMovePlayed),
+      nearBest: Number.isFinite(cpGap) && cpGap <= tolerance && winChanceGap <= 0.04,
+      depth: v?.analysisDepth ?? null,
+      playedMove: v?.playedUci ?? null,
+      bestMove: v?.rootBestMove ?? null,
+      beforeCp,
+      playedCp,
+      cpGap,
+      winChanceGap,
+      compensationVerified: Boolean(v?.verified && v?.worstAcceptedCp >= -100),
+      alreadyCompletelyWinning,
+      counterfactualVerified,
+      bestNonSacrificingCp: counterfactual?.bestNonSacrificingCp ?? null,
+      alternativeUpperBoundCp: counterfactual?.alternativeUpperBoundCp ?? null,
+      ratingUsed
     };
-    const reject = (reason) => ({ grade: baseGrade, reason, eligible: false, ...evidence });
-    if (!verification?.verified) return reject(verification?.reason || "Not a verified material sacrifice");
-    const {
-      deepBefore,
-      deepAfter,
-      bestAlternativeCp,
-      worstAcceptedCp,
-      materialCostCp,
-      opponentCanGainMaterial,
-      forcingCompensation = false,
-      offeredCaptureCount
-    } = verification;
-    if (![deepBefore, deepAfter, bestAlternativeCp, worstAcceptedCp, materialCostCp].every(Number.isFinite))
-      return reject("Incomplete deep verification");
-    if (offeredCaptureCount < 1 || (!opponentCanGainMaterial || materialCostCp < 75) && !forcingCompensation)
-      return reject("No material sacrifice or forcing tactical compensation");
-    if (["inaccuracy", "mistake", "blunder", "miss"].includes(baseGrade))
-      return reject("Original move is not sufficiently accurate");
-    const validRating = Number.isFinite(rating) && rating > 0;
-    const nearBestTolerance = validRating && rating < 1200 ? 35 : 22;
-    const bestGap = Math.max(0, bestAlternativeCp - deepAfter);
-    if (bestGap > nearBestTolerance)
-      return reject(`Not near-best: ${Math.round(bestGap)}cp behind the best move`);
-    if (deepBefore > 450)
-      return reject("Already clearly winning before the sacrifice");
-    if (deepAfter < -100 || worstAcceptedCp < -100)
-      return reject("Opponent can obtain a clearly favorable position");
-    if (deepBefore - deepAfter > nearBestTolerance)
-      return reject("Evaluation falls too much at equal depth");
+    const reject = (reason) => ({ grade: baseGrade, ...evidence, reason });
+    if (!v?.verified) return reject(v?.reason || "Sacrifice verification missing");
+    if (!evidence.isSacrifice) return reject("No meaningful material or forcing temporary sacrifice");
+    if (!v.qualityVerified || ![beforeCp, playedCp, cpGap, v.deepAfter, v.worstAcceptedCp].every(Number.isFinite))
+      return reject("Incomplete equal-depth root MultiPV evidence");
+    if (!evidence.nearBest) return reject("Played move is not near-best in the same root search");
+    if (!counterfactualVerified) return reject("Incomplete counterfactual evidence: " + (counterfactual?.reason || "alternatives not verified"));
+    if (alreadyCompletelyWinning) return reject("Already completely winning with a non-sacrificing alternative");
+    if (playedCp < -100 || v.deepAfter < -100 || v.worstAcceptedCp < -100)
+      return reject("Sacrifice leaves a bad position or lacks compensation");
     return {
       grade: baseGrade,
-      eligible: true,
       ...evidence,
-      reason: `Candidate only; best gap ${Math.round(bestGap)}cp; manual verification required`
+      eligible: true,
+      reason: "Verified candidate; automatic Brilliant awards remain disabled"
     };
   }
 
@@ -3748,15 +3749,15 @@
     beforePlayerCp,
     afterPlayerCp
   }) {
-    const after = new Chess(afterFen);
+    const after2 = new Chess(afterFen);
     const player = move.color === "w" ? "White" : "Black";
     const opponent = move.color === "w" ? "Black" : "White";
     const bestSan = getBestMoveSan(beforeFen, bestMove);
-    if (after.isCheckmate()) {
+    if (after2.isCheckmate()) {
       return `${move.san} delivers checkmate and ends the game.`;
     }
     if (["blunder", "mistake"].includes(grade)) {
-      const replies = after.moves({ verbose: true });
+      const replies = after2.moves({ verbose: true });
       for (const reply of replies) {
         const test = new Chess(afterFen);
         test.move(reply);
@@ -3767,10 +3768,10 @@
       }
     }
     if (["blunder", "mistake"].includes(grade)) {
-      const captures = after.moves({ verbose: true });
+      const captures = after2.moves({ verbose: true });
       const valuableCaptures = captures.filter((reply) => {
         if (!reply.captured) return false;
-        const target = after.get(reply.to);
+        const target = after2.get(reply.to);
         return target && target.color === move.color && (PIECE_VALUES[target.type] || 0) >= 5;
       }).sort(
         (a, b) => (PIECE_VALUES[b.captured] || 0) - (PIECE_VALUES[a.captured] || 0)
@@ -3805,7 +3806,7 @@
         `promotes a pawn to a ${PIECE_NAMES[move.promotion]}`
       );
     }
-    if (after.isCheck()) {
+    if (after2.isCheck()) {
       features.push("gives check");
     }
     if (features.length > 0) {
@@ -4680,36 +4681,131 @@
     return { element: container, goToMove, showEngineVariation };
   }
 
-  // src/tactics.js
+  // src/sacrificeMaterial.js
   var VALUES2 = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
-  var other = (color) => color === "w" ? "b" : "w";
+  var MATERIAL_LIMITS = Object.freeze({ minimumCost: 75, maxCaptures: 4, maxExchangePlies: 8, maxExchangeNodes: 256 });
   function materialBalance(chess, color) {
     let cp = 0;
     for (const row of chess.board()) for (const piece of row) {
-      if (!piece) continue;
-      cp += (piece.color === color ? 1 : -1) * (VALUES2[piece.type] ?? 0);
+      if (piece) cp += (piece.color === color ? 1 : -1) * VALUES2[piece.type];
     }
     return cp / 100;
   }
-  function materialCp(chess, color) {
-    return Math.round(materialBalance(chess, color) * 100);
+  var materialCp = (chess, color) => Math.round(materialBalance(chess, color) * 100);
+  var uciOf = (move) => move.from + move.to + (move.promotion || "");
+  function playUci(chess, uci) {
+    if (typeof uci !== "string" || !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)) throw new Error("Invalid PV move");
+    return chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
   }
-  function legalCapturesOfMovedPiece(chess, move) {
-    if (!chess || !move || chess.isGameOver() || chess.turn() === move.color) return [];
-    const piece = chess.get(move.to);
-    if (!piece || piece.color !== move.color || piece.type === "k") return [];
-    if ((VALUES2[piece.type] ?? 0) <= (VALUES2[move.captured] ?? 0)) return [];
-    return chess.moves({ verbose: true }).filter(
-      (reply) => reply.to === move.to && Boolean(reply.captured) && reply.color === other(move.color)
-    );
+  function after(chess, move) {
+    const copy = new Chess(chess.fen());
+    playUci(copy, uciOf(move));
+    return copy;
   }
+  function findMaterialOffers(chess, move, beforeFen = move?.before) {
+    if (!chess || !move || !beforeFen || chess.isGameOver() || chess.turn() === move.color) return [];
+    const baseline = materialCp(new Chess(beforeFen), move.color);
+    return chess.moves({ verbose: true }).filter((capture) => capture.captured && baseline - materialCp(after(chess, capture), move.color) >= MATERIAL_LIMITS.minimumCost);
+  }
+  function inspectMaterialOffer({ before, chess, move, capture }) {
+    const mover = move.color, baseline = materialCp(before, mover), taken = after(chess, capture);
+    let nodes = 0, complete = true;
+    const leaf = (position) => ({ cp: materialCp(position, mover), line: [], trace: [] });
+    function choose(position, options2) {
+      const maximize = position.turn() === mover;
+      return options2.reduce((best, item) => {
+        if (!best || (maximize ? item.cp > best.cp : item.cp < best.cp) || item.cp === best.cp && item.line.length > best.line.length) return item;
+        return best;
+      }, null);
+    }
+    function descend(position, reply, next) {
+      const copy = after(position, reply), result = next(copy);
+      return { cp: result.cp, line: [uciOf(reply), ...result.line], trace: [{ san: reply.san, fen: copy.fen(), materialCp: materialCp(copy, mover) }, ...result.trace] };
+    }
+    function exchange(position, target, plies) {
+      if (nodes >= MATERIAL_LIMITS.maxExchangeNodes) {
+        complete = false;
+        return leaf(position);
+      }
+      nodes++;
+      if (position.isGameOver()) return leaf(position);
+      const legal = position.moves({ verbose: true });
+      const captures = legal.filter((reply) => reply.captured && reply.to === target);
+      if (plies === 0) {
+        if (captures.length || position.isCheck()) complete = false;
+        return leaf(position);
+      }
+      const options2 = [];
+      if (!position.isCheck()) options2.push(leaf(position));
+      else for (const reply of legal.filter((reply2) => !reply2.captured || reply2.to !== target)) {
+        options2.push(descend(position, reply, leaf));
+      }
+      for (const reply of captures) options2.push(descend(position, reply, (copy) => exchange(copy, target, plies - 1)));
+      return choose(position, options2) || leaf(position);
+    }
+    function opponentExchange(position) {
+      const options2 = [];
+      if (!position.isCheck()) options2.push(leaf(position));
+      const legal = position.moves({ verbose: true });
+      for (const reply of legal) {
+        if (reply.captured) options2.push(descend(position, reply, (copy) => exchange(copy, reply.to, MATERIAL_LIMITS.maxExchangePlies - 2)));
+        else if (position.isCheck()) options2.push(descend(position, reply, leaf));
+        if (nodes > MATERIAL_LIMITS.maxExchangeNodes) break;
+      }
+      return choose(position, options2) || leaf(position);
+    }
+    let bestImmediate = materialCp(taken, mover);
+    const recaptures = taken.moves({ verbose: true }).filter((reply) => reply.captured && reply.to === capture.to);
+    const options = taken.isCheck() ? taken.moves({ verbose: true }).filter((reply) => !reply.captured || reply.to !== capture.to).map((reply) => descend(taken, reply, leaf)) : [leaf(taken)];
+    for (const reply of recaptures) {
+      bestImmediate = Math.max(bestImmediate, materialCp(after(taken, reply), mover));
+      options.push(descend(taken, reply, opponentExchange));
+    }
+    const settled = choose(taken, options) || leaf(taken);
+    const immediateCostCp = Math.max(0, baseline - bestImmediate);
+    const delayedCostCp = complete ? Math.max(0, baseline - settled.cp) : null;
+    const materialCostCp = Math.max(immediateCostCp, delayedCostCp ?? 0);
+    const tacticalReplies = [];
+    for (const reply of taken.moves({ verbose: true }).filter((reply2) => reply2.captured && reply2.to !== capture.to && VALUES2[reply2.captured] >= VALUES2.r)) {
+      const next = after(taken, reply);
+      if (next.isCheck()) tacticalReplies.push({ san: reply.san, captured: reply.captured, check: true });
+    }
+    const offeredSquare = capture.flags.includes("e") ? capture.to[0] + (mover === "w" ? "4" : "5") : capture.to;
+    return {
+      capture: capture.san,
+      captureUci: uciOf(capture),
+      offeredSquare,
+      newlyExposed: !before.isAttacked(offeredSquare, mover === "w" ? "b" : "w"),
+      offeredPiece: capture.captured,
+      discovered: capture.to !== move.to,
+      immediateCostCp,
+      delayedCostCp,
+      materialCostCp,
+      materialTraceComplete: complete,
+      exchangeNodes: nodes,
+      materialContinuation: settled.line,
+      materialTrace: settled.trace,
+      tacticalReplies,
+      ordinaryRecaptures: recaptures.map((reply) => ({ san: reply.san, captured: reply.captured })),
+      forcingCompensation: tacticalReplies.length > 0,
+      isSacrifice: materialCostCp >= MATERIAL_LIMITS.minimumCost || tacticalReplies.length > 0
+    };
+  }
+
+  // src/tactics.js
   function detectSacrificeCandidate(chess, move) {
-    return legalCapturesOfMovedPiece(chess, move).length > 0;
+    try {
+      const before = new Chess(move.before), offers = findMaterialOffers(chess, move);
+      if (offers.length > MATERIAL_LIMITS.maxCaptures) return false;
+      return offers.some((capture) => inspectMaterialOffer({ before, chess, move, capture }).isSacrifice);
+    } catch {
+      return false;
+    }
   }
   function scoreForMover(e, turn, mover) {
     if (!e) return null;
     let cp;
-    if (e.mate != null) cp = e.mate > 0 ? 1e4 : -1e4;
+    if (Number.isFinite(e.mate) && e.mate !== 0) cp = e.mate > 0 ? 1e4 : -1e4;
     else if (Number.isFinite(e.score)) cp = e.score;
     else return null;
     return turn === mover ? cp : -cp;
@@ -4717,113 +4813,174 @@
   async function engineScore(chess, mover, engine, depth) {
     if (chess.isCheckmate()) return chess.turn() === mover ? -1e4 : 1e4;
     if (chess.isGameOver()) return 0;
-    return scoreForMover(await engine(chess.fen(), depth), chess.turn(), mover);
-  }
-  async function rootEvaluation(chess, mover, engine, depth) {
-    if (chess.isGameOver()) return { scoreCp: await engineScore(chess, mover, engine, depth), bestMove: null };
     const result = await engine(chess.fen(), depth);
+    if (result?.success === false || result?.error) throw new Error(result.error || "Engine rejected search");
+    return result?.depth === depth ? scoreForMover(result, chess.turn(), mover) : null;
+  }
+  async function rootEvaluation(chess, mover, engine, depth, options) {
+    const result = await engine(chess.fen(), depth, options);
+    if (result?.success === false || result?.error) throw new Error(result.error || "Engine rejected search");
     return {
       scoreCp: scoreForMover(result, chess.turn(), mover),
       bestMove: result?.bestMove || null,
+      depth: result?.depth,
       candidates: result?.candidates || []
     };
   }
-  async function verifyBrilliantCandidate({
-    chess,
-    beforeFen,
-    move,
-    evaluatePosition,
-    depth = 18
-  }) {
-    const reject = (reason, data = {}) => ({ verified: false, reason, ...data });
-    if (!chess || !beforeFen || !move || typeof evaluatePosition !== "function")
-      return reject("Missing position or engine");
-    const captures = legalCapturesOfMovedPiece(chess, move);
-    if (!captures.length) return reject("No legal capture of the offered piece");
-    const mover = move.color;
-    const before = new Chess(beforeFen);
-    let deepBefore, deepAfter, bestAlternativeCp, rootBestMove, rootCandidates;
+  function completeRootLine(line, fen, depth) {
+    if (!line || line.depth !== depth || line.bound || !Number.isInteger(line.rank) || line.rank < 1 || line.mate != null && (!Number.isFinite(line.mate) || line.mate === 0 || line.scoreCp != null) || !Number.isFinite(line.scoreCp) && !(Number.isFinite(line.mate) && line.mate !== 0) || !Array.isArray(line.pv) || !line.pv.length || line.pv.length > 128 || line.pv[0] !== line.move) return false;
     try {
-      const root = await rootEvaluation(before, mover, evaluatePosition, depth);
-      deepBefore = root.scoreCp;
-      bestAlternativeCp = root.scoreCp;
-      rootBestMove = root.bestMove;
-      rootCandidates = root.candidates;
-      deepAfter = await engineScore(chess, mover, evaluatePosition, depth);
-    } catch (e) {
-      return reject(`Deep analysis failed: ${e.message}`);
+      const position = new Chess(fen);
+      for (const uci of line.pv) playUci(position, uci);
+      return true;
+    } catch {
+      return false;
     }
-    if (![deepBefore, deepAfter, bestAlternativeCp].every(Number.isFinite))
-      return reject("Missing depth-matched root/played evaluations");
-    const playedUci = move.from + move.to + (move.promotion || "");
-    const deepBestMovePlayed = rootBestMove?.toLowerCase() === playedUci.toLowerCase();
-    const deepCpGap = Math.max(0, bestAlternativeCp - deepAfter);
-    let worstAcceptedCp = Infinity;
-    let greatestPermanentCostCp = 0;
-    let opponentCanGainMaterial = false;
-    let forcingCompensation = false;
+  }
+  var lineScore = (line) => scoreForMover({ score: line.scoreCp, mate: line.mate }, "w", "w");
+  async function auditCaptureResponses({ before, chess, move, evaluatePosition, depth }) {
+    const captures = findMaterialOffers(chess, move, before.fen());
+    if (!captures.length) return { verified: true, isSacrifice: false, reason: "No legal net material offer", acceptedLines: [], materialCostCp: 0, offeredCaptureCount: 0 };
+    if (captures.length > MATERIAL_LIMITS.maxCaptures) return { verified: false, reason: "Capture audit budget exceeded" };
     const acceptedLines = [];
-    const baselineMaterial = materialCp(before, mover);
     for (const capture of captures) {
+      const evidence = inspectMaterialOffer({ before, chess, move, capture });
       const taken = new Chess(chess.fen());
-      taken.move({ from: capture.from, to: capture.to, promotion: capture.promotion || void 0 });
-      let score;
-      try {
-        score = await engineScore(taken, mover, evaluatePosition, depth);
-      } catch (e) {
-        return reject(`Capture analysis failed: ${e.message}`);
-      }
-      if (!Number.isFinite(score)) return reject("Capture evaluation missing");
-      worstAcceptedCp = Math.min(worstAcceptedCp, score);
-      let bestImmediateRecovery = materialCp(taken, mover);
-      const tacticalReplies = [];
-      const ordinaryRecaptures = [];
-      for (const reply of taken.moves({ verbose: true }).filter((x) => Boolean(x.captured))) {
-        const temp = new Chess(taken.fen());
-        temp.move({ from: reply.from, to: reply.to, promotion: reply.promotion || void 0 });
-        bestImmediateRecovery = Math.max(bestImmediateRecovery, materialCp(temp, mover));
-        const highValueTarget = (VALUES2[reply.captured] ?? 0) >= VALUES2.r;
-        const differentSquare = reply.to !== capture.to;
-        const forcesCheck = temp.isCheck() || temp.isCheckmate();
-        const detail = { san: reply.san, captured: reply.captured, check: forcesCheck };
-        if (highValueTarget && differentSquare && forcesCheck) {
-          tacticalReplies.push(detail);
-        } else if (reply.to === capture.to) {
-          ordinaryRecaptures.push(detail);
-        }
-      }
-      const permanentCost = Math.max(0, baselineMaterial - bestImmediateRecovery);
-      greatestPermanentCostCp = Math.max(greatestPermanentCostCp, permanentCost);
-      if (permanentCost >= 75) opponentCanGainMaterial = true;
-      if (tacticalReplies.length) forcingCompensation = true;
-      acceptedLines.push({
-        capture: capture.san,
-        scoreCp: score,
-        approximateMaterialCostCp: permanentCost,
-        tacticalReplies,
-        ordinaryRecaptures
-      });
+      playUci(taken, uciOf(capture));
+      const score = await engineScore(taken, move.color, evaluatePosition, depth);
+      if (!Number.isFinite(score)) return { verified: false, reason: "Capture evaluation missing" };
+      acceptedLines.push({ ...evidence, scoreCp: score, approximateMaterialCostCp: evidence.materialCostCp });
     }
+    const materialCostCp = Math.max(...acceptedLines.map((line) => line.materialCostCp));
+    const primaryOffer = acceptedLines.filter((line) => line.isSacrifice).sort((a, b) => b.materialCostCp - a.materialCostCp || Number(a.discovered) - Number(b.discovered))[0];
+    const delayed = primaryOffer?.immediateCostCp < 75 && primaryOffer?.delayedCostCp >= 75;
+    const forcingCompensation = acceptedLines.some((line) => line.forcingCompensation);
     return {
       verified: true,
-      reason: "Audited capture responses",
-      deepBefore,
-      deepAfter,
-      bestAlternativeCp,
-      rootBestMove,
-      playedUci,
-      deepBestMovePlayed,
-      deepCpGap,
-      analysisDepth: depth,
-      rootCandidates,
-      bestAlternativeMethod: "single Stockfish search of the before-position FEN",
-      worstAcceptedCp,
-      materialCostCp: greatestPermanentCostCp,
-      opponentCanGainMaterial,
+      reason: "Audited legal offers and bounded material continuations",
+      acceptedLines,
+      isSacrifice: acceptedLines.some((line) => line.isSacrifice),
+      materialCostCp,
+      sacrificeType: primaryOffer?.forcingCompensation ? "forcing-temporary" : primaryOffer?.discovered ? "discovered-material" : delayed ? "delayed-material" : materialCostCp >= 75 ? "material" : "equal-exchange",
+      materialTraceComplete: acceptedLines.every((line) => line.materialTraceComplete),
+      opponentCanGainMaterial: materialCostCp >= 75,
       forcingCompensation,
-      offeredCaptureCount: acceptedLines.length,
-      acceptedLines
+      worstAcceptedCp: Math.min(...acceptedLines.map((line) => line.scoreCp)),
+      offeredCaptureCount: acceptedLines.length
     };
+  }
+  async function analyzeCounterfactual({ before, move, root, evaluatePosition, depth }) {
+    const fail = (reason) => ({ verified: false, alreadyCompletelyWinning: null, reason, depth, examined, excludedSacrifices: excluded, allAlternativesCovered: false });
+    const examined = [], excluded = [];
+    const playedUci = uciOf(move), fen = before.fen();
+    let remaining = before.moves({ verbose: true }).map(uciOf).filter((uci) => uci !== playedUci);
+    const finish = (winning, reason, line = null, nonSacrificing = false) => ({
+      verified: true,
+      alreadyCompletelyWinning: winning,
+      reason,
+      depth,
+      allAlternativesCovered: true,
+      alternativeUpperBoundCp: line ? lineScore(line) : null,
+      bestNonSacrificingMove: nonSacrificing ? line.move : null,
+      bestNonSacrificingCp: nonSacrificing ? lineScore(line) : null,
+      examined,
+      excludedSacrifices: excluded
+    });
+    if (!remaining.length) return finish(false, "No other legal move; all other eligibility gates still apply");
+    const primary = root.candidates.find((line) => line.rank === 1);
+    if (root.depth !== depth || primary?.move !== root.bestMove || !completeRootLine(primary, fen, depth)) return fail("Incomplete unrestricted root evidence");
+    const rank2 = primary.move === playedUci ? 2 : 1;
+    let alternative = root.candidates.find((line) => line.rank === rank2);
+    if (!completeRootLine(alternative, fen, depth)) return fail("Missing same-depth best-alternative PV");
+    for (let iteration = 0; iteration <= 2; iteration++) {
+      if (!alternative || !remaining.includes(alternative.move) || !completeRootLine(alternative, fen, depth)) return fail("Incomplete remaining-alternative search");
+      const cp = lineScore(alternative), position = new Chess(fen), altMove = playUci(position, alternative.move);
+      const offers = findMaterialOffers(position, altMove, fen);
+      const entry = { move: alternative.move, cp, mate: alternative.mate ?? null, depth };
+      examined.push(entry);
+      if (cp < 450) {
+        entry.nonSacrificing = offers.length === 0;
+        return finish(false, "All remaining alternatives fall below the decisive threshold", alternative, entry.nonSacrificing);
+      }
+      if (!offers.length) {
+        entry.nonSacrificing = true;
+        return finish(true, "A non-sacrificing alternative already maintains a decisive advantage", alternative, true);
+      }
+      if (iteration === 2) return fail("Counterfactual sacrifice-exclusion budget exceeded");
+      const audit = await auditCaptureResponses({ before, chess: position, move: altMove, evaluatePosition, depth });
+      if (!audit.verified || !audit.materialTraceComplete) return fail("Alternative material evidence incomplete or budget exhausted");
+      if (!audit.isSacrifice) {
+        entry.nonSacrificing = true;
+        return finish(true, "An alternative recovers its material and maintains a decisive advantage", alternative, true);
+      }
+      if (audit.worstAcceptedCp < -100) return fail("Alternative sacrifice soundness is inconsistent; cannot exclude it");
+      if (!audit.acceptedLines.some((line) => line.isSacrifice && (!line.discovered || line.newlyExposed)))
+        return fail("Winning alternative only leaves a persistent unrelated offer; exclusion is ambiguous");
+      entry.nonSacrificing = false;
+      entry.materialCostCp = audit.materialCostCp;
+      excluded.push(alternative.move);
+      remaining = remaining.filter((uci) => uci !== alternative.move);
+      if (!remaining.length) return finish(false, "All alternatives were verified sacrifices");
+      const restricted = await rootEvaluation(before, move.color, evaluatePosition, depth, { searchmoves: remaining, multiPV: 1 });
+      if (restricted.depth !== depth) return fail("Remaining-alternative search did not reach requested depth");
+      alternative = restricted.candidates.find((line) => line.rank === 1 && line.move === restricted.bestMove);
+    }
+    return fail("Counterfactual evidence unavailable");
+  }
+  async function verifyBrilliantCandidate({ chess, beforeFen, move, evaluatePosition, depth = 18 }) {
+    const reject = (reason, data = {}) => ({ verified: false, reason, ...data });
+    if (!chess || !beforeFen || !move || typeof evaluatePosition !== "function") return reject("Missing position or engine");
+    let before;
+    try {
+      before = new Chess(beforeFen);
+      const replay = new Chess(beforeFen);
+      playUci(replay, uciOf(move));
+      if (replay.fen() !== chess.fen() || before.turn() !== move.color) return reject("Move and position do not match");
+      const offers = findMaterialOffers(chess, move, beforeFen);
+      if (!offers.length) return reject("No legal net material offer");
+      if (offers.length > MATERIAL_LIMITS.maxCaptures) return reject("Capture audit budget exceeded");
+    } catch (error) {
+      return reject(`Invalid position: ${error.message}`);
+    }
+    try {
+      const mover = move.color, playedUci = uciOf(move);
+      const unrestricted = await rootEvaluation(before, mover, evaluatePosition, depth);
+      let root = unrestricted;
+      if (!root.candidates.some((line) => line.move === playedUci) && /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(root.bestMove || "")) {
+        root = await rootEvaluation(before, mover, evaluatePosition, depth, { searchmoves: [root.bestMove, playedUci] });
+      }
+      const deepAfter = await engineScore(chess, mover, evaluatePosition, depth);
+      if (![root.scoreCp, deepAfter].every(Number.isFinite)) return reject("Missing depth-matched root/played evaluations");
+      const rootLines = root.depth === depth ? root.candidates.filter((line) => completeRootLine(line, beforeFen, depth)) : [];
+      const bestLine = rootLines.find((line) => line.rank === 1 && line.move === root.bestMove), playedLine = rootLines.find((line) => line.move === playedUci);
+      const mateCompatible = bestLine?.mate == null ? playedLine?.mate == null : bestLine.mate > 0 && playedLine?.mate > 0 && playedLine.mate <= bestLine.mate + 1;
+      const qualityVerified = Boolean(bestLine && playedLine && mateCompatible);
+      const playedCp = qualityVerified ? lineScore(playedLine) : null, beforeCp = qualityVerified ? lineScore(bestLine) : null;
+      const audit = await auditCaptureResponses({ before, chess, move, evaluatePosition, depth });
+      if (!audit.verified) return reject(audit.reason);
+      const counterfactual = qualityVerified && audit.isSacrifice && playedCp >= -100 && deepAfter >= -100 && audit.worstAcceptedCp >= -100 ? await analyzeCounterfactual({ before, move, root: unrestricted, evaluatePosition, depth }) : { verified: false, alreadyCompletelyWinning: null, reason: "Sacrifice or quality/soundness gates not established" };
+      return {
+        ...audit,
+        deepBefore: root.scoreCp,
+        deepAfter,
+        bestAlternativeCp: root.scoreCp,
+        rootBestMove: root.bestMove,
+        playedUci,
+        deepBestMovePlayed: root.bestMove === playedUci,
+        deepCpGap: qualityVerified ? Math.max(0, beforeCp - playedCp) : null,
+        analysisDepth: depth,
+        rootCandidates: root.candidates,
+        qualityVerified,
+        playedCp,
+        beforeCp,
+        unrestrictedBeforeCp: unrestricted.scoreCp,
+        unrestrictedCandidates: unrestricted.candidates,
+        counterfactual,
+        bestAlternativeMethod: "same-root MultiPV comparison with bounded paired fallback"
+      };
+    } catch (error) {
+      return reject(`Deep analysis failed: ${error.message}`);
+    }
   }
 
   // src/content.js
@@ -4945,11 +5102,13 @@
         result.scrollTop = result.scrollHeight;
       }
     }
-    async function evaluatePosition(fen, depth = 12) {
+    async function evaluatePosition(fen, depth = 12, options = {}) {
       const result = await chrome.runtime.sendMessage({
         type: "ANALYZE_POSITION",
         fen,
-        depth
+        depth,
+        searchmoves: options.searchmoves,
+        multiPV: options.multiPV
       });
       if (!result?.success) {
         throw new Error(
@@ -4957,6 +5116,7 @@
         );
       }
       return {
+        depth: result.depth,
         bestMove: result.bestMove,
         score: result.scoreCp,
         mate: result.mate,
@@ -5000,7 +5160,7 @@
         }
         return turn === "w" ? evaluation.score : -evaluation.score;
       }
-      function uciOf(move) {
+      function uciOf2(move) {
         return move.from + move.to + (move.promotion || "");
       }
       function terminalEvaluation(position) {
@@ -5217,16 +5377,18 @@
           (evaluation, i) => toWhiteCp(evaluation, positionTurns[i])
         );
         graphData.push(...whiteCps.map((whiteCp, ply) => ({ ply, whiteCp })));
+        let brilliantAuditCount = 0;
         for (let i = 0; i < moves.length; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
           const move = moves[i];
           const player = move.color;
           const before = evaluations[i];
-          const after = evaluations[i + 1];
+          const after2 = evaluations[i + 1];
           const beforeFen = positionFens[i];
           const beforePlayerCp = player === "w" ? whiteCps[i] : -whiteCps[i];
           const afterWhiteCp = whiteCps[i + 1];
           const afterPlayerCp = player === "w" ? afterWhiteCp : -afterWhiteCp;
-          const bestMovePlayed = before.bestMove?.toLowerCase() === uciOf(move).toLowerCase();
+          const bestMovePlayed = before.bestMove?.toLowerCase() === uciOf2(move).toLowerCase();
           replay.move(move.san);
           const sacrificeCandidate = detectSacrificeCandidate(replay, move);
           const classification = classifyMove({
@@ -5247,7 +5409,9 @@
             alternativeLoss
           });
           let brilliantDiagnostic = null;
-          if (sacrificeCandidate && !replay.isGameOver()) {
+          if (sacrificeCandidate && brilliantAuditCount >= 12) brilliantDiagnostic = "Audit budget exceeded; no promotion";
+          if (sacrificeCandidate && !replay.isGameOver() && brilliantAuditCount < 12) {
+            brilliantAuditCount++;
             const eloKey = player === "w" ? "WhiteElo" : "BlackElo";
             const elo = Number(chess.header()[eloKey]);
             const rating = Number.isFinite(elo) && elo > 0 ? elo : null;

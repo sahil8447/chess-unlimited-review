@@ -32,6 +32,7 @@ function parseMultiPVLine(line) {
   if (!pv.length) return null;
 
   return {
+    bound: /\b(?:lowerbound|upperbound)\b/.test(line),
     depth: Number(depthMatch[1]),
     rank: rankMatch ? Number(rankMatch[1]) : 1,
     move: pv[0],
@@ -141,7 +142,12 @@ function initializeEngine() {
   return initPromise;
 }
 
-async function analyzePosition(fen, depth = 12) {
+async function analyzePosition(fen, depth = 12, searchmoves = [], multiPV = searchmoves.length ? Math.min(searchmoves.length, 3) : 3) {
+  if (!Array.isArray(searchmoves) || searchmoves.length > 218 ||
+      searchmoves.some(move => typeof move !== "string" || !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(move)))
+    throw new Error("Invalid root search moves");
+  if (!Number.isInteger(multiPV) || multiPV < 1 || multiPV > 3 || (searchmoves.length && multiPV > searchmoves.length))
+    throw new Error("Invalid MultiPV count");
   if (typeof fen !== "string" || !fen.trim()) {
     throw new Error("Missing FEN");
   }
@@ -165,24 +171,30 @@ async function analyzePosition(fen, depth = 12) {
       maxDepth: -1
     };
 
-    engine.postMessage("setoption name MultiPV value 3");
+    engine.postMessage("setoption name MultiPV value " + multiPV);
     engine.postMessage("position fen " + fen);
-    engine.postMessage("go depth " + requestedDepth);
+    engine.postMessage("go depth " + requestedDepth + (searchmoves.length ? " searchmoves " + searchmoves.join(" ") : ""));
   });
 }
 
 // Serialize all requests. Long-game review and live exploration
 // may share the same offscreen Stockfish worker.
-function enqueuePosition(fen, depth) {
-  const job = queue.then(() => analyzePosition(fen, depth));
+const evaluationCache = new Map();
+function enqueuePosition(fen, depth, searchmoves = [], multiPV = searchmoves.length ? Math.min(searchmoves.length, 3) : 3) {
+  const key = JSON.stringify([fen, depth ?? 12, searchmoves, multiPV]);
+  if (evaluationCache.has(key)) return evaluationCache.get(key);
+  const job = queue.then(() => analyzePosition(fen, depth, searchmoves, multiPV));
   queue = job.catch(() => {});
+  evaluationCache.set(key, job);
+  job.catch(() => evaluationCache.delete(key));
+  if (evaluationCache.size > 256) evaluationCache.delete(evaluationCache.keys().next().value);
   return job;
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type !== "OFFSCREEN_ANALYZE") return;
 
-  enqueuePosition(message.fen, message.depth ?? 12)
+  enqueuePosition(message.fen, message.depth ?? 12, message.searchmoves ?? [], message.multiPV)
     .then(result => sendResponse({ success: true, ...result }))
     .catch(error => sendResponse({
       success: false,

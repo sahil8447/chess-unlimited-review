@@ -1,0 +1,19 @@
+[
+  {
+    "files": [
+      "morphy-opera.pgn",
+      "fischer-spassky-1972-game6.pgn"
+    ],
+    "source": "https://raw.githubusercontent.com/jhlywa/chess.js/master/__tests__/load-pgn.test.ts",
+    "downloadSha256": "dba48ad3f693f211c6d93d69d428dbf6f1630d088b140a1f5027784d3dfa2b18",
+    "notes": "Extracted full game PGNs; prose comments removed."
+  },
+  {
+    "files": [
+      "deep-blue-kasparov-1997-game6.pgn"
+    ],
+    "source": "https://raw.githubusercontent.com/niklasf/python-chess/master/data/pgn/kasparov-deep-blue-1997.pgn",
+    "downloadSha256": "220baed5c5b820b1ee054b72734c1af9c2b75d87c8a9448701dadbe08ef8e877",
+    "notes": "Extracted match game six, Site 06."
+  }
+]
