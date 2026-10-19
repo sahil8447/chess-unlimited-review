@@ -48,11 +48,15 @@ function decodeTcnMove(encoded) {
   };
 }
 
-export async function fetchCurrentChessComPgn({signal} = {}) {
-  const match = location.pathname.match(
-    /^\/(?:analysis\/)?game\/(live|daily)\/(\d+)(?:\/|$)/
-  );
+export function detectChessComGame(pathname) {
+  const match = pathname.match(/^\/(?:analysis\/)?game\/(live|daily)\/(\d+)(?:\/|$)/) || pathname.match(/^\/play\/(online|computer)\/(\d+)(?:\/|$)/);
+  if (!match || match[1] === 'computer') return null;
+  return {type: match[1] === 'online' ? 'live' : match[1], id: match[2]};
+}
 
+export async function fetchCurrentChessComPgn({signal} = {}) {
+  const identity = detectChessComGame(location.pathname);
+  const match = identity && [null, identity.type, identity.id];
   if (!match) {
     throw new Error(
       "Open a completed Chess.com game page to fetch its PGN."
@@ -80,12 +84,16 @@ export async function fetchCurrentChessComPgn({signal} = {}) {
   }
 
   const data = await response.json();
+  const current = detectChessComGame(location.pathname);
+  if (current?.id !== gameId || current?.type !== gameType) throw new Error("Game changed during import; retry on the current page");
   const gameData = data?.game;
 
   if (!gameData) {
     throw new Error("Chess.com returned no game data");
   }
 
+  const returnedId = gameData.id ?? gameData.gameId;
+  if (returnedId != null && String(returnedId) !== gameId) throw new Error("Chess.com returned a different game");
   const headers =
     gameData.pgnHeaders ||
     gameData.pgnheader ||
@@ -109,6 +117,9 @@ export async function fetchCurrentChessComPgn({signal} = {}) {
     throw new Error("Chess.com returned an invalid move list");
   }
 
+  if (moveList.length > 4000) throw new Error("Game move list exceeds supported limits");
+  const reportedPlies = gameData.plyCount;
+  if (reportedPlies != null && reportedPlies !== moveList.length / 2) throw new Error("Incomplete move list");
   const chess = new Chess();
 
   if (headers.FEN) {
@@ -161,5 +172,7 @@ export async function fetchCurrentChessComPgn({signal} = {}) {
     }
   }
 
+  if (chess.isCheckmate() && result !== (chess.turn() === 'w' ? '0-1' : '1-0')) throw new Error("Game result contradicts final position");
+  chess.header('Site', `https://www.chess.com/game/${gameType}/${gameId}`);
   return chess.pgn();
 }

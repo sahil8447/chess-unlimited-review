@@ -1,3 +1,4 @@
+import {parseGame} from '../src/analyzer.js';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {Chess} from 'chess.js';
@@ -83,4 +84,21 @@ test('explanations use legal best SAN and recognize actual terminal mate',()=>{
 test('Miss rejects an illegal tail even after three material-winning PV plies',()=>{
  const result=detectMissedOpportunity({beforeFen:'4k3/8/8/8/8/8/q7/R3K3 w Q - 0 1',bestVariation:['a1a2','e8e7','a2a7','a1a8'],bestMovePlayed:false,beforePlayerCp:500,afterPlayerCp:0,color:'w'});
  assert.equal(result,null);
+});
+
+test('callback rejects a mismatched game ID and reported truncated moves',async t=>{
+ stubFetch(t,{id:43,pgnHeaders:{Result:'1-0'},moveList:encode('e2','e4')});
+ await assert.rejects(fetchCurrentChessComPgn(),/different game/);
+ globalThis.fetch=async()=>({ok:true,json:async()=>({game:{id:42,plyCount:10,pgnHeaders:{Result:'1-0'},moveList:encode('e2','e4')}})});
+ await assert.rejects(fetchCurrentChessComPgn(),/Incomplete/);
+});
+test('a late callback cannot import the previous game after navigation',async t=>{
+ stubFetch(t,{});
+ globalThis.fetch=async()=>({ok:true,json:async()=>{globalThis.location.pathname='/game/live/43';return {game:{pgnHeaders:{Result:'1-0'},moveList:encode('e2','e4')}};}});
+ await assert.rejects(fetchCurrentChessComPgn(),/Game changed/);
+});
+
+test('analysis parser retains custom black fullmove numbering',()=>{
+ const parsed=parseGame('[SetUp "1"]\n[FEN "7k/8/8/8/8/8/p7/7K b - - 0 23"]\n\n23... a1=Q+ *');
+ assert.equal(parsed.positions[0].moveNumber,23);assert.equal(parsed.positions[0].color,'b');
 });

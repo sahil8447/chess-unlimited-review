@@ -117,6 +117,38 @@ test('Chromium product components and standalone WASM worker',{timeout:180000},a
     return {complete:result.textContent.includes('Game Review Complete'),moves:window.chessReviewResults?.reviewedMoves.length};
    });assert.deepEqual(result,{complete:true,moves:4});
   });
+  await t.test('SPA transition closes old game and keeps exactly one review button',async()=>{
+   await browser.navigate('/game/live/42?content');
+   const result=await browser.evaluate(async()=>{
+    document.getElementById('chess-unlimited-review-btn').click();
+    await new Promise(r=>setTimeout(r,100));
+    history.pushState({},'', '/game/live/43');
+    await new Promise(r=>setTimeout(r,30));
+    return {buttons:document.querySelectorAll('#chess-unlimited-review-btn').length,panel:!!document.getElementById('chess-unlimited-review-panel'),stale:!!window.chessReviewResults};
+   });assert.deepEqual(result,{buttons:1,panel:false,stale:false});
+  });
+  await t.test('online game route imports player summary and short-game rating fallback',async()=>{
+   await browser.navigate('/play/online/42?content');
+   const result=await browser.evaluate(async()=>{
+    document.getElementById('chess-unlimited-review-btn').click();
+    const output=document.getElementById('chess-review-result');
+    for(let i=0;i<300&&!output.textContent.includes('Game Review Complete');i++)await new Promise(r=>setTimeout(r,10));
+    return {complete:output.textContent.includes('Game Review Complete'),cards:output.querySelectorAll('.chess-player-summary > div').length,insufficient:output.textContent.includes('Insufficient data')};
+   });assert.deepEqual(result,{complete:true,cards:2,insufficient:true});
+  });
+  await t.test('explicit cancel restores controls without publishing an old review',async()=>{
+   await browser.navigate('/analysis?content');
+   const result=await browser.evaluate(async()=>{
+    document.getElementById('chess-unlimited-review-btn').click();let resolve,calls=0;
+    window.testEngine=()=>{calls++;return new Promise(r=>resolve=r);};
+    document.getElementById('chess-review-pgn').value='1. e4 e5 *';
+    document.getElementById('chess-review-import').click();
+    document.getElementById('chess-review-cancel').click();
+    resolve({success:true,scoreCp:0,mate:null,depth:12,pv:[],candidates:[]});
+    await new Promise(r=>setTimeout(r,30));
+    return {calls,enabled:!document.getElementById('chess-review-import').disabled,canceled:document.getElementById('chess-review-result').textContent.includes('canceled'),stale:!!window.chessReviewResults};
+   });assert.deepEqual(result,{calls:1,enabled:true,canceled:true,stale:false});
+  });
   await t.test('actual Stockfish 19 Lite browser Worker initializes and searches WASM',async()=>{
    await browser.navigate('/analysis');
    const result=await browser.evaluate(()=>new Promise((resolve,reject)=>{

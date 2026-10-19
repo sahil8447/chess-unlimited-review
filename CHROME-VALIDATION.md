@@ -42,3 +42,18 @@ Real Chromium component tests now verify local fixture navigation/import/cancell
 For the longer historical games in `test/games`, use the recorded `beforeFen` and offered move in `test/recognition-results.json` to import a short PGN with `[SetUp "1"]` and `[FEN "..."]` headers. This isolates the exact benchmark from the unchanged 12-candidate audit budget. All six historical offers should be recognized; Opera Rxd7 and Fischer Rxf6 remain diagnostically withheld for ambiguous winning alternatives.
 
 For a failure, record the exact PGN/FEN, move, action, expected/actual behavior, console error, and extension error. A passing unit suite does not mark any unperformed row as passed.
+
+
+## V1 final Windows acceptance (not executed in cloud)
+
+1. Back up/sync with LOCAL-SYNC.md. Build, load `dist` in an authorized Chrome profile, reload the Chess.com tab. Confirm only one Unlimited Review button.
+2. Finish one real bullet/blitz/rapid game and remain on its game page. Click Unlimited Review once without opening Chess.com's Analysis. Verify imported ID/Site, names, ratings, result, time control and complete last move against the actual game. Test both `/game/live/<id>` and `/play/online/<id>` if served. A route without a game ID must explain manual fallback, not choose a different game.
+3. Open a completed daily game and an individual history game; verify the same fields. Try a still-running game: reject automatic review as unfinished. Opening generic history alone supports manual PGN, not guessing an archived game.
+4. Verify two player cards separate actual game rating, performance estimate, confidence/range and accuracy. Use a standard game with ten-plus moves per player and enough nontrivial decisions; a short game must say Insufficient data. Review another game and verify all values change with it. Ratings are unofficial and uncalibrated.
+5. Navigate between two game IDs while import/search is pending, including browser back/forward. Old panel/results must disappear. Reopen and verify the current ID. Repeated clicks and DOM rerenders must never duplicate the button.
+6. Cancel during import and during analysis; controls must recover and late responses must not publish. Close/reopen, retry import, use malformed PGN and then valid PGN, and test a temporary network/engine failure. A callback timeout should expose manual import within 15 seconds; Retry current game import retries explicitly.
+7. Verify board/PV/custom moves/undo/return, promotion picker, custom black-to-move FEN numbering, graph keyboard selection and move-row Enter/Space. Check no stale evaluation after rapid navigation.
+8. Import test/rxd7.pgn; verify 45 plies and diagnostic eligibility without a Brilliant badge. Test narrow/wide layout, readable player cards and tooltips, keyboard close/cancel and screen-reader status.
+9. Confirm no background analysis continues to enqueue new jobs after cancel/close. One already-running shared engine job may finish. Check Chrome service-worker/offscreen console for errors and repeated worker creation after reviewing several games.
+
+The callback is undocumented and may change or be denied by Chess.com. No access-control bypass is implemented. Successful fixtures cannot establish live compatibility. Record Chrome/Windows versions, game IDs, outcomes and any console errors before public release.

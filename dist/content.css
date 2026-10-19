@@ -1306,3 +1306,18 @@
   color: white;
 }
 
+
+#chess-unlimited-review-panel .chess-player-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+#chess-unlimited-review-panel .chess-player-summary > div {
+  white-space: pre-line;
+  background: #34332f;
+  border: 1px solid #56544d;
+  border-radius: 8px;
+  padding: 12px;
+  line-height: 1.7;
+}

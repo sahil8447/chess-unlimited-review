@@ -1,3 +1,5 @@
+> Superseded for the V1 development branch by [V1-VALIDATION.md](V1-VALIDATION.md). Counts below describe the preceding bdceead checkpoint.
+
 # Product validation and cloud-to-Windows delivery
 
 ## Location and recovery

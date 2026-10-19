@@ -1,0 +1,31 @@
+{
+  "branch": "codex/chess-unlimited-review-v1",
+  "baseCommit": "bdceead6fe23a0edcbef3b43ba304da113fe8ef2",
+  "results": {
+    "tests": 127,
+    "pass": 126,
+    "fail": 0,
+    "skipped": 1
+  },
+  "durationMs": 97256.005944,
+  "install": "npm ci passed",
+  "build": "passed",
+  "browser": {
+    "tests": 16,
+    "pass": 15,
+    "skipped": 1,
+    "skipReason": "Loading of unpacked extensions is disabled by the administrator.",
+    "liveChessComVerified": false,
+    "standaloneWasmPassed": true
+  },
+  "brilliant": {
+    "automaticAwards": false,
+    "soundRecognized": 13,
+    "eligible": 11,
+    "withheld": 2,
+    "negativeCases": 9,
+    "negativeEligible": 0
+  },
+  "performanceModelEmpiricallyCalibrated": false,
+  "windowsDirectoryModified": false
+}

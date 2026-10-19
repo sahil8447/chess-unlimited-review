@@ -1,4 +1,5 @@
-import { fetchCurrentChessComPgn } from "./chesscomPgn.js";
+import { estimatePerformance } from "./performanceRating.js";
+import { detectChessComGame, fetchCurrentChessComPgn } from "./chesscomPgn.js";
 import { detectMissedOpportunity } from "./missDetection.js";
 import { classifyBrilliantMove } from "./brilliantRules.js";
 import { generateMoveExplanation } from "./moveExplanation.js";
@@ -21,7 +22,9 @@ import {
   const BUTTON_ID = "chess-unlimited-review-btn";
   const PANEL_ID = "chess-unlimited-review-panel";
   const panelSessions = new WeakMap();
+  let pageIdentity = location.pathname;
   function closePanel(panel) {
+    delete window.chessReviewResults;
     const session = panelSessions.get(panel);
     session?.controller.abort();
     session?.review?.abort();
@@ -30,7 +33,7 @@ import {
     panel.remove();
   }
   function isGamePage() {
-    return /^\/(game|analysis|games)(?:\/|$)/.test(
+    return /^\/(game|analysis|games|play)(?:\/|$)/.test(
       location.pathname
     );
   }
@@ -47,11 +50,12 @@ async function autoFetchAndReview(panel) {
   const input = panel.querySelector("#chess-review-pgn");
   const result = panel.querySelector("#chess-review-result");
   const button = panel.querySelector("#chess-review-import");
+  const importSignal = panelSessions.get(panel).controller.signal;
   button.disabled = true;
   result.textContent = "Fetching game from Chess.com...";
   try {
-    const pgn = await fetchCurrentChessComPgn({signal: panelSessions.get(panel)?.controller.signal});
-    if (!panel.isConnected) return;
+    const pgn = await fetchCurrentChessComPgn({signal: AbortSignal.any([importSignal, AbortSignal.timeout(15000)])});
+    if (!panel.isConnected || importSignal.aborted) return;
     // Validate before passing it to Stockfish.
     const testGame = new Chess();
     testGame.loadPgn(pgn);
@@ -69,7 +73,7 @@ async function autoFetchAndReview(panel) {
     // board, move badges and information card.
     await analyzeGame();
   } catch (error) {
-    if (!panel.isConnected) return;
+    if (!panel.isConnected || importSignal.aborted) return;
     console.error("[Chess Review Auto Fetch]", error);
     result.textContent =
       "Automatic import unavailable: " +
@@ -80,7 +84,7 @@ async function autoFetchAndReview(panel) {
       details.open = true;
     }
   } finally {
-    if (panel.isConnected) {
+    if (panel.isConnected && !importSignal.aborted) {
       button.disabled = false;
     }
   }
@@ -105,7 +109,9 @@ function openPanel() {
     <button id="chess-review-import">
       Analyze Game
     </button>
-    <div id="chess-review-result"></div>
+    <button id="chess-review-fetch" type="button">Retry current game import</button>
+    <button id="chess-review-cancel" type="button">Cancel analysis</button>
+    <div id="chess-review-result" role="status" aria-live="polite"></div>
   `;
   // Close button.
   const closeButton = document.createElement("button");
@@ -145,9 +151,24 @@ function openPanel() {
       void analyzeGame();
     }
   });
+  panel.querySelector('#chess-review-fetch').addEventListener('click', () => {
+    if (!analyzeButton.disabled) void autoFetchAndReview(panel);
+  });
+  panel.querySelector('#chess-review-cancel').addEventListener('click', () => {
+    const session = panelSessions.get(panel);
+    session.review?.abort();
+    session.review = null;
+    session.controller.abort();
+    session.controller = new AbortController();
+    session.board?.destroy();
+    delete window.chessReviewResults;
+    panel.querySelector('#chess-review-result').textContent = 'Analysis canceled. Retry import or analyze a PGN.';
+    analyzeButton.disabled = false;
+    analyzeButton.textContent = 'Analyze Game';
+  });
   // Automatically import completed Chess.com games.
   if (
-    /^\/(?:analysis\/)?game\/(live|daily)\/\d+(?:\/|$)/.test(location.pathname)
+    detectChessComGame(location.pathname)
   ) {
     void autoFetchAndReview(panel);
   }
@@ -209,6 +230,7 @@ async function analyzeGame() {
     return evaluatePosition(fen, depth, {...options, signal});
   };
   const pgn = input.value.trim();
+  delete window.chessReviewResults;
   result.replaceChildren();
   const chess = new Chess();
   try {
@@ -345,6 +367,9 @@ async function analyzeGame() {
       const afterPlayerCp = player === "w" ? afterWhiteCp : -afterWhiteCp;
       const bestMovePlayed =
         before.bestMove?.toLowerCase() === uciOf(move).toLowerCase();
+      const legalChoices = replay.moves().length;
+      const previousMove = moves[i - 1];
+      const obviousRecapture = Boolean(move.captured && previousMove?.captured && previousMove.to === move.to);
       replay.move(move.san);
       const sacrificeCandidate = detectSacrificeCandidate(replay, move);
       const classification = classifyMove({
@@ -421,6 +446,7 @@ async function analyzeGame() {
       }
 
       reviewedMoves.push({
+        legalChoices, obviousRecapture,
         number: Number(beforeFen.split(" ")[5]),
         color: player,
         san: move.san,
@@ -454,6 +480,7 @@ bestVariation: before.pv || [],
 assertActive();
 const whiteAccuracy = calculateAccuracy(reviewedMoves, "w");
 const blackAccuracy = calculateAccuracy(reviewedMoves, "b");
+const performance = Object.fromEntries(['w', 'b'].map(color => [color, estimatePerformance({moves: reviewedMoves, color, headers: chess.header(), complete: true, customStart: Boolean(initialFen)})]));
 const gradeCounts = {
   White: {},
   Black: {}
@@ -467,6 +494,7 @@ console.log("[Chess Review Grade Counts]");
 console.table(gradeCounts);
     // Store results for the graph and review UI.
     window.chessReviewResults = {
+      pgn, headers: chess.header(), performance,
       reviewedMoves,
       graphData,
       whiteAccuracy,
@@ -481,6 +509,18 @@ console.table(gradeCounts);
     `White Estimated Accuracy: ${whiteAccuracy?.toFixed(1) ?? "N/A"}%\n` +
 `Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
     result.replaceChildren(heading, accuracy);
+    const players = document.createElement('div');
+    players.className = 'chess-player-summary';
+    for (const [color, label, estimatedAccuracy] of [['w', 'White', whiteAccuracy], ['b', 'Black', blackAccuracy]]) {
+      const card = document.createElement('div');
+      const estimate = performance[color];
+      card.title = 'Unofficial, uncalibrated single-game model estimate, not official Elo or Chess.com rating. The range is heuristic uncertainty, not a statistical confidence interval.';
+      card.textContent = `${label}: ${chess.header()[label] || 'Unknown'} · Actual game rating: ${chess.header()[label + 'Elo'] || 'Unavailable'}\nEstimated Performance Rating: ${estimate.rating === null ? 'Insufficient data — ' + estimate.reason : estimate.rating + ' ± ' + estimate.uncertainty + ' (' + estimate.confidence + ' confidence)'}\nEstimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? 'N/A'}%`;
+      players.appendChild(card);
+    }
+    const gameMetadata = document.createElement('p');
+    gameMetadata.textContent = `Result: ${chess.header().Result || '*'} · Time control: ${chess.header().TimeControl || 'Unavailable'} · Unofficial review estimates`;
+    result.append(players, gameMetadata);
 {
   const counts = {
     w: {},
@@ -810,6 +850,9 @@ result.appendChild(dashboard);
       const gradeInfo = GRADES[move.grade];
       const row = document.createElement("div");
       row.className = "chess-move-row";
+      row.tabIndex = 0;
+      row.setAttribute("role", "button");
+      row.setAttribute("aria-label", `${move.number}${move.color === "w" ? "." : "..."} ${move.san}, ${gradeInfo.label}`);
       const moveName = document.createElement("span");
       moveName.textContent =
         `${move.number}${move.color === "w" ? "." : "..."} ${move.san}`;
@@ -822,6 +865,12 @@ result.appendChild(dashboard);
 const selectedPly = reviewedMoves.indexOf(move) + 1;
 row.addEventListener("click", () => {
   reviewBoard.goToMove(selectedPly);
+});
+row.addEventListener('keydown', event => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    reviewBoard.goToMove(selectedPly);
+  }
 });
 moveList.appendChild(row);
 }
@@ -839,6 +888,11 @@ updateMoveInfo(reviewedMoves.length);
   }
 }
   function update() {
+    if (pageIdentity !== location.pathname) {
+      pageIdentity = location.pathname;
+      const previous = document.getElementById(PANEL_ID);
+      if (previous) closePanel(previous);
+    }
     if (!isGamePage()) {
       document.getElementById(BUTTON_ID)?.remove();
       const panel = document.getElementById(PANEL_ID);
@@ -851,5 +905,8 @@ updateMoveInfo(reviewedMoves.length);
     document.documentElement,
     { childList: true, subtree: true }
   );
+  window.navigation?.addEventListener("currententrychange", update);
+  addEventListener("popstate", update);
+  addEventListener("hashchange", update);
   update();
 })();

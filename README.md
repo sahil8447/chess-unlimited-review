@@ -39,3 +39,12 @@ The repository currently includes some tracked Windows dependency files. Linux o
 - `test/calibration-results.json`, `test/recognition-results.json`: recorded engine evidence and sourced historical PGNs.
 
 Automatic Brilliant badges remain disabled. Complete the live Chrome acceptance checks before treating this branch as a fully verified release.
+
+
+## V1 development update
+
+The current release branch is `codex/chess-unlimited-review-v1`. See [V1 validation](V1-VALIDATION.md), [performance model](PERFORMANCE-RATING.md), and [safe Windows synchronization](LOCAL-SYNC.md).
+
+Completed `/game/live/<id>`, `/game/daily/<id>`, `/analysis/game/...` and `/play/online/<id>` routes support automatic import when Chess.com's callback returns a valid completed game. History pages offer manual PGN import; open an individual game for automatic import. Generic `/play/online` pages without a game identifier cannot be reliably imported and use the explicit manual fallback. No analysis-page detour is required on a supported completed-game route.
+
+Estimated Performance Rating is an unofficial model estimate. Short, unfinished, trivial, abandoned or custom-start games may show Insufficient data. Automatic Brilliant awards remain disabled. Final real Chess.com/Windows Chrome acceptance is pending.

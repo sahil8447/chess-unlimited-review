@@ -28,7 +28,7 @@ export function parseGame(pgn) {
 
     positions.push({
       index: i,
-      moveNumber: Math.floor(i / 2) + 1,
+      moveNumber: Number(fenBefore.split(" ")[5]),
       color: move.color,
       san: move.san,
       uci: move.from + move.to +

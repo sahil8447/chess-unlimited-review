@@ -1,4 +1,264 @@
 (() => {
+  // src/grading.js
+  var GRADES = {
+    best: {
+      label: "Best",
+      symbol: "\u2605",
+      color: "#81b64c"
+    },
+    excellent: {
+      label: "Excellent",
+      symbol: "!",
+      color: "#81b64c"
+    },
+    good: {
+      label: "Good",
+      symbol: "",
+      color: "#96af8b"
+    },
+    inaccuracy: {
+      label: "Inaccuracy",
+      symbol: "?!",
+      color: "#f0c15c"
+    },
+    miss: {
+      label: "Miss",
+      symbol: "\u2715",
+      color: "#f16b6b"
+    },
+    mistake: {
+      label: "Mistake",
+      symbol: "?",
+      color: "#e69b50"
+    },
+    blunder: {
+      label: "Blunder",
+      symbol: "??",
+      color: "#e05252"
+    },
+    brilliant: {
+      label: "Brilliant",
+      symbol: "!!",
+      color: "#1baca6"
+    },
+    great: {
+      label: "Great",
+      symbol: "!",
+      color: "#5c8bb0"
+    }
+  };
+  var clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  function winChance(cp) {
+    if (!Number.isFinite(cp)) return 0.5;
+    const score = clamp(cp, -1e4, 1e4);
+    return 1 / (1 + Math.exp(-368208e-8 * score));
+  }
+  function classifyMove({
+    beforeCp,
+    afterCp,
+    bestMovePlayed
+  }) {
+    if (!Number.isFinite(beforeCp) || !Number.isFinite(afterCp)) {
+      return { grade: "good", loss: 0 };
+    }
+    const loss = clamp(
+      winChance(beforeCp) - winChance(afterCp),
+      0,
+      1
+    );
+    if (loss >= 0.2) {
+      return { grade: "blunder", loss };
+    }
+    if (loss >= 0.1) {
+      return { grade: "mistake", loss };
+    }
+    if (loss >= 0.05) {
+      return { grade: "inaccuracy", loss };
+    }
+    if (bestMovePlayed) {
+      return { grade: "best", loss };
+    }
+    if (loss <= 5e-3) {
+      return { grade: "excellent", loss };
+    }
+    return { grade: "good", loss };
+  }
+  function moveAccuracyFromWinLoss(winLoss) {
+    if (!Number.isFinite(winLoss)) return null;
+    const loss = Math.max(0, winLoss);
+    const accuracy = 103.1668100711649 * Math.exp(-0.04354415386753951 * loss) - 3.166924740191411;
+    return clamp(accuracy, 0, 100);
+  }
+  function calculateMoveAccuracy(beforeCp, afterCp) {
+    if (!Number.isFinite(beforeCp) || !Number.isFinite(afterCp)) {
+      return null;
+    }
+    const beforeWin = winChance(beforeCp) * 100;
+    const afterWin = winChance(afterCp) * 100;
+    const loss = Math.max(0, beforeWin - afterWin);
+    return moveAccuracyFromWinLoss(loss);
+  }
+  function standardDeviation(values) {
+    if (values.length < 2) return 0;
+    const mean = values.reduce((sum, n) => sum + n, 0) / values.length;
+    const variance = values.reduce(
+      (sum, n) => sum + (n - mean) ** 2,
+      0
+    ) / values.length;
+    return Math.sqrt(variance);
+  }
+  function calculateAccuracy(reviewedMoves, color) {
+    if (!Array.isArray(reviewedMoves) || reviewedMoves.length === 0 || !["w", "b"].includes(color)) {
+      return null;
+    }
+    if (reviewedMoves.some(
+      (move) => !Number.isFinite(move.beforePlayerCp) || !Number.isFinite(move.afterPlayerCp)
+    )) {
+      console.warn(
+        "[Accuracy] Missing evaluation data"
+      );
+      return null;
+    }
+    const first = reviewedMoves[0];
+    const initialWhiteCp = first.color === "w" ? first.beforePlayerCp : -first.beforePlayerCp;
+    const whiteCps = [
+      initialWhiteCp,
+      ...reviewedMoves.map(
+        (move) => move.color === "w" ? move.afterPlayerCp : -move.afterPlayerCp
+      )
+    ];
+    const winPercents = whiteCps.map((cp) => winChance(cp) * 100);
+    const windowSize = clamp(
+      Math.floor(reviewedMoves.length / 10),
+      2,
+      8
+    );
+    const weights = reviewedMoves.map((_, index) => {
+      const start = Math.max(
+        0,
+        Math.min(
+          index - Math.floor(windowSize / 2),
+          winPercents.length - windowSize
+        )
+      );
+      const values = winPercents.slice(
+        start,
+        start + windowSize
+      );
+      return clamp(
+        standardDeviation(values),
+        0.5,
+        12
+      );
+    });
+    let weightedSum = 0;
+    let totalWeight = 0;
+    const accuracies = [];
+    for (let i = 0; i < reviewedMoves.length; i++) {
+      const move = reviewedMoves[i];
+      if (move.color !== color) continue;
+      const accuracy = calculateMoveAccuracy(
+        move.beforePlayerCp,
+        move.afterPlayerCp
+      );
+      if (accuracy === null) return null;
+      accuracies.push(accuracy);
+      weightedSum += accuracy * weights[i];
+      totalWeight += weights[i];
+    }
+    if (accuracies.length === 0) return null;
+    const weightedMean = weightedSum / totalWeight;
+    const harmonicMean = accuracies.some((value) => value === 0) ? 0 : accuracies.length / accuracies.reduce(
+      (sum, value) => sum + 1 / value,
+      0
+    );
+    const finalAccuracy = (weightedMean + harmonicMean) / 2;
+    console.log("[Accuracy]", {
+      color,
+      moves: accuracies.length,
+      weightedMean: weightedMean.toFixed(2),
+      harmonicMean: harmonicMean.toFixed(2),
+      finalAccuracy: finalAccuracy.toFixed(2)
+    });
+    return clamp(finalAccuracy, 0, 100);
+  }
+  function classifyTacticalMove({
+    baseGrade,
+    bestMovePlayed,
+    beforeCp,
+    afterCp,
+    materialBefore,
+    materialAfter,
+    isCapture,
+    isCheck,
+    alternativeLoss = null
+  }) {
+    if (!bestMovePlayed) return baseGrade;
+    const loss = Math.max(
+      0,
+      winChance(beforeCp) - winChance(afterCp)
+    );
+    const criticalPosition = Number.isFinite(beforeCp) && Number.isFinite(afterCp) && beforeCp < 300 && afterCp > -100;
+    if (criticalPosition && alternativeLoss !== null && alternativeLoss >= 0.1 && loss < 0.02) {
+      return "great";
+    }
+    return baseGrade;
+  }
+  function calculateAlternativeLoss(candidates) {
+    if (!Array.isArray(candidates)) return null;
+    const best = candidates.find((c) => c.rank === 1);
+    const second = candidates.find((c) => c.rank === 2);
+    if (!best || !second) return null;
+    if (!Number.isInteger(best.depth) || best.depth < 1 || best.depth !== second.depth || best.bound || second.bound) return null;
+    function score(candidate) {
+      if (candidate.mate !== null && candidate.mate !== void 0) {
+        return Number.isFinite(candidate.mate) && candidate.mate !== 0 ? Math.sign(candidate.mate) * 1e4 : null;
+      }
+      return candidate.scoreCp;
+    }
+    const bestCp = score(best);
+    const secondCp = score(second);
+    if (!Number.isFinite(bestCp) || !Number.isFinite(secondCp)) {
+      return null;
+    }
+    return Math.max(
+      0,
+      winChance(bestCp) - winChance(secondCp)
+    );
+  }
+
+  // src/performanceRating.js
+  var PERFORMANCE_MODEL = Object.freeze({ minRating: 400, maxRating: 2800, minMoves: 10, minEffective: 6 });
+  var clamp2 = (n, a, b) => Math.max(a, Math.min(b, n));
+  var rating = (n) => Number.isFinite(Number(n)) && Number(n) >= 100 && Number(n) <= 4e3 ? Number(n) : null;
+  function estimatePerformance({ moves, color, headers = {}, complete = false, customStart = false }) {
+    const insufficient = (reason) => ({ rating: null, confidence: "Insufficient data", reason });
+    if (!complete || !Array.isArray(moves) || !["w", "b"].includes(color)) return insufficient("Analysis incomplete");
+    if (!["1-0", "0-1", "1/2-1/2"].includes(headers.Result) || /abort|abandon/i.test(headers.Termination || "")) return insufficient("Game unfinished or abandoned");
+    if (customStart) return insufficient("Custom starting positions are outside this model");
+    const own = moves.filter((m) => m.color === color);
+    if (own.length < PERFORMANCE_MODEL.minMoves) return insufficient("Too few moves");
+    let weight = 0, quality = 0, errors = 0;
+    for (const m of own) {
+      if (!Number.isFinite(m.beforePlayerCp) || !Number.isFinite(m.afterPlayerCp) || !Number.isInteger(m.legalChoices)) return insufficient("Missing analysis evidence");
+      const w = m.legalChoices <= 1 || m.obviousRecapture || Math.abs(m.beforePlayerCp) >= 600 ? 0 : m.number <= 6 ? 0.25 : 1;
+      const accuracy = calculateMoveAccuracy(m.beforePlayerCp, m.afterPlayerCp);
+      weight += w;
+      quality += w * accuracy;
+      errors += w * (["blunder", "miss"].includes(m.grade) ? 2 : m.grade === "mistake" ? 1 : 0);
+    }
+    if (weight < PERFORMANCE_MODEL.minEffective) return insufficient("Too few nontrivial decisions");
+    const player = rating(headers[color === "w" ? "WhiteElo" : "BlackElo"]);
+    const opponent = rating(headers[color === "w" ? "BlackElo" : "WhiteElo"]);
+    const prior = player !== null && opponent !== null ? 0.75 * player + 0.25 * opponent : player ?? opponent ?? 1500;
+    const average = quality / weight;
+    const adjustment = clamp2(320 * Math.log((average + 5) / (105 - average)) - 500 * errors / weight, -800, 800);
+    const reliability = weight / (weight + 20);
+    const value = Math.round(clamp2(prior + reliability * adjustment, PERFORMANCE_MODEL.minRating, PERFORMANCE_MODEL.maxRating) / 10) * 10;
+    const uncertainty = Math.round((350 + 500 / Math.sqrt(weight) + (player === null ? 150 : 0)) / 10) * 10;
+    return { rating: value, confidence: weight >= 20 && player !== null ? "Moderate" : "Low", uncertainty, effectiveMoves: weight, quality: average, prior };
+  }
+
   // node_modules/chess.js/dist/esm/chess.js
   function rootNode(comment) {
     return comment !== null ? { comment, variations: [] } : { variations: [] };
@@ -3485,10 +3745,14 @@
       ...promotion ? { promotion } : {}
     };
   }
+  function detectChessComGame(pathname) {
+    const match = pathname.match(/^\/(?:analysis\/)?game\/(live|daily)\/(\d+)(?:\/|$)/) || pathname.match(/^\/play\/(online|computer)\/(\d+)(?:\/|$)/);
+    if (!match || match[1] === "computer") return null;
+    return { type: match[1] === "online" ? "live" : match[1], id: match[2] };
+  }
   async function fetchCurrentChessComPgn({ signal } = {}) {
-    const match = location.pathname.match(
-      /^\/(?:analysis\/)?game\/(live|daily)\/(\d+)(?:\/|$)/
-    );
+    const identity = detectChessComGame(location.pathname);
+    const match = identity && [null, identity.type, identity.id];
     if (!match) {
       throw new Error(
         "Open a completed Chess.com game page to fetch its PGN."
@@ -3512,10 +3776,14 @@
       );
     }
     const data = await response.json();
+    const current = detectChessComGame(location.pathname);
+    if (current?.id !== gameId || current?.type !== gameType) throw new Error("Game changed during import; retry on the current page");
     const gameData = data?.game;
     if (!gameData) {
       throw new Error("Chess.com returned no game data");
     }
+    const returnedId = gameData.id ?? gameData.gameId;
+    if (returnedId != null && String(returnedId) !== gameId) throw new Error("Chess.com returned a different game");
     const headers = gameData.pgnHeaders || gameData.pgnheader || {};
     const result = headers.Result;
     if (!["1-0", "0-1", "1/2-1/2"].includes(result)) {
@@ -3527,6 +3795,9 @@
     if (typeof moveList !== "string" || moveList.length === 0 || moveList.length % 2 !== 0) {
       throw new Error("Chess.com returned an invalid move list");
     }
+    if (moveList.length > 4e3) throw new Error("Game move list exceeds supported limits");
+    const reportedPlies = gameData.plyCount;
+    if (reportedPlies != null && reportedPlies !== moveList.length / 2) throw new Error("Incomplete move list");
     const chess = new Chess();
     if (headers.FEN) {
       chess.load(headers.FEN);
@@ -3569,6 +3840,8 @@
         chess.header(key, String(headers[key]));
       }
     }
+    if (chess.isCheckmate() && result !== (chess.turn() === "w" ? "0-1" : "1-0")) throw new Error("Game result contradicts final position");
+    chess.header("Site", `https://www.chess.com/game/${gameType}/${gameId}`);
     return chess.pgn();
   }
 
@@ -3660,8 +3933,8 @@
   function approximateWinChance(cp) {
     return Number.isFinite(cp) ? 1 / (1 + Math.exp(-cp / 220)) : null;
   }
-  function classifyBrilliantMove({ baseGrade, verification: v, rating }) {
-    const ratingUsed = Number.isFinite(rating) && rating > 0 ? rating : 1500;
+  function classifyBrilliantMove({ baseGrade, verification: v, rating: rating2 }) {
+    const ratingUsed = Number.isFinite(rating2) && rating2 > 0 ? rating2 : 1500;
     const tolerance = ratingUsed < 1200 ? 35 : 22;
     const beforeCp = v?.beforeCp ?? null, playedCp = v?.playedCp ?? null;
     const cpGap = v?.deepCpGap ?? null;
@@ -3932,234 +4205,6 @@
     }
     container.append(heading, svg, selectedLabel);
     return container;
-  }
-
-  // src/grading.js
-  var GRADES = {
-    best: {
-      label: "Best",
-      symbol: "\u2605",
-      color: "#81b64c"
-    },
-    excellent: {
-      label: "Excellent",
-      symbol: "!",
-      color: "#81b64c"
-    },
-    good: {
-      label: "Good",
-      symbol: "",
-      color: "#96af8b"
-    },
-    inaccuracy: {
-      label: "Inaccuracy",
-      symbol: "?!",
-      color: "#f0c15c"
-    },
-    miss: {
-      label: "Miss",
-      symbol: "\u2715",
-      color: "#f16b6b"
-    },
-    mistake: {
-      label: "Mistake",
-      symbol: "?",
-      color: "#e69b50"
-    },
-    blunder: {
-      label: "Blunder",
-      symbol: "??",
-      color: "#e05252"
-    },
-    brilliant: {
-      label: "Brilliant",
-      symbol: "!!",
-      color: "#1baca6"
-    },
-    great: {
-      label: "Great",
-      symbol: "!",
-      color: "#5c8bb0"
-    }
-  };
-  var clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-  function winChance(cp) {
-    if (!Number.isFinite(cp)) return 0.5;
-    const score = clamp(cp, -1e4, 1e4);
-    return 1 / (1 + Math.exp(-368208e-8 * score));
-  }
-  function classifyMove({
-    beforeCp,
-    afterCp,
-    bestMovePlayed
-  }) {
-    if (!Number.isFinite(beforeCp) || !Number.isFinite(afterCp)) {
-      return { grade: "good", loss: 0 };
-    }
-    const loss = clamp(
-      winChance(beforeCp) - winChance(afterCp),
-      0,
-      1
-    );
-    if (loss >= 0.2) {
-      return { grade: "blunder", loss };
-    }
-    if (loss >= 0.1) {
-      return { grade: "mistake", loss };
-    }
-    if (loss >= 0.05) {
-      return { grade: "inaccuracy", loss };
-    }
-    if (bestMovePlayed) {
-      return { grade: "best", loss };
-    }
-    if (loss <= 5e-3) {
-      return { grade: "excellent", loss };
-    }
-    return { grade: "good", loss };
-  }
-  function moveAccuracyFromWinLoss(winLoss) {
-    if (!Number.isFinite(winLoss)) return null;
-    const loss = Math.max(0, winLoss);
-    const accuracy = 103.1668100711649 * Math.exp(-0.04354415386753951 * loss) - 3.166924740191411;
-    return clamp(accuracy, 0, 100);
-  }
-  function calculateMoveAccuracy(beforeCp, afterCp) {
-    if (!Number.isFinite(beforeCp) || !Number.isFinite(afterCp)) {
-      return null;
-    }
-    const beforeWin = winChance(beforeCp) * 100;
-    const afterWin = winChance(afterCp) * 100;
-    const loss = Math.max(0, beforeWin - afterWin);
-    return moveAccuracyFromWinLoss(loss);
-  }
-  function standardDeviation(values) {
-    if (values.length < 2) return 0;
-    const mean = values.reduce((sum, n) => sum + n, 0) / values.length;
-    const variance = values.reduce(
-      (sum, n) => sum + (n - mean) ** 2,
-      0
-    ) / values.length;
-    return Math.sqrt(variance);
-  }
-  function calculateAccuracy(reviewedMoves, color) {
-    if (!Array.isArray(reviewedMoves) || reviewedMoves.length === 0 || !["w", "b"].includes(color)) {
-      return null;
-    }
-    if (reviewedMoves.some(
-      (move) => !Number.isFinite(move.beforePlayerCp) || !Number.isFinite(move.afterPlayerCp)
-    )) {
-      console.warn(
-        "[Accuracy] Missing evaluation data"
-      );
-      return null;
-    }
-    const first = reviewedMoves[0];
-    const initialWhiteCp = first.color === "w" ? first.beforePlayerCp : -first.beforePlayerCp;
-    const whiteCps = [
-      initialWhiteCp,
-      ...reviewedMoves.map(
-        (move) => move.color === "w" ? move.afterPlayerCp : -move.afterPlayerCp
-      )
-    ];
-    const winPercents = whiteCps.map((cp) => winChance(cp) * 100);
-    const windowSize = clamp(
-      Math.floor(reviewedMoves.length / 10),
-      2,
-      8
-    );
-    const weights = reviewedMoves.map((_, index) => {
-      const start = Math.max(
-        0,
-        Math.min(
-          index - Math.floor(windowSize / 2),
-          winPercents.length - windowSize
-        )
-      );
-      const values = winPercents.slice(
-        start,
-        start + windowSize
-      );
-      return clamp(
-        standardDeviation(values),
-        0.5,
-        12
-      );
-    });
-    let weightedSum = 0;
-    let totalWeight = 0;
-    const accuracies = [];
-    for (let i = 0; i < reviewedMoves.length; i++) {
-      const move = reviewedMoves[i];
-      if (move.color !== color) continue;
-      const accuracy = calculateMoveAccuracy(
-        move.beforePlayerCp,
-        move.afterPlayerCp
-      );
-      if (accuracy === null) return null;
-      accuracies.push(accuracy);
-      weightedSum += accuracy * weights[i];
-      totalWeight += weights[i];
-    }
-    if (accuracies.length === 0) return null;
-    const weightedMean = weightedSum / totalWeight;
-    const harmonicMean = accuracies.some((value) => value === 0) ? 0 : accuracies.length / accuracies.reduce(
-      (sum, value) => sum + 1 / value,
-      0
-    );
-    const finalAccuracy = (weightedMean + harmonicMean) / 2;
-    console.log("[Accuracy]", {
-      color,
-      moves: accuracies.length,
-      weightedMean: weightedMean.toFixed(2),
-      harmonicMean: harmonicMean.toFixed(2),
-      finalAccuracy: finalAccuracy.toFixed(2)
-    });
-    return clamp(finalAccuracy, 0, 100);
-  }
-  function classifyTacticalMove({
-    baseGrade,
-    bestMovePlayed,
-    beforeCp,
-    afterCp,
-    materialBefore,
-    materialAfter,
-    isCapture,
-    isCheck,
-    alternativeLoss = null
-  }) {
-    if (!bestMovePlayed) return baseGrade;
-    const loss = Math.max(
-      0,
-      winChance(beforeCp) - winChance(afterCp)
-    );
-    const criticalPosition = Number.isFinite(beforeCp) && Number.isFinite(afterCp) && beforeCp < 300 && afterCp > -100;
-    if (criticalPosition && alternativeLoss !== null && alternativeLoss >= 0.1 && loss < 0.02) {
-      return "great";
-    }
-    return baseGrade;
-  }
-  function calculateAlternativeLoss(candidates) {
-    if (!Array.isArray(candidates)) return null;
-    const best = candidates.find((c) => c.rank === 1);
-    const second = candidates.find((c) => c.rank === 2);
-    if (!best || !second) return null;
-    if (!Number.isInteger(best.depth) || best.depth < 1 || best.depth !== second.depth || best.bound || second.bound) return null;
-    function score(candidate) {
-      if (candidate.mate !== null && candidate.mate !== void 0) {
-        return Number.isFinite(candidate.mate) && candidate.mate !== 0 ? Math.sign(candidate.mate) * 1e4 : null;
-      }
-      return candidate.scoreCp;
-    }
-    const bestCp = score(best);
-    const secondCp = score(second);
-    if (!Number.isFinite(bestCp) || !Number.isFinite(secondCp)) {
-      return null;
-    }
-    return Math.max(
-      0,
-      winChance(bestCp) - winChance(secondCp)
-    );
   }
 
   // src/board.js
@@ -4998,7 +5043,9 @@
     const BUTTON_ID = "chess-unlimited-review-btn";
     const PANEL_ID = "chess-unlimited-review-panel";
     const panelSessions = /* @__PURE__ */ new WeakMap();
+    let pageIdentity = location.pathname;
     function closePanel(panel) {
+      delete window.chessReviewResults;
       const session = panelSessions.get(panel);
       session?.controller.abort();
       session?.review?.abort();
@@ -5007,7 +5054,7 @@
       panel.remove();
     }
     function isGamePage() {
-      return /^\/(game|analysis|games)(?:\/|$)/.test(
+      return /^\/(game|analysis|games|play)(?:\/|$)/.test(
         location.pathname
       );
     }
@@ -5024,11 +5071,12 @@
       const input = panel.querySelector("#chess-review-pgn");
       const result = panel.querySelector("#chess-review-result");
       const button = panel.querySelector("#chess-review-import");
+      const importSignal = panelSessions.get(panel).controller.signal;
       button.disabled = true;
       result.textContent = "Fetching game from Chess.com...";
       try {
-        const pgn2 = await fetchCurrentChessComPgn({ signal: panelSessions.get(panel)?.controller.signal });
-        if (!panel.isConnected) return;
+        const pgn2 = await fetchCurrentChessComPgn({ signal: AbortSignal.any([importSignal, AbortSignal.timeout(15e3)]) });
+        if (!panel.isConnected || importSignal.aborted) return;
         const testGame = new Chess();
         testGame.loadPgn(pgn2);
         if (!testGame.history().length) {
@@ -5042,7 +5090,7 @@
         button.disabled = false;
         await analyzeGame();
       } catch (error) {
-        if (!panel.isConnected) return;
+        if (!panel.isConnected || importSignal.aborted) return;
         console.error("[Chess Review Auto Fetch]", error);
         result.textContent = "Automatic import unavailable: " + error.message + "\n\nYou can still paste a PGN and click Analyze Game.";
         const details = panel.querySelector(".chess-pgn-details");
@@ -5050,7 +5098,7 @@
           details.open = true;
         }
       } finally {
-        if (panel.isConnected) {
+        if (panel.isConnected && !importSignal.aborted) {
           button.disabled = false;
         }
       }
@@ -5074,7 +5122,9 @@
     <button id="chess-review-import">
       Analyze Game
     </button>
-    <div id="chess-review-result"></div>
+    <button id="chess-review-fetch" type="button">Retry current game import</button>
+    <button id="chess-review-cancel" type="button">Cancel analysis</button>
+    <div id="chess-review-result" role="status" aria-live="polite"></div>
   `;
       const closeButton = document.createElement("button");
       closeButton.className = "chess-review-close";
@@ -5109,7 +5159,22 @@
           void analyzeGame();
         }
       });
-      if (/^\/(?:analysis\/)?game\/(live|daily)\/\d+(?:\/|$)/.test(location.pathname)) {
+      panel.querySelector("#chess-review-fetch").addEventListener("click", () => {
+        if (!analyzeButton.disabled) void autoFetchAndReview(panel);
+      });
+      panel.querySelector("#chess-review-cancel").addEventListener("click", () => {
+        const session = panelSessions.get(panel);
+        session.review?.abort();
+        session.review = null;
+        session.controller.abort();
+        session.controller = new AbortController();
+        session.board?.destroy();
+        delete window.chessReviewResults;
+        panel.querySelector("#chess-review-result").textContent = "Analysis canceled. Retry import or analyze a PGN.";
+        analyzeButton.disabled = false;
+        analyzeButton.textContent = "Analyze Game";
+      });
+      if (detectChessComGame(location.pathname)) {
         void autoFetchAndReview(panel);
       }
     }
@@ -5170,6 +5235,7 @@
         return evaluatePosition(fen, depth, { ...options, signal });
       };
       const pgn2 = input.value.trim();
+      delete window.chessReviewResults;
       result.replaceChildren();
       const chess = new Chess();
       try {
@@ -5432,6 +5498,9 @@
           const afterWhiteCp = whiteCps[i + 1];
           const afterPlayerCp = player === "w" ? afterWhiteCp : -afterWhiteCp;
           const bestMovePlayed = before.bestMove?.toLowerCase() === uciOf2(move).toLowerCase();
+          const legalChoices = replay.moves().length;
+          const previousMove = moves[i - 1];
+          const obviousRecapture = Boolean(move.captured && previousMove?.captured && previousMove.to === move.to);
           replay.move(move.san);
           const sacrificeCandidate = detectSacrificeCandidate(replay, move);
           const classification = classifyMove({
@@ -5457,7 +5526,7 @@
             brilliantAuditCount++;
             const eloKey = player === "w" ? "WhiteElo" : "BlackElo";
             const elo = Number(chess.header()[eloKey]);
-            const rating = Number.isFinite(elo) && elo > 0 ? elo : null;
+            const rating2 = Number.isFinite(elo) && elo > 0 ? elo : null;
             try {
               const verification = await verifyBrilliantCandidate({
                 chess: replay,
@@ -5473,7 +5542,7 @@
               const decision = classifyBrilliantMove({
                 baseGrade: classification.grade,
                 verification,
-                rating,
+                rating: rating2,
                 bestMovePlayed,
                 alternatives: before.candidates || []
               });
@@ -5497,6 +5566,8 @@
             classification.grade = "miss";
           }
           reviewedMoves.push({
+            legalChoices,
+            obviousRecapture,
             number: Number(beforeFen.split(" ")[5]),
             color: player,
             san: move.san,
@@ -5528,6 +5599,7 @@
         assertActive();
         const whiteAccuracy = calculateAccuracy(reviewedMoves, "w");
         const blackAccuracy = calculateAccuracy(reviewedMoves, "b");
+        const performance = Object.fromEntries(["w", "b"].map((color) => [color, estimatePerformance({ moves: reviewedMoves, color, headers: chess.header(), complete: true, customStart: Boolean(initialFen) })]));
         const gradeCounts = {
           White: {},
           Black: {}
@@ -5539,6 +5611,9 @@
         console.log("[Chess Review Grade Counts]");
         console.table(gradeCounts);
         window.chessReviewResults = {
+          pgn: pgn2,
+          headers: chess.header(),
+          performance,
           reviewedMoves,
           graphData,
           whiteAccuracy,
@@ -5551,6 +5626,20 @@
         accuracy.textContent = `White Estimated Accuracy: ${whiteAccuracy?.toFixed(1) ?? "N/A"}%
 Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
         result.replaceChildren(heading, accuracy);
+        const players = document.createElement("div");
+        players.className = "chess-player-summary";
+        for (const [color, label, estimatedAccuracy] of [["w", "White", whiteAccuracy], ["b", "Black", blackAccuracy]]) {
+          const card = document.createElement("div");
+          const estimate = performance[color];
+          card.title = "Unofficial, uncalibrated single-game model estimate, not official Elo or Chess.com rating. The range is heuristic uncertainty, not a statistical confidence interval.";
+          card.textContent = `${label}: ${chess.header()[label] || "Unknown"} \xB7 Actual game rating: ${chess.header()[label + "Elo"] || "Unavailable"}
+Estimated Performance Rating: ${estimate.rating === null ? "Insufficient data \u2014 " + estimate.reason : estimate.rating + " \xB1 " + estimate.uncertainty + " (" + estimate.confidence + " confidence)"}
+Estimated accuracy: ${estimatedAccuracy?.toFixed(1) ?? "N/A"}%`;
+          players.appendChild(card);
+        }
+        const gameMetadata = document.createElement("p");
+        gameMetadata.textContent = `Result: ${chess.header().Result || "*"} \xB7 Time control: ${chess.header().TimeControl || "Unavailable"} \xB7 Unofficial review estimates`;
+        result.append(players, gameMetadata);
         {
           const counts = {
             w: {},
@@ -5708,6 +5797,9 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
           const gradeInfo = GRADES[move.grade];
           const row = document.createElement("div");
           row.className = "chess-move-row";
+          row.tabIndex = 0;
+          row.setAttribute("role", "button");
+          row.setAttribute("aria-label", `${move.number}${move.color === "w" ? "." : "..."} ${move.san}, ${gradeInfo.label}`);
           const moveName = document.createElement("span");
           moveName.textContent = `${move.number}${move.color === "w" ? "." : "..."} ${move.san}`;
           const grade = document.createElement("span");
@@ -5718,6 +5810,12 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
           const selectedPly = reviewedMoves.indexOf(move) + 1;
           row.addEventListener("click", () => {
             reviewBoard.goToMove(selectedPly);
+          });
+          row.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              reviewBoard.goToMove(selectedPly);
+            }
           });
           moveList.appendChild(row);
         }
@@ -5734,6 +5832,11 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
       }
     }
     function update() {
+      if (pageIdentity !== location.pathname) {
+        pageIdentity = location.pathname;
+        const previous = document.getElementById(PANEL_ID);
+        if (previous) closePanel(previous);
+      }
       if (!isGamePage()) {
         document.getElementById(BUTTON_ID)?.remove();
         const panel = document.getElementById(PANEL_ID);
@@ -5746,6 +5849,9 @@ Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
       document.documentElement,
       { childList: true, subtree: true }
     );
+    window.navigation?.addEventListener("currententrychange", update);
+    addEventListener("popstate", update);
+    addEventListener("hashchange", update);
     update();
   })();
 })();
