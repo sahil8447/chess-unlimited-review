@@ -4479,11 +4479,12 @@
           const coherent = quality.get(i) || rootQuality(before, move, baseDepth);
           const beforeEvaluation = coherent?.beforeEvaluation ?? baseBefore, afterEvaluation = terminals[i + 1] ? baseAfter : coherent?.afterEvaluation ?? baseAfter;
           const beforePlayerCp = evaluationCp(beforeEvaluation), afterPlayerCp = evaluationCp(afterEvaluation);
-          const bestMovePlayed = root.bestMove === uciOf(move), legalChoices = positions[i].moves().length;
+          const bestMove = coherent?.bestMove ?? root.bestMove, bestVariation = coherent?.rootBestLine?.pv ?? root.pv ?? [];
+          const bestMovePlayed = bestMove === uciOf(move), legalChoices = positions[i].moves().length;
           const previous = moves[i - 1], obviousRecapture = Boolean(move.captured && previous?.captured && previous.to === move.to);
           const classification = classifyMove({ beforeCp: beforePlayerCp, afterCp: afterPlayerCp, beforeEvaluation, afterEvaluation, bestMovePlayed, qualityVerified: quality.has(i), legalChoices });
           const initialGrade = classifyMove({ beforeCp: positionBeforeCp, afterCp: positionAfterCp, beforeEvaluation: baseBefore, afterEvaluation: baseAfter, bestMovePlayed: before.bestMove === uciOf(move), legalChoices }).grade;
-          const alternativeLoss = coherent?.source === "same-root" && root.depth >= Math.max(18, criticalDepth) ? calculateAlternativeLoss(root.candidates) : null;
+          const alternativeLoss = coherent?.source === "same-root" && bestMove === root.bestMove && root.depth >= Math.max(18, criticalDepth) ? calculateAlternativeLoss(root.candidates) : null;
           let grade = legalChoices === 1 || obviousRecapture ? classification.grade : classifyTacticalMove({ baseGrade: classification.grade, bestMovePlayed, beforeCp: beforePlayerCp, afterCp: afterPlayerCp, alternativeLoss });
           const missStart = now();
           const miss = final && ["inaccuracy", "mistake", "blunder"].includes(grade) ? detectMissedOpportunity({ beforeFen, bestVariation: root.pv, bestMovePlayed, beforePlayerCp, afterPlayerCp, color: move.color, evidence: { root, quality: coherent, minDepth: criticalDepth } }) : null;
@@ -4521,9 +4522,9 @@
             depth: coherent?.depth || before.depth || 0,
             afterDepth: after2.depth || 0,
             deepVerified: Boolean(quality.get(i)),
-            bestMove: root.bestMove,
+            bestMove,
             bestMovePlayed,
-            bestVariation: root.pv || [],
+            bestVariation,
             evaluation: graphData[i + 1].whiteCp === null ? null : graphData[i + 1].whiteCp / 100,
             bestMate: coherent?.bestMate ?? null,
             playedMate: coherent?.playedMate ?? null,
@@ -4531,7 +4532,7 @@
             alternativeLoss,
             missDiagnostic: miss || null,
             brilliantDiagnostic: audits ? "Pending optional audit" : "Optional diagnostic audit not requested",
-            explanation: grade === "book" ? `Recorded in the local Lichess opening book (source line ${opening.eco}). Accuracy still uses the engine evaluation.` : miss?.explanation || generateMoveExplanation({ move, grade, beforeFen, afterFen: move.after, bestMove: root.bestMove, bestMovePlayed, beforePlayerCp, afterPlayerCp, beforeEvaluation, afterEvaluation, mateEvidence: classification.mateEvidence })
+            explanation: grade === "book" ? `Recorded in the local Lichess opening book (source line ${opening.eco}). Accuracy still uses the engine evaluation.` : miss?.explanation || generateMoveExplanation({ move, grade, beforeFen, afterFen: move.after, bestMove, bestMovePlayed, beforePlayerCp, afterPlayerCp, beforeEvaluation, afterEvaluation, mateEvidence: classification.mateEvidence })
           };
         });
         return {

@@ -1,0 +1,4848 @@
+{
+  "scope": "Cold, sequential single samples; local PGN, no DOM/network; 20/80 legal unfinished prefixes. Actual shipped single-thread WASM.",
+  "environment": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "node": "v24.19.0",
+    "platform": "linux"
+  },
+  "results": [
+    {
+      "id": "20",
+      "mode": "after",
+      "elapsedMs": 25696.14273,
+      "metrics": {
+        "requests": 39,
+        "localCacheHits": 0,
+        "transportCacheHits": 0,
+        "engineMs": 25031,
+        "initializationMs": 227,
+        "requestMs": 25262.561501,
+        "baseMs": 1737.3535249999998,
+        "criticalMs": 23727.545598999997,
+        "brilliantMs": 0.000804000002972316,
+        "missMs": 16.685944000007567,
+        "classificationMs": 215.03432300000304,
+        "initialMs": 1895.2187980000003,
+        "totalMs": 25694.940138,
+        "criticalMoves": 11,
+        "greatVerifications": 3,
+        "replyChecks": 0,
+        "audits": 0,
+        "errors": [],
+        "engineSearches": 39,
+        "unknownRequestCount": 0,
+        "cacheHitRate": 0
+      },
+      "transport": {
+        "requests": 39,
+        "searches": 39,
+        "workerStarts": 1,
+        "initializationMs": 227.02389100000005,
+        "engineMs": 25016.796745,
+        "requestMs": 25261.458160999995,
+        "byDepth": {
+          "12": 21,
+          "18": 18
+        }
+      },
+      "whiteAccuracy": 70.66354800312304,
+      "blackAccuracy": 68.34464053776657,
+      "grades": [
+        {
+          "ply": 1,
+          "san": "e4",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 31,
+          "afterPlayerCp": 31,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 31,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 31,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 2,
+          "san": "c5",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.009171050060543473,
+          "cpLoss": 10,
+          "beforePlayerCp": -28,
+          "afterPlayerCp": -38,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -28,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -38,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 95.96114342743246
+        },
+        {
+          "ply": 3,
+          "san": "Bc4",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.03860481739483357,
+          "cpLoss": 42,
+          "beforePlayerCp": 38,
+          "afterPlayerCp": -4,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 38,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -4,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 84.0366899230695
+        },
+        {
+          "ply": 4,
+          "san": "Nc6",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.007364026881329422,
+          "cpLoss": 8,
+          "beforePlayerCp": 4,
+          "afterPlayerCp": -4,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 4,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -4,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 96.7442123197653
+        },
+        {
+          "ply": 5,
+          "san": "Bxf7+",
+          "color": "w",
+          "grade": "blunder",
+          "depth": 18,
+          "loss": 0.32810386511305745,
+          "cpLoss": 427,
+          "beforePlayerCp": 0,
+          "afterPlayerCp": -427,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 0,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -427,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 21.55391679711348
+        },
+        {
+          "ply": 6,
+          "san": "Kxf7",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 414,
+          "afterPlayerCp": 414,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 414,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 414,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 7,
+          "san": "Qh5+",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -398,
+          "afterPlayerCp": -398,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -398,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -398,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 8,
+          "san": "g6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 443,
+          "afterPlayerCp": 443,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 443,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 443,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 9,
+          "san": "Qxc5",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -388,
+          "afterPlayerCp": -388,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -388,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -388,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 10,
+          "san": "Nf6",
+          "color": "b",
+          "grade": "best",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 412,
+          "afterPlayerCp": 412,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 412,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 412,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 11,
+          "san": "e5",
+          "color": "w",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.06482147342618985,
+          "cpLoss": 142,
+          "beforePlayerCp": -412,
+          "afterPlayerCp": -554,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -412,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -554,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 74.62888514397312
+        },
+        {
+          "ply": 12,
+          "san": "Ne4",
+          "color": "b",
+          "grade": "blunder",
+          "depth": 18,
+          "loss": 0.48039576006242346,
+          "cpLoss": 655,
+          "beforePlayerCp": 547,
+          "afterPlayerCp": -108,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 547,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -108,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 9.569990693137306
+        },
+        {
+          "ply": 13,
+          "san": "Qd5+",
+          "color": "w",
+          "grade": "best",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 98,
+          "afterPlayerCp": 98,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 98,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 98,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 14,
+          "san": "e6",
+          "color": "b",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.09321017658148395,
+          "cpLoss": 111,
+          "beforePlayerCp": -108,
+          "afterPlayerCp": -219,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -108,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -219,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 65.5827060614663
+        },
+        {
+          "ply": 15,
+          "san": "Qxe4",
+          "color": "w",
+          "grade": "great",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 232,
+          "afterPlayerCp": 232,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 232,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 232,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "color": "b",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.10701400837463446,
+          "cpLoss": 162,
+          "beforePlayerCp": -240,
+          "afterPlayerCp": -402,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -240,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -402,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 61.57207181831479
+        },
+        {
+          "ply": 17,
+          "san": "Qf3+",
+          "color": "w",
+          "grade": "blunder",
+          "depth": 18,
+          "loss": 0.22112507283694205,
+          "cpLoss": 292,
+          "beforePlayerCp": 382,
+          "afterPlayerCp": 90,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 382,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 90,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 36.22168863575839
+        },
+        {
+          "ply": 18,
+          "san": "Kg7",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -99,
+          "afterPlayerCp": -99,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -99,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -99,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 19,
+          "san": "Ne2",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.16148288687193307,
+          "cpLoss": 177,
+          "beforePlayerCp": 95,
+          "afterPlayerCp": -82,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 95,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -82,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 47.902379973603416
+        },
+        {
+          "ply": 20,
+          "san": "Rf8",
+          "color": "b",
+          "grade": "great",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 87,
+          "afterPlayerCp": 87,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 87,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 87,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        }
+      ],
+      "verificationPlan": [
+        {
+          "ply": 12,
+          "san": "Ne4",
+          "uci": "f6e4",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 21,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 547,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -108,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 5,
+          "san": "Bxf7+",
+          "uci": "c4f7",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 23,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 0,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -427,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 17,
+          "san": "Qf3+",
+          "uci": "e4f3",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 25,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 382,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 90,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 19,
+          "san": "Ne2",
+          "uci": "g1e2",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 27,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 95,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -82,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "uci": "f8c5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 29,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -240,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -402,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 14,
+          "san": "e6",
+          "uci": "e7e6",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 31,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -108,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -219,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 11,
+          "san": "e5",
+          "uci": "e4e5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 33,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -412,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -554,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 10,
+          "san": "Nf6",
+          "uci": "g8f6",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 35,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 412,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 412,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 13,
+          "san": "Qd5+",
+          "uci": "c5d5",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 36,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 98,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 98,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 15,
+          "san": "Qxe4",
+          "uci": "d5e4",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 37,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 232,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 232,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 20,
+          "san": "Rf8",
+          "uci": "h8f8",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 38,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 87,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 87,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        }
+      ]
+    },
+    {
+      "id": "42",
+      "mode": "after",
+      "elapsedMs": 76177.049969,
+      "metrics": {
+        "requests": 75,
+        "localCacheHits": 0,
+        "transportCacheHits": 0,
+        "engineMs": 75208,
+        "initializationMs": 206,
+        "requestMs": 75429.52038100001,
+        "baseMs": 1888.6894509999984,
+        "criticalMs": 73963.356916,
+        "brilliantMs": 0.0009999999892897904,
+        "missMs": 6.169355000023643,
+        "classificationMs": 310.2262389999996,
+        "initialMs": 2050.370994000001,
+        "totalMs": 76176.20048300001,
+        "criticalMoves": 19,
+        "greatVerifications": 4,
+        "replyChecks": 2,
+        "audits": 0,
+        "errors": [],
+        "engineSearches": 75,
+        "unknownRequestCount": 0,
+        "cacheHitRate": 0
+      },
+      "transport": {
+        "requests": 75,
+        "searches": 75,
+        "workerStarts": 1,
+        "initializationMs": 206.20636000000013,
+        "engineMs": 75202.15781099998,
+        "requestMs": 75427.297279,
+        "byDepth": {
+          "12": 42,
+          "18": 33
+        }
+      },
+      "whiteAccuracy": 68.4232404076921,
+      "blackAccuracy": 67.62576348609826,
+      "grades": [
+        {
+          "ply": 1,
+          "san": "e4",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 31,
+          "afterPlayerCp": 31,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 31,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 31,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 2,
+          "san": "c5",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.009171050060543473,
+          "cpLoss": 10,
+          "beforePlayerCp": -28,
+          "afterPlayerCp": -38,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -28,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -38,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 95.96114342743246
+        },
+        {
+          "ply": 3,
+          "san": "Bc4",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.03860481739483357,
+          "cpLoss": 42,
+          "beforePlayerCp": 38,
+          "afterPlayerCp": -4,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 38,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -4,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 84.0366899230695
+        },
+        {
+          "ply": 4,
+          "san": "Nc6",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.007364026881329422,
+          "cpLoss": 8,
+          "beforePlayerCp": 4,
+          "afterPlayerCp": -4,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 4,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -4,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 96.7442123197653
+        },
+        {
+          "ply": 5,
+          "san": "Bxf7+",
+          "color": "w",
+          "grade": "blunder",
+          "depth": 18,
+          "loss": 0.3181965444430632,
+          "cpLoss": 412,
+          "beforePlayerCp": -5,
+          "afterPlayerCp": -417,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -5,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -417,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 22.643726986479308
+        },
+        {
+          "ply": 6,
+          "san": "Kxf7",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 414,
+          "afterPlayerCp": 414,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 414,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 414,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 7,
+          "san": "Qh5+",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -398,
+          "afterPlayerCp": -398,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -398,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -398,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 8,
+          "san": "g6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 443,
+          "afterPlayerCp": 443,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 443,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 443,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 9,
+          "san": "Qxc5",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -388,
+          "afterPlayerCp": -388,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -388,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -388,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 10,
+          "san": "Nf6",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.04240253018739082,
+          "cpLoss": 74,
+          "beforePlayerCp": 426,
+          "afterPlayerCp": 352,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 426,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 352,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 82.60647770272222
+        },
+        {
+          "ply": 11,
+          "san": "e5",
+          "color": "w",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.06566276150269705,
+          "cpLoss": 148,
+          "beforePlayerCp": -420,
+          "afterPlayerCp": -568,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -420,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -568,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 74.34441574216793
+        },
+        {
+          "ply": 12,
+          "san": "Ne4",
+          "color": "b",
+          "grade": "blunder",
+          "depth": 18,
+          "loss": 0.4769912515450939,
+          "cpLoss": 667,
+          "beforePlayerCp": 574,
+          "afterPlayerCp": -93,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 574,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -93,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 9.760217471891067
+        },
+        {
+          "ply": 13,
+          "san": "Qd5+",
+          "color": "w",
+          "grade": "best",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 100,
+          "afterPlayerCp": 100,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 14,
+          "san": "e6",
+          "color": "b",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.11280518207524165,
+          "cpLoss": 134,
+          "beforePlayerCp": -93,
+          "afterPlayerCp": -227,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -93,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -227,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 59.95994917556108
+        },
+        {
+          "ply": 15,
+          "san": "Qxe4",
+          "color": "w",
+          "grade": "great",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 218,
+          "afterPlayerCp": 218,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 218,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 218,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "color": "b",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.10634777015915192,
+          "cpLoss": 159,
+          "beforePlayerCp": -235,
+          "afterPlayerCp": -394,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -235,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -394,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 61.76015738640867
+        },
+        {
+          "ply": 17,
+          "san": "Qf3+",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.19569111309936782,
+          "cpLoss": 261,
+          "beforePlayerCp": 375,
+          "afterPlayerCp": 114,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 375,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 114,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 40.834710578087304
+        },
+        {
+          "ply": 18,
+          "san": "Kg7",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -99,
+          "afterPlayerCp": -99,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -99,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -99,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 19,
+          "san": "Ne2",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.169562468275468,
+          "cpLoss": 186,
+          "beforePlayerCp": 92,
+          "afterPlayerCp": -94,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 92,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -94,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 46.136905602492554
+        },
+        {
+          "ply": 20,
+          "san": "Rf8",
+          "color": "b",
+          "grade": "great",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 100,
+          "afterPlayerCp": 100,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 21,
+          "san": "Nf4",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.15831077579878394,
+          "cpLoss": 196,
+          "beforePlayerCp": -95,
+          "afterPlayerCp": -291,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -95,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -291,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 48.61267868516551
+        },
+        {
+          "ply": 22,
+          "san": "Nd4",
+          "color": "b",
+          "grade": "great",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 294,
+          "afterPlayerCp": 294,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 294,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 294,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 23,
+          "san": "Qc3",
+          "color": "w",
+          "grade": "inaccuracy",
+          "depth": 12,
+          "loss": 0.08257956512758902,
+          "cpLoss": 117,
+          "beforePlayerCp": -227,
+          "afterPlayerCp": -344,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -227,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -344,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 68.83994045905
+        },
+        {
+          "ply": 24,
+          "san": "b6",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.015530449701222526,
+          "cpLoss": 24,
+          "beforePlayerCp": 344,
+          "afterPlayerCp": 320,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 344,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 320,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 93.25379989386418
+        },
+        {
+          "ply": 25,
+          "san": "g3",
+          "color": "w",
+          "grade": "inaccuracy",
+          "depth": 12,
+          "loss": 0.08200388335128667,
+          "cpLoss": 144,
+          "beforePlayerCp": -320,
+          "afterPlayerCp": -464,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -320,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -464,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 69.020670643272
+        },
+        {
+          "ply": 26,
+          "san": "g5",
+          "color": "b",
+          "grade": "blunder",
+          "depth": 18,
+          "loss": 0.27132534262414754,
+          "cpLoss": 502,
+          "beforePlayerCp": 671,
+          "afterPlayerCp": 169,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 671,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 169,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 28.48769010779143
+        },
+        {
+          "ply": 27,
+          "san": "Nh5+",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.18450845871959914,
+          "cpLoss": 336,
+          "beforePlayerCp": -242,
+          "afterPlayerCp": -578,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -242,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -578,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 43.03034601815883
+        },
+        {
+          "ply": 28,
+          "san": "Kg8",
+          "color": "b",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.060979313485099995,
+          "cpLoss": 156,
+          "beforePlayerCp": 619,
+          "afterPlayerCp": 463,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 619,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 463,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 75.94138576802231
+        },
+        {
+          "ply": 29,
+          "san": "Nf6+",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.027535859278876196,
+          "cpLoss": 49,
+          "beforePlayerCp": -373,
+          "afterPlayerCp": -422,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -373,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -422,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 88.34274291661822
+        },
+        {
+          "ply": 30,
+          "san": "Kh8",
+          "color": "b",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.09915949542018532,
+          "cpLoss": 261,
+          "beforePlayerCp": 685,
+          "afterPlayerCp": 424,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 685,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 424,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 63.82456288054521
+        },
+        {
+          "ply": 31,
+          "san": "Qd3",
+          "color": "w",
+          "grade": "best",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -475,
+          "afterPlayerCp": -475,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -475,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -475,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 32,
+          "san": "Rxf6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 251,
+          "afterPlayerCp": 251,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 251,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 251,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 33,
+          "san": "exf6",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -292,
+          "afterPlayerCp": -292,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -292,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -292,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 34,
+          "san": "Qxf6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 289,
+          "afterPlayerCp": 289,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 289,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 289,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 35,
+          "san": "O-O",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.10481799083221115,
+          "cpLoss": 483,
+          "beforePlayerCp": -518,
+          "afterPlayerCp": -1001,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -518,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -1001,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 62.194099514123316
+        },
+        {
+          "ply": 36,
+          "san": "Nf3+",
+          "color": "b",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 733,
+          "afterPlayerCp": 894,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 733,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 894,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 37,
+          "san": "Kg2",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -894,
+          "afterPlayerCp": -894,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -894,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -894,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 38,
+          "san": "Bb7",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 848,
+          "afterPlayerCp": 848,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 848,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 848,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 39,
+          "san": "Kh3",
+          "color": "w",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.007945227547563563,
+          "cpLoss": null,
+          "beforePlayerCp": -1311,
+          "afterPlayerCp": null,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -1311,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "mate",
+            "moves": -2,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "allows-forced-mate",
+            "forced": false
+          },
+          "accuracyContribution": 96.49167799109745
+        },
+        {
+          "ply": 40,
+          "san": "Qh6+",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": null,
+          "beforePlayerCp": null,
+          "afterPlayerCp": null,
+          "beforeEvaluation": {
+            "kind": "mate",
+            "moves": 2,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "mate",
+            "moves": 2,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 41,
+          "san": "Kg4",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": null,
+          "beforePlayerCp": null,
+          "afterPlayerCp": null,
+          "beforeEvaluation": {
+            "kind": "mate",
+            "moves": -1,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "mate",
+            "moves": -1,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "already-forced-loss",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 42,
+          "san": "Nxh2#",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": null,
+          "beforePlayerCp": null,
+          "afterPlayerCp": null,
+          "beforeEvaluation": {
+            "kind": "mate",
+            "moves": 1,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "checkmate",
+            "outcome": 1,
+            "depth": 0
+          },
+          "mateEvidence": {
+            "kind": "delivers-checkmate",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        }
+      ],
+      "verificationPlan": [
+        {
+          "ply": 39,
+          "san": "Kh3",
+          "uci": "g2h3",
+          "reason": "mate-transition",
+          "status": "verified",
+          "startRequest": 42,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -1311,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "mate",
+            "moves": -2,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 12,
+          "san": "Ne4",
+          "uci": "f6e4",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 44,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 574,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -93,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 5,
+          "san": "Bxf7+",
+          "uci": "c4f7",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 46,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -5,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -417,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 17,
+          "san": "Qf3+",
+          "uci": "e4f3",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 48,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 375,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 114,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 26,
+          "san": "g5",
+          "uci": "g6g5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 50,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 671,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 169,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 35,
+          "san": "O-O",
+          "uci": "e1g1",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 52,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -518,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -1001,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 19,
+          "san": "Ne2",
+          "uci": "g1e2",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 54,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 92,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -94,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 27,
+          "san": "Nh5+",
+          "uci": "f4h5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 56,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -242,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -578,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 21,
+          "san": "Nf4",
+          "uci": "e2f4",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 58,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -95,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -291,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "uci": "f8c5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 60,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -235,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -394,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 14,
+          "san": "e6",
+          "uci": "e7e6",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 62,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -93,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -227,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 30,
+          "san": "Kh8",
+          "uci": "g8h8",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 64,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 685,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 424,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 11,
+          "san": "e5",
+          "uci": "e4e5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 66,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -420,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -568,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 13,
+          "san": "Qd5+",
+          "uci": "c5d5",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 68,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 15,
+          "san": "Qxe4",
+          "uci": "d5e4",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 69,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 218,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 218,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 20,
+          "san": "Rf8",
+          "uci": "h8f8",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 70,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 100,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 22,
+          "san": "Nd4",
+          "uci": "c6d4",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 71,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 294,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 294,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 28,
+          "san": "Kg8",
+          "uci": "g7g8",
+          "reason": "reply-conflict",
+          "status": "verified",
+          "startRequest": 72,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 619,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 463,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 31,
+          "san": "Qd3",
+          "uci": "c3d3",
+          "reason": "reply-conflict",
+          "status": "verified",
+          "startRequest": 73,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -475,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -475,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        }
+      ]
+    },
+    {
+      "id": "80",
+      "mode": "after",
+      "elapsedMs": 28458.62224299999,
+      "metrics": {
+        "requests": 96,
+        "localCacheHits": 0,
+        "transportCacheHits": 0,
+        "engineMs": 27578,
+        "initializationMs": 349,
+        "requestMs": 27944.16658600005,
+        "baseMs": 3303.8818829999946,
+        "criticalMs": 24876.455287999997,
+        "brilliantMs": 0.00043200000072829425,
+        "missMs": 0.14873899993835948,
+        "classificationMs": 243.41553099999146,
+        "initialMs": 3451.4953420000093,
+        "totalMs": 28457.006114000003,
+        "criticalMoves": 9,
+        "greatVerifications": 4,
+        "replyChecks": 0,
+        "audits": 0,
+        "errors": [],
+        "engineSearches": 96,
+        "unknownRequestCount": 0,
+        "cacheHitRate": 0
+      },
+      "transport": {
+        "requests": 96,
+        "searches": 96,
+        "workerStarts": 1,
+        "initializationMs": 348.58156099999906,
+        "engineMs": 27577.159458000126,
+        "requestMs": 27942.326144000035,
+        "byDepth": {
+          "12": 81,
+          "18": 15
+        }
+      },
+      "whiteAccuracy": 98.36245164088044,
+      "blackAccuracy": 92.22697199222958,
+      "grades": [
+        {
+          "ply": 1,
+          "san": "c4",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.01654070169515054,
+          "cpLoss": 18,
+          "beforePlayerCp": 31,
+          "afterPlayerCp": 13,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 31,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 13,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 92.8305712328932
+        },
+        {
+          "ply": 2,
+          "san": "e6",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.011032287951036723,
+          "cpLoss": 12,
+          "beforePlayerCp": -13,
+          "afterPlayerCp": -25,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -13,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -25,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 95.1609966136885
+        },
+        {
+          "ply": 3,
+          "san": "Nf3",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 25,
+          "afterPlayerCp": 25,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 25,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 25,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 4,
+          "san": "d5",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -25,
+          "afterPlayerCp": -25,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -25,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -25,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 5,
+          "san": "d4",
+          "color": "w",
+          "grade": "best",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 22,
+          "afterPlayerCp": 22,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 6,
+          "san": "Nf6",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -24,
+          "afterPlayerCp": -24,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 7,
+          "san": "Nc3",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 24,
+          "afterPlayerCp": 24,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 24,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 24,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 8,
+          "san": "Be7",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -24,
+          "afterPlayerCp": -24,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 9,
+          "san": "Bg5",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.005513173071276967,
+          "cpLoss": 6,
+          "beforePlayerCp": 26,
+          "afterPlayerCp": 20,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 26,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 20,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 97.55268830393308
+        },
+        {
+          "ply": 10,
+          "san": "O-O",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0.00367602967809727,
+          "cpLoss": 4,
+          "beforePlayerCp": -20,
+          "afterPlayerCp": -24,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -20,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 98.36164491295138
+        },
+        {
+          "ply": 11,
+          "san": "e3",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 24,
+          "afterPlayerCp": 24,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 24,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 24,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 12,
+          "san": "h6",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -24,
+          "afterPlayerCp": -24,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -24,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 13,
+          "san": "Bh4",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 22,
+          "afterPlayerCp": 23,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 23,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 14,
+          "san": "b6",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -23,
+          "afterPlayerCp": -19,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -23,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -19,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 15,
+          "san": "cxd5",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 19,
+          "afterPlayerCp": 19,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 19,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 19,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 16,
+          "san": "Nxd5",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -21,
+          "afterPlayerCp": -21,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -21,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -21,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 17,
+          "san": "Bxe7",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 19,
+          "afterPlayerCp": 19,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 19,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 19,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 18,
+          "san": "Qxe7",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -13,
+          "afterPlayerCp": -13,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -13,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -13,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 19,
+          "san": "Nxd5",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 0,
+          "afterPlayerCp": 10,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 0,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 10,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 20,
+          "san": "exd5",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -10,
+          "afterPlayerCp": -10,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -10,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -10,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 21,
+          "san": "Rc1",
+          "color": "w",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 14,
+          "afterPlayerCp": 14,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 14,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 14,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 22,
+          "san": "Be6",
+          "color": "b",
+          "grade": "book",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 1,
+          "afterPlayerCp": 1,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 1,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 1,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 23,
+          "san": "Qa4",
+          "color": "w",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0.0009203442604454048,
+          "cpLoss": 1,
+          "beforePlayerCp": 8,
+          "afterPlayerCp": 7,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 8,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 7,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.58726537699971
+        },
+        {
+          "ply": 24,
+          "san": "c5",
+          "color": "b",
+          "grade": "excellent",
+          "depth": 18,
+          "loss": 0.0036820134406646554,
+          "cpLoss": 4,
+          "beforePlayerCp": 4,
+          "afterPlayerCp": 0,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 4,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 0,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 98.35899954054923
+        },
+        {
+          "ply": 25,
+          "san": "Qa3",
+          "color": "w",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0.0027615319200139377,
+          "cpLoss": 3,
+          "beforePlayerCp": 3,
+          "afterPlayerCp": 0,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 3,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 0,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 98.76674819201293
+        },
+        {
+          "ply": 26,
+          "san": "Rc8",
+          "color": "b",
+          "grade": "best",
+          "depth": 18,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 10,
+          "afterPlayerCp": 10,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 10,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 10,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 27,
+          "san": "Bb5",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.006443108599977154,
+          "cpLoss": 7,
+          "beforePlayerCp": -1,
+          "afterPlayerCp": -8,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -1,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -8,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 97.14566643713334
+        },
+        {
+          "ply": 28,
+          "san": "a6",
+          "color": "b",
+          "grade": "good",
+          "depth": 18,
+          "loss": 0.012876745652301125,
+          "cpLoss": 14,
+          "beforePlayerCp": 22,
+          "afterPlayerCp": 8,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 8,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 94.37443534768127
+        },
+        {
+          "ply": 29,
+          "san": "dxc5",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -16,
+          "afterPlayerCp": -16,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -16,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -16,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 30,
+          "san": "bxc5",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 14,
+          "afterPlayerCp": 14,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 14,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 14,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 31,
+          "san": "O-O",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -16,
+          "afterPlayerCp": -16,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -16,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -16,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 32,
+          "san": "Ra7",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.021168779180595676,
+          "cpLoss": 23,
+          "beforePlayerCp": 11,
+          "afterPlayerCp": -12,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 11,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -12,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 90.91533805683706
+        },
+        {
+          "ply": 33,
+          "san": "Be2",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 12,
+          "afterPlayerCp": 12,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 12,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 12,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 34,
+          "san": "Nd7",
+          "color": "b",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -14,
+          "afterPlayerCp": -14,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -14,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -14,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 35,
+          "san": "Nd4",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 14,
+          "afterPlayerCp": 14,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 14,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 14,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 36,
+          "san": "Qf8",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.007350839606276249,
+          "cpLoss": 8,
+          "beforePlayerCp": -19,
+          "afterPlayerCp": -27,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -19,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -27,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 96.749949669066
+        },
+        {
+          "ply": 37,
+          "san": "Nxe6",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 27,
+          "afterPlayerCp": 27,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 27,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 27,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 38,
+          "san": "fxe6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -34,
+          "afterPlayerCp": -34,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -34,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -34,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 39,
+          "san": "e4",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 34,
+          "afterPlayerCp": 34,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 34,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 34,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 40,
+          "san": "d4",
+          "color": "b",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.0864321844430192,
+          "cpLoss": 97,
+          "beforePlayerCp": -46,
+          "afterPlayerCp": -143,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -46,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -143,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 67.64203619936089
+        },
+        {
+          "ply": 41,
+          "san": "f4",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 124,
+          "afterPlayerCp": 124,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 124,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 124,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 42,
+          "san": "Qe7",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.007883442379633177,
+          "cpLoss": 9,
+          "beforePlayerCp": -117,
+          "afterPlayerCp": -126,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -117,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -126,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 96.51849357780038
+        },
+        {
+          "ply": 43,
+          "san": "e5",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.02559572646055497,
+          "cpLoss": 29,
+          "beforePlayerCp": 126,
+          "afterPlayerCp": 97,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 126,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 97,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 89.11910457448954
+        },
+        {
+          "ply": 44,
+          "san": "Rb8",
+          "color": "b",
+          "grade": "mistake",
+          "depth": 18,
+          "loss": 0.10281732300569252,
+          "cpLoss": 121,
+          "beforePlayerCp": -91,
+          "afterPlayerCp": -212,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -91,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -212,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 62.765995168812914
+        },
+        {
+          "ply": 45,
+          "san": "Bc4",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 175,
+          "afterPlayerCp": 175,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 175,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 175,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 46,
+          "san": "Kh8",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.005899604132880487,
+          "cpLoss": 7,
+          "beforePlayerCp": -159,
+          "afterPlayerCp": -166,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -159,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -166,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 97.38335179806654
+        },
+        {
+          "ply": 47,
+          "san": "Qh3",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 166,
+          "afterPlayerCp": 166,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 166,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 166,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 48,
+          "san": "Nf8",
+          "color": "b",
+          "grade": "inaccuracy",
+          "depth": 18,
+          "loss": 0.07185237275368911,
+          "cpLoss": 94,
+          "beforePlayerCp": -190,
+          "afterPlayerCp": -284,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -190,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -284,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 72.28322093697727
+        },
+        {
+          "ply": 49,
+          "san": "b3",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 279,
+          "afterPlayerCp": 279,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 279,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 279,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 50,
+          "san": "a5",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -227,
+          "afterPlayerCp": -227,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -227,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -227,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 51,
+          "san": "f5",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 245,
+          "afterPlayerCp": 245,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 245,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 245,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 52,
+          "san": "exf5",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.03058484298648878,
+          "cpLoss": 42,
+          "beforePlayerCp": -247,
+          "afterPlayerCp": -289,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -247,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -289,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 87.13584048303794
+        },
+        {
+          "ply": 53,
+          "san": "Rxf5",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 289,
+          "afterPlayerCp": 289,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 289,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 289,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 54,
+          "san": "Nh7",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.017286524185388147,
+          "cpLoss": 25,
+          "beforePlayerCp": -285,
+          "afterPlayerCp": -310,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -285,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -310,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 92.51931345321496
+        },
+        {
+          "ply": 55,
+          "san": "Rcf1",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 310,
+          "afterPlayerCp": 310,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 310,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 310,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 56,
+          "san": "Qd8",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.03819974264976772,
+          "cpLoss": 60,
+          "beforePlayerCp": -310,
+          "afterPlayerCp": -370,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -310,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -370,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 84.19064094811624
+        },
+        {
+          "ply": 57,
+          "san": "Qg3",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 370,
+          "afterPlayerCp": 370,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 370,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 370,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 58,
+          "san": "Re7",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -376,
+          "afterPlayerCp": -376,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -376,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -376,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 59,
+          "san": "h4",
+          "color": "w",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 386,
+          "afterPlayerCp": 389,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 386,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 389,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 60,
+          "san": "Rbb7",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.015535054192252151,
+          "cpLoss": 28,
+          "beforePlayerCp": -389,
+          "afterPlayerCp": -417,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -389,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -417,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 93.25186669057928
+        },
+        {
+          "ply": 61,
+          "san": "e6",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 417,
+          "afterPlayerCp": 417,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 417,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 417,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 62,
+          "san": "Rbc7",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.026070342428682003,
+          "cpLoss": 55,
+          "beforePlayerCp": -440,
+          "afterPlayerCp": -495,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -440,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -495,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 88.92857628583555
+        },
+        {
+          "ply": 63,
+          "san": "Qe5",
+          "color": "w",
+          "grade": "good",
+          "depth": 18,
+          "loss": 0.03736792824855828,
+          "cpLoss": 86,
+          "beforePlayerCp": 544,
+          "afterPlayerCp": 458,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 544,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 458,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 84.50762949670506
+        },
+        {
+          "ply": 64,
+          "san": "Qe8",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.03891173405564333,
+          "cpLoss": 79,
+          "beforePlayerCp": -413,
+          "afterPlayerCp": -492,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -413,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -492,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 83.92022513650636
+        },
+        {
+          "ply": 65,
+          "san": "a4",
+          "color": "w",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 492,
+          "afterPlayerCp": 501,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 492,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 501,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 66,
+          "san": "Qd8",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -501,
+          "afterPlayerCp": -501,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -501,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -501,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 67,
+          "san": "R1f2",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.017257772130181426,
+          "cpLoss": 36,
+          "beforePlayerCp": 481,
+          "afterPlayerCp": 445,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 481,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 445,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 92.5312939662892
+        },
+        {
+          "ply": 68,
+          "san": "Qe8",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.009782953074518347,
+          "cpLoss": 20,
+          "beforePlayerCp": -445,
+          "afterPlayerCp": -465,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -445,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -465,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 95.69737024756964
+        },
+        {
+          "ply": 69,
+          "san": "R2f3",
+          "color": "w",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 465,
+          "afterPlayerCp": 495,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 465,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 495,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 70,
+          "san": "Qd8",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -495,
+          "afterPlayerCp": -495,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -495,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -495,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 71,
+          "san": "Bd3",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.008345796185609156,
+          "cpLoss": 19,
+          "beforePlayerCp": 506,
+          "afterPlayerCp": 487,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 506,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 487,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 96.3180007581545
+        },
+        {
+          "ply": 72,
+          "san": "Qe8",
+          "color": "b",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.03238993545845435,
+          "cpLoss": 80,
+          "beforePlayerCp": -487,
+          "afterPlayerCp": -567,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -487,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -567,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 86.42883191915381
+        },
+        {
+          "ply": 73,
+          "san": "Qe4",
+          "color": "w",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 567,
+          "afterPlayerCp": 569,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 567,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 569,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 74,
+          "san": "Nf6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -569,
+          "afterPlayerCp": -569,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -569,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -569,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 75,
+          "san": "Rxf6",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 600,
+          "afterPlayerCp": 600,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 600,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 600,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 76,
+          "san": "gxf6",
+          "color": "b",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -612,
+          "afterPlayerCp": -612,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -612,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -612,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 77,
+          "san": "Rxf6",
+          "color": "w",
+          "grade": "best",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": 527,
+          "afterPlayerCp": 527,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 527,
+            "depth": 12,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 527,
+            "depth": 12,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 78,
+          "san": "Kg8",
+          "color": "b",
+          "grade": "excellent",
+          "depth": 12,
+          "loss": 0,
+          "cpLoss": 0,
+          "beforePlayerCp": -646,
+          "afterPlayerCp": -616,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -646,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -616,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 99.9998853309735
+        },
+        {
+          "ply": 79,
+          "san": "Bc4",
+          "color": "w",
+          "grade": "good",
+          "depth": 12,
+          "loss": 0.010162083236180952,
+          "cpLoss": 31,
+          "beforePlayerCp": 616,
+          "afterPlayerCp": 585,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 616,
+            "depth": 12
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 585,
+            "depth": 12
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 95.534290801072
+        },
+        {
+          "ply": 80,
+          "san": "Kh8",
+          "color": "b",
+          "grade": "good",
+          "depth": 18,
+          "loss": 0.007567452261526381,
+          "cpLoss": 159,
+          "beforePlayerCp": -1098,
+          "afterPlayerCp": -1257,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -1098,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -1257,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "mateEvidence": {
+            "kind": "ordinary",
+            "forced": false
+          },
+          "accuracyContribution": 96.65575035939987
+        }
+      ],
+      "verificationPlan": [
+        {
+          "ply": 80,
+          "san": "Kh8",
+          "uci": "g8h8",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 81,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -1098,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -1257,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 40,
+          "san": "d4",
+          "uci": "d5d4",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 83,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -46,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -143,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 44,
+          "san": "Rb8",
+          "uci": "c8b8",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 85,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -91,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -212,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 48,
+          "san": "Nf8",
+          "uci": "d7f8",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 87,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": -190,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": -284,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 63,
+          "san": "Qe5",
+          "uci": "g3e5",
+          "reason": "practical-loss",
+          "status": "verified",
+          "startRequest": 89,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 544,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 458,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        },
+        {
+          "ply": 5,
+          "san": "d4",
+          "uci": "d2d4",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 91,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 24,
+          "san": "c5",
+          "uci": "c7c5",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 92,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 4,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 0,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 26,
+          "san": "Rc8",
+          "uci": "f8c8",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 93,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 10,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 10,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 1
+        },
+        {
+          "ply": 28,
+          "san": "a6",
+          "uci": "a7a6",
+          "reason": "great-candidate",
+          "status": "verified",
+          "startRequest": 94,
+          "beforeEvaluation": {
+            "kind": "cp",
+            "cp": 22,
+            "depth": 18,
+            "basis": "root-best-line"
+          },
+          "afterEvaluation": {
+            "kind": "cp",
+            "cp": 8,
+            "depth": 18,
+            "basis": "root-played-line"
+          },
+          "requests": 2
+        }
+      ]
+    }
+  ]
+}

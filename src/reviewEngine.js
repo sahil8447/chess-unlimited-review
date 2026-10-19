@@ -64,11 +64,14 @@ export async function runReview(pgn,evaluatePosition,{signal,onProgress=()=>{},o
       const coherent=quality.get(i)||rootQuality(before,move,baseDepth);
       const beforeEvaluation=coherent?.beforeEvaluation??baseBefore,afterEvaluation=terminals[i+1]?baseAfter:coherent?.afterEvaluation??baseAfter;
       const beforePlayerCp=evaluationCp(beforeEvaluation),afterPlayerCp=evaluationCp(afterEvaluation);
-      const bestMovePlayed=root.bestMove===uciOf(move),legalChoices=positions[i].moves().length;
+      // A bounded paired search can reorder the earlier unrestricted best.
+      // Grade, explanation and displayed PV must use the accepted comparison.
+      const bestMove=coherent?.bestMove??root.bestMove,bestVariation=coherent?.rootBestLine?.pv??root.pv??[];
+      const bestMovePlayed=bestMove===uciOf(move),legalChoices=positions[i].moves().length;
       const previous=moves[i-1],obviousRecapture=Boolean(move.captured&&previous?.captured&&previous.to===move.to);
       const classification=classifyMove({beforeCp:beforePlayerCp,afterCp:afterPlayerCp,beforeEvaluation,afterEvaluation,bestMovePlayed,qualityVerified:quality.has(i),legalChoices});
       const initialGrade=classifyMove({beforeCp:positionBeforeCp,afterCp:positionAfterCp,beforeEvaluation:baseBefore,afterEvaluation:baseAfter,bestMovePlayed:before.bestMove===uciOf(move),legalChoices}).grade;
-      const alternativeLoss=coherent?.source==='same-root' && root.depth>=Math.max(18,criticalDepth) ? calculateAlternativeLoss(root.candidates) : null;
+      const alternativeLoss=coherent?.source==='same-root' && bestMove===root.bestMove && root.depth>=Math.max(18,criticalDepth) ? calculateAlternativeLoss(root.candidates) : null;
       let grade=legalChoices===1 || obviousRecapture ? classification.grade : classifyTacticalMove({baseGrade:classification.grade,bestMovePlayed,beforeCp:beforePlayerCp,afterCp:afterPlayerCp,alternativeLoss});
       const missStart=now();
       const miss=final && ['inaccuracy','mistake','blunder'].includes(grade) ? detectMissedOpportunity({beforeFen,bestVariation:root.pv,bestMovePlayed,beforePlayerCp,afterPlayerCp,color:move.color,evidence:{root,quality:coherent,minDepth:criticalDepth}}) : null;
@@ -83,10 +86,10 @@ export async function runReview(pgn,evaluatePosition,{signal,onProgress=()=>{},o
         positionBeforeEvaluation,positionAfterEvaluation,positionBeforeCp,positionAfterCp,positionBeforeWhiteCp:graphData[i].whiteCp,positionAfterWhiteCp:graphData[i+1].whiteCp,
         accuracyContribution:calculateReviewedMoveAccuracy({beforeEvaluation,afterEvaluation}),qualitySource:coherent?.source||'adjacent-position estimate',qualityEvidence:coherent??null,
         depth:coherent?.depth||before.depth||0,afterDepth:after.depth||0,deepVerified:Boolean(quality.get(i)),
-        bestMove:root.bestMove,bestMovePlayed,bestVariation:root.pv||[],evaluation:graphData[i+1].whiteCp===null?null:graphData[i+1].whiteCp/100,
+        bestMove,bestMovePlayed,bestVariation,evaluation:graphData[i+1].whiteCp===null?null:graphData[i+1].whiteCp/100,
         bestMate:coherent?.bestMate??null,playedMate:coherent?.playedMate??null,
         book:opening||null,alternativeLoss,missDiagnostic:miss||null,brilliantDiagnostic:audits?'Pending optional audit':'Optional diagnostic audit not requested',
-        explanation:grade==='book' ? `Recorded in the local Lichess opening book (source line ${opening.eco}). Accuracy still uses the engine evaluation.` : miss?.explanation || generateMoveExplanation({move,grade,beforeFen,afterFen:move.after,bestMove:root.bestMove,bestMovePlayed,beforePlayerCp,afterPlayerCp,beforeEvaluation,afterEvaluation,mateEvidence:classification.mateEvidence})};
+        explanation:grade==='book' ? `Recorded in the local Lichess opening book (source line ${opening.eco}). Accuracy still uses the engine evaluation.` : miss?.explanation || generateMoveExplanation({move,grade,beforeFen,afterFen:move.after,bestMove,bestMovePlayed,beforePlayerCp,afterPlayerCp,beforeEvaluation,afterEvaluation,mateEvidence:classification.mateEvidence})};
     });
     return {pgn,headers,scorePerspectives:{quality:'mover',position:'white',engine:'side-to-move'},options:{book,audits,baseDepth,criticalDepth,detailed},searchLog,verifications,reviewedMoves,graphData,whiteAccuracy:calculateAccuracy(reviewedMoves,'w'),blackAccuracy:calculateAccuracy(reviewedMoves,'b'),
       performance:Object.fromEntries(['w','b'].map(color=>[color,estimatePerformance({moves:reviewedMoves,color,headers,complete:final && metrics.errors.length===0,customStart:Boolean(headers.FEN)})])),metrics};

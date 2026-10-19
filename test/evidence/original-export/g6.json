@@ -1,0 +1,432 @@
+{
+  "source": {
+    "kind": "actual-user-upload",
+    "sha256": "17f398739365e6c73b07c9efe0cf9b282fbc295a678fc84ffb501f99955c9aba",
+    "bytes": 73189
+  },
+  "original": {
+    "verification": {
+      "verified": true,
+      "reason": "Audited legal offers and bounded material continuations",
+      "acceptedLines": [
+        {
+          "capture": "Qxg6+",
+          "captureUci": "h5g6",
+          "offeredSquare": "g6",
+          "newlyExposed": false,
+          "offeredPiece": "p",
+          "discovered": false,
+          "immediateCostCp": 0,
+          "delayedCostCp": 0,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [
+            "f7g6"
+          ],
+          "materialTrace": [
+            {
+              "san": "Kxg6",
+              "fen": "r1bq1bnr/pp1pp2p/2n3k1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+              "materialCp": 1030
+            }
+          ],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [
+            {
+              "san": "Kxg6",
+              "captured": "q"
+            },
+            {
+              "san": "hxg6",
+              "captured": "q"
+            }
+          ],
+          "forcingCompensation": false,
+          "isSacrifice": false,
+          "scoreCp": 1024,
+          "approximateMaterialCostCp": 0
+        },
+        {
+          "capture": "Qxh7+",
+          "captureUci": "h5h7",
+          "offeredSquare": "h7",
+          "newlyExposed": false,
+          "offeredPiece": "p",
+          "discovered": true,
+          "immediateCostCp": 0,
+          "delayedCostCp": 0,
+          "materialCostCp": 0,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [
+            "h8h7"
+          ],
+          "materialTrace": [
+            {
+              "san": "Rxh7",
+              "fen": "r1bq1bn1/pp1ppk1r/2n3p1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+              "materialCp": 1030
+            }
+          ],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [
+            {
+              "san": "Rxh7",
+              "captured": "q"
+            }
+          ],
+          "forcingCompensation": false,
+          "isSacrifice": false,
+          "scoreCp": 1057,
+          "approximateMaterialCostCp": 0
+        },
+        {
+          "capture": "Qxc5",
+          "captureUci": "h5c5",
+          "offeredSquare": "c5",
+          "newlyExposed": false,
+          "offeredPiece": "p",
+          "discovered": true,
+          "immediateCostCp": 100,
+          "delayedCostCp": 100,
+          "materialCostCp": 100,
+          "materialTraceComplete": true,
+          "exchangeNodes": 0,
+          "materialContinuation": [],
+          "materialTrace": [],
+          "tacticalReplies": [],
+          "ordinaryRecaptures": [],
+          "forcingCompensation": false,
+          "isSacrifice": true,
+          "scoreCp": 393,
+          "approximateMaterialCostCp": 100
+        }
+      ],
+      "isSacrifice": true,
+      "materialCostCp": 100,
+      "sacrificeType": "discovered-material",
+      "materialTraceComplete": true,
+      "opponentCanGainMaterial": true,
+      "forcingCompensation": false,
+      "worstAcceptedCp": 393,
+      "offeredCaptureCount": 3,
+      "deepBefore": 394,
+      "deepAfter": 422,
+      "bestAlternativeCp": 394,
+      "rootBestMove": "g7g6",
+      "playedUci": "g7g6",
+      "deepBestMovePlayed": true,
+      "deepCpGap": 0,
+      "analysisDepth": 18,
+      "rootCandidates": [
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 1,
+          "move": "g7g6",
+          "pv": [
+            "g7g6",
+            "h5c5",
+            "e7e5",
+            "c5c4",
+            "d7d5",
+            "c4d5",
+            "d8d5",
+            "e4d5",
+            "c6d4",
+            "e1d1",
+            "g8f6",
+            "b1c3",
+            "h7h6",
+            "d2d3",
+            "b7b5",
+            "g1e2",
+            "d4e2",
+            "d1e2",
+            "b5b4"
+          ],
+          "scoreCp": 394,
+          "mate": null
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 2,
+          "move": "f7e6",
+          "pv": [
+            "f7e6",
+            "h5d5",
+            "e6f6",
+            "d5f5"
+          ],
+          "scoreCp": null,
+          "mate": -2
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 3,
+          "move": "f7f6",
+          "pv": [
+            "f7f6",
+            "h5f5"
+          ],
+          "scoreCp": null,
+          "mate": -1
+        }
+      ],
+      "qualityVerified": true,
+      "playedCp": 394,
+      "beforeCp": 394,
+      "unrestrictedBeforeCp": 394,
+      "unrestrictedCandidates": [
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 1,
+          "move": "g7g6",
+          "pv": [
+            "g7g6",
+            "h5c5",
+            "e7e5",
+            "c5c4",
+            "d7d5",
+            "c4d5",
+            "d8d5",
+            "e4d5",
+            "c6d4",
+            "e1d1",
+            "g8f6",
+            "b1c3",
+            "h7h6",
+            "d2d3",
+            "b7b5",
+            "g1e2",
+            "d4e2",
+            "d1e2",
+            "b5b4"
+          ],
+          "scoreCp": 394,
+          "mate": null
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 2,
+          "move": "f7e6",
+          "pv": [
+            "f7e6",
+            "h5d5",
+            "e6f6",
+            "d5f5"
+          ],
+          "scoreCp": null,
+          "mate": -2
+        },
+        {
+          "bound": false,
+          "depth": 18,
+          "rank": 3,
+          "move": "f7f6",
+          "pv": [
+            "f7f6",
+            "h5f5"
+          ],
+          "scoreCp": null,
+          "mate": -1
+        }
+      ],
+      "counterfactual": {
+        "verified": true,
+        "alreadyCompletelyWinning": false,
+        "reason": "All remaining alternatives fall below the decisive threshold",
+        "depth": 18,
+        "allAlternativesCovered": true,
+        "alternativeUpperBoundCp": -10000,
+        "bestNonSacrificingMove": null,
+        "bestNonSacrificingCp": null,
+        "examined": [
+          {
+            "move": "f7e6",
+            "cp": -10000,
+            "mate": -2,
+            "depth": 18,
+            "nonSacrificing": false
+          }
+        ],
+        "excludedSacrifices": []
+      },
+      "bestAlternativeMethod": "same-root MultiPV comparison with bounded paired fallback"
+    },
+    "decision": {
+      "grade": "best",
+      "eligible": true,
+      "reason": "Verified candidate; automatic Brilliant awards remain disabled",
+      "isSacrifice": true,
+      "sacrificeType": "discovered-material",
+      "bestMovePlayed": true,
+      "nearBest": true,
+      "depth": 18,
+      "playedMove": "g7g6",
+      "bestMove": "g7g6",
+      "beforeCp": 394,
+      "playedCp": 394,
+      "cpGap": 0,
+      "winChanceGap": 0,
+      "compensationVerified": true,
+      "alreadyCompletelyWinning": false,
+      "counterfactualVerified": true,
+      "bestNonSacrificingCp": null,
+      "alternativeUpperBoundCp": -10000,
+      "ratingUsed": 1101
+    }
+  },
+  "corrected": {
+    "verified": true,
+    "isSacrifice": false,
+    "reason": "Pre-existing unrelated threat; sacrifice causality unsupported",
+    "acceptedLines": [
+      {
+        "capture": "Qxg6+",
+        "captureUci": "h5g6",
+        "offeredSquare": "g6",
+        "causality": {
+          "supported": true,
+          "kind": "moved-unit",
+          "beforeCapturable": false,
+          "reason": "The move placed the offered unit on its captured square"
+        },
+        "newlyExposed": true,
+        "geometricallyAttackedBefore": true,
+        "offeredPiece": "p",
+        "discovered": false,
+        "immediateCostCp": 0,
+        "delayedCostCp": 0,
+        "exposureCostCp": 0,
+        "materialCostCp": 0,
+        "materialTraceComplete": true,
+        "exchangeNodes": 0,
+        "materialContinuation": [
+          "f7g6"
+        ],
+        "materialTrace": [
+          {
+            "san": "Kxg6",
+            "fen": "r1bq1bnr/pp1pp2p/2n3k1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+            "materialCp": 1030
+          }
+        ],
+        "tacticalReplies": [],
+        "ordinaryRecaptures": [
+          {
+            "san": "Kxg6",
+            "captured": "q"
+          },
+          {
+            "san": "hxg6",
+            "captured": "q"
+          }
+        ],
+        "forcingCompensation": false,
+        "isSacrifice": false
+      },
+      {
+        "capture": "Qxh7+",
+        "captureUci": "h5h7",
+        "offeredSquare": "h7",
+        "causality": {
+          "supported": false,
+          "kind": "pre-existing-unrelated-threat",
+          "beforeCapturable": true,
+          "beforeCostCp": 0,
+          "reason": "The same unit was already capturable for comparable material; the move supplies no supported offer causality"
+        },
+        "newlyExposed": false,
+        "geometricallyAttackedBefore": true,
+        "offeredPiece": "p",
+        "discovered": true,
+        "immediateCostCp": 0,
+        "delayedCostCp": 0,
+        "exposureCostCp": 0,
+        "materialCostCp": 0,
+        "materialTraceComplete": true,
+        "exchangeNodes": 0,
+        "materialContinuation": [
+          "h8h7"
+        ],
+        "materialTrace": [
+          {
+            "san": "Rxh7",
+            "fen": "r1bq1bn1/pp1ppk1r/2n3p1/2p5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 6",
+            "materialCp": 1030
+          }
+        ],
+        "tacticalReplies": [],
+        "ordinaryRecaptures": [
+          {
+            "san": "Rxh7",
+            "captured": "q"
+          }
+        ],
+        "forcingCompensation": false,
+        "isSacrifice": false
+      },
+      {
+        "capture": "Qxc5",
+        "captureUci": "h5c5",
+        "offeredSquare": "c5",
+        "causality": {
+          "supported": false,
+          "kind": "pre-existing-unrelated-threat",
+          "beforeCapturable": true,
+          "beforeCostCp": 100,
+          "reason": "The same unit was already capturable for comparable material; the move supplies no supported offer causality"
+        },
+        "newlyExposed": false,
+        "geometricallyAttackedBefore": true,
+        "offeredPiece": "p",
+        "discovered": true,
+        "immediateCostCp": 100,
+        "delayedCostCp": 100,
+        "exposureCostCp": 100,
+        "materialCostCp": 0,
+        "materialTraceComplete": true,
+        "exchangeNodes": 0,
+        "materialContinuation": [],
+        "materialTrace": [],
+        "tacticalReplies": [],
+        "ordinaryRecaptures": [],
+        "forcingCompensation": false,
+        "isSacrifice": false
+      }
+    ],
+    "causalityComplete": false,
+    "materialTraceComplete": true,
+    "materialCostCp": 0,
+    "offeredCaptureCount": 3
+  },
+  "decision": {
+    "grade": "best",
+    "eligible": false,
+    "reason": "No meaningful material or forcing temporary sacrifice",
+    "isSacrifice": false,
+    "sacrificeType": "unknown",
+    "bestMovePlayed": false,
+    "nearBest": false,
+    "depth": null,
+    "playedMove": null,
+    "bestMove": null,
+    "beforeCp": null,
+    "playedCp": null,
+    "cpGap": null,
+    "winChanceGap": null,
+    "compensationVerified": false,
+    "alreadyCompletelyWinning": null,
+    "counterfactualVerified": false,
+    "bestNonSacrificingCp": null,
+    "alternativeUpperBoundCp": null,
+    "ratingUsed": 1101
+  },
+  "searches": 0
+}

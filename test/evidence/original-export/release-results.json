@@ -1,0 +1,96 @@
+{
+  "baseCommit": "15a33a827a0b5165da93383de9f9257adbe1801a",
+  "branch": "codex/chess-review-original-export-validation",
+  "source": {
+    "kind": "actual-user-upload",
+    "sha256": "17f398739365e6c73b07c9efe0cf9b282fbc295a678fc84ffb501f99955c9aba",
+    "bytes": 73189
+  },
+  "originalImportedWith": "npm run import:review",
+  "originalValidation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [
+      "Legacy mate sentinel is ambiguous at ply 39; reverify with engine",
+      "Legacy mate sentinel is ambiguous at ply 40; reverify with engine",
+      "Legacy mate sentinel is ambiguous at ply 41; reverify with engine",
+      "Legacy mate sentinel is ambiguous at ply 42; reverify with engine",
+      "Legacy incomplete export has no lifecycle; its 42 records do not prove final analysis",
+      "Legacy live metrics contain work but totalMs was not snapshotted"
+    ],
+    "game": {
+      "plies": 42,
+      "whitePlies": 21,
+      "blackPlies": 21,
+      "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "finalFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q2P1/PPPP1P1n/RNB2R2 w - - 0 22",
+      "checkmate": true,
+      "result": "0-1"
+    }
+  },
+  "baselineMoveFieldMismatches": [],
+  "classificationReplayMismatches": [],
+  "freshValidation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "game": {
+      "plies": 42,
+      "whitePlies": 21,
+      "blackPlies": 21,
+      "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "finalFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q2P1/PPPP1P1n/RNB2R2 w - - 0 22",
+      "checkmate": true,
+      "result": "0-1"
+    }
+  },
+  "tests": {
+    "total": 188,
+    "passed": 187,
+    "failed": 0,
+    "skipped": 1,
+    "durationMs": 115167.738209,
+    "command": "npm test"
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true
+  },
+  "automaticBrilliantEnabled": false,
+  "accuracy": {
+    "white": 68.4232404076921,
+    "black": 67.62576348609826,
+    "coefficientsChanged": false
+  },
+  "coldDiagnosticsMs": 113623.605156,
+  "coldDiagnosticsSearches": 90,
+  "warmDiagnostics": {
+    "elapsedMs": 1034.3828480000084,
+    "transport": {
+      "requests": 90,
+      "searches": 0,
+      "engineMs": 0,
+      "requestMs": 1.4716399999306304,
+      "workerStarts": 0
+    },
+    "accuracy": [
+      68.4232404076921,
+      67.62576348609826
+    ],
+    "sameGrades": true
+  },
+  "limitations": [
+    "No usable original browser elapsed duration or per-search log",
+    "Cold 42-ply sample is slower than frozen V1.1",
+    "Original export captured during optional diagnostics; no fabricated final state",
+    "Chess.com reference is aggregate-only; White discrepancy remains",
+    "Bb7 counterfactual budget exceeded; eligibility withheld",
+    "Unpacked extension blocked by administrator policy; manual Windows Chrome acceptance remains pending"
+  ],
+  "originalBytesPreservedOutsideGit": true,
+  "initialTestRun": {
+    "failed": 1,
+    "reason": "Built content bundle was stale after source fix; rebuilt before successful full rerun"
+  },
+  "windowsRepositoryModified": false
+}

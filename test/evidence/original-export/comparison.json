@@ -1,0 +1,3137 @@
+{
+  "source": {
+    "kind": "actual-user-upload",
+    "sha256": "17f398739365e6c73b07c9efe0cf9b282fbc295a678fc84ffb501f99955c9aba",
+    "bytes": 73189
+  },
+  "baselineMismatches": [],
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [
+      "Legacy mate sentinel is ambiguous at ply 39; reverify with engine",
+      "Legacy mate sentinel is ambiguous at ply 40; reverify with engine",
+      "Legacy mate sentinel is ambiguous at ply 41; reverify with engine",
+      "Legacy mate sentinel is ambiguous at ply 42; reverify with engine",
+      "Legacy incomplete export has no lifecycle; its 42 records do not prove final analysis",
+      "Legacy live metrics contain work but totalMs was not snapshotted"
+    ],
+    "game": {
+      "plies": 42,
+      "whitePlies": 21,
+      "blackPlies": 21,
+      "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "finalFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q2P1/PPPP1P1n/RNB2R2 w - - 0 22",
+      "checkmate": true,
+      "result": "0-1"
+    }
+  },
+  "freshValidation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "game": {
+      "plies": 42,
+      "whitePlies": 21,
+      "blackPlies": 21,
+      "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "finalFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q2P1/PPPP1P1n/RNB2R2 w - - 0 22",
+      "checkmate": true,
+      "result": "0-1"
+    }
+  },
+  "automaticBrilliantEnabled": false,
+  "classificationReplay": [
+    {
+      "ply": 1,
+      "san": "e4",
+      "originalGrade": "book",
+      "replayedGrade": "book",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 2,
+      "san": "c5",
+      "originalGrade": "book",
+      "replayedGrade": "book",
+      "agrees": true,
+      "accuracy": 95.96114342743246
+    },
+    {
+      "ply": 3,
+      "san": "Bc4",
+      "originalGrade": "book",
+      "replayedGrade": "book",
+      "agrees": true,
+      "accuracy": 84.0366899230695
+    },
+    {
+      "ply": 4,
+      "san": "Nc6",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 96.74421231976531
+    },
+    {
+      "ply": 5,
+      "san": "Bxf7+",
+      "originalGrade": "blunder",
+      "replayedGrade": "blunder",
+      "agrees": true,
+      "accuracy": 21.781734061174358
+    },
+    {
+      "ply": 6,
+      "san": "Kxf7",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 7,
+      "san": "Qh5+",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 8,
+      "san": "g6",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 9,
+      "san": "Qxc5",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 10,
+      "san": "Nf6",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 82.60647770272222
+    },
+    {
+      "ply": 11,
+      "san": "e5",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 80.65106444178373
+    },
+    {
+      "ply": 12,
+      "san": "Ne4",
+      "originalGrade": "blunder",
+      "replayedGrade": "blunder",
+      "agrees": true,
+      "accuracy": 10.801526774144182
+    },
+    {
+      "ply": 13,
+      "san": "Qd5+",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 14,
+      "san": "e6",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 59.114085127352574
+    },
+    {
+      "ply": 15,
+      "san": "Qxe4",
+      "originalGrade": "great",
+      "replayedGrade": "great",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 16,
+      "san": "Bc5",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 62.57002424597115
+    },
+    {
+      "ply": 17,
+      "san": "Qf3+",
+      "originalGrade": "blunder",
+      "replayedGrade": "blunder",
+      "agrees": true,
+      "accuracy": 35.99806465276551
+    },
+    {
+      "ply": 18,
+      "san": "Kg7",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 19,
+      "san": "Ne2",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 48.701746962379794
+    },
+    {
+      "ply": 20,
+      "san": "Rf8",
+      "originalGrade": "great",
+      "replayedGrade": "great",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 21,
+      "san": "Nf4",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 55.28249783664095
+    },
+    {
+      "ply": 22,
+      "san": "Nd4",
+      "originalGrade": "great",
+      "replayedGrade": "great",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 23,
+      "san": "Qc3",
+      "originalGrade": "inaccuracy",
+      "replayedGrade": "inaccuracy",
+      "agrees": true,
+      "accuracy": 68.83994045905
+    },
+    {
+      "ply": 24,
+      "san": "b6",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 93.25379989386416
+    },
+    {
+      "ply": 25,
+      "san": "g3",
+      "originalGrade": "inaccuracy",
+      "replayedGrade": "inaccuracy",
+      "agrees": true,
+      "accuracy": 69.020670643272
+    },
+    {
+      "ply": 26,
+      "san": "g5",
+      "originalGrade": "blunder",
+      "replayedGrade": "blunder",
+      "agrees": true,
+      "accuracy": 27.540912912498612
+    },
+    {
+      "ply": 27,
+      "san": "Nh5+",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 47.662930631204816
+    },
+    {
+      "ply": 28,
+      "san": "Kg8",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 87.52147012019577
+    },
+    {
+      "ply": 29,
+      "san": "Nf6+",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 88.34274291661822
+    },
+    {
+      "ply": 30,
+      "san": "Kh8",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 61.40119445604913
+    },
+    {
+      "ply": 31,
+      "san": "Qd3",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 97.524657422645
+    },
+    {
+      "ply": 32,
+      "san": "Rxf6",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 33,
+      "san": "exf6",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 34,
+      "san": "Qxf6",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 35,
+      "san": "O-O",
+      "originalGrade": "mistake",
+      "replayedGrade": "mistake",
+      "agrees": true,
+      "accuracy": 53.98805255781618
+    },
+    {
+      "ply": 36,
+      "san": "Nf3+",
+      "originalGrade": "excellent",
+      "replayedGrade": "excellent",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 37,
+      "san": "Kg2",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 38,
+      "san": "Bb7",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 39,
+      "san": "Kh3",
+      "originalGrade": "good",
+      "replayedGrade": "good",
+      "agrees": true,
+      "accuracy": 89.64555240197302
+    },
+    {
+      "ply": 40,
+      "san": "Qh6+",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 41,
+      "san": "Kg4",
+      "originalGrade": "excellent",
+      "replayedGrade": "excellent",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    },
+    {
+      "ply": 42,
+      "san": "Nxh2#",
+      "originalGrade": "best",
+      "replayedGrade": "best",
+      "agrees": true,
+      "accuracy": 99.9998853309735
+    }
+  ],
+  "accuracy": {
+    "w": {
+      "original": {
+        "value": 68.34474981611713,
+        "weightedMean": 70.62198225850116,
+        "harmonicMean": 66.0675173737331,
+        "contributions": [
+          {
+            "index": 0,
+            "accuracy": 99.9998853309735,
+            "weight": 1.4844126080640987
+          },
+          {
+            "index": 2,
+            "accuracy": 84.0366899230695,
+            "weight": 1.4844126080640987
+          },
+          {
+            "index": 4,
+            "accuracy": 21.781734061174358,
+            "weight": 12
+          },
+          {
+            "index": 6,
+            "accuracy": 99.9998853309735,
+            "weight": 12
+          },
+          {
+            "index": 8,
+            "accuracy": 99.9998853309735,
+            "weight": 1.1803272213678282
+          },
+          {
+            "index": 10,
+            "accuracy": 80.65106444178373,
+            "weight": 3.6828685410799555
+          },
+          {
+            "index": 12,
+            "accuracy": 99.9998853309735,
+            "weight": 12
+          },
+          {
+            "index": 14,
+            "accuracy": 99.9998853309735,
+            "weight": 5.417258803726054
+          },
+          {
+            "index": 16,
+            "accuracy": 35.99806465276551,
+            "weight": 7.97487507095807
+          },
+          {
+            "index": 18,
+            "accuracy": 48.701746962379794,
+            "weight": 12
+          },
+          {
+            "index": 20,
+            "accuracy": 55.28249783664095,
+            "weight": 10.885239474741763
+          },
+          {
+            "index": 22,
+            "accuracy": 68.83994045905,
+            "weight": 7.681573134479306
+          },
+          {
+            "index": 24,
+            "accuracy": 69.020670643272,
+            "weight": 5.2983673213178415
+          },
+          {
+            "index": 26,
+            "accuracy": 47.662930631204816,
+            "weight": 8.083852442079296
+          },
+          {
+            "index": 28,
+            "accuracy": 88.34274291661822,
+            "weight": 7.789970347750563
+          },
+          {
+            "index": 30,
+            "accuracy": 97.524657422645,
+            "weight": 4.906458336583197
+          },
+          {
+            "index": 32,
+            "accuracy": 99.9998853309735,
+            "weight": 1.4523951684507619
+          },
+          {
+            "index": 34,
+            "accuracy": 53.98805255781618,
+            "weight": 8.308199663355179
+          },
+          {
+            "index": 36,
+            "accuracy": 99.9998853309735,
+            "weight": 9.006538096533491
+          },
+          {
+            "index": 38,
+            "accuracy": 89.64555240197302,
+            "weight": 1.6105423294792216
+          },
+          {
+            "index": 40,
+            "accuracy": 99.9998853309735,
+            "weight": 1.0517616103099172
+          }
+        ]
+      },
+      "fresh": {
+        "value": 68.4232404076921,
+        "weightedMean": 70.44612923706856,
+        "harmonicMean": 66.40035157831566,
+        "contributions": [
+          {
+            "index": 0,
+            "accuracy": 99.9998853309735,
+            "weight": 1.4844126080640987
+          },
+          {
+            "index": 2,
+            "accuracy": 84.0366899230695,
+            "weight": 1.4844126080640987
+          },
+          {
+            "index": 4,
+            "accuracy": 22.643726986479308,
+            "weight": 12
+          },
+          {
+            "index": 6,
+            "accuracy": 99.9998853309735,
+            "weight": 12
+          },
+          {
+            "index": 8,
+            "accuracy": 99.9998853309735,
+            "weight": 1.1803272213678282
+          },
+          {
+            "index": 10,
+            "accuracy": 74.34441574216793,
+            "weight": 3.6828685410799555
+          },
+          {
+            "index": 12,
+            "accuracy": 99.9998853309735,
+            "weight": 12
+          },
+          {
+            "index": 14,
+            "accuracy": 99.9998853309735,
+            "weight": 5.417258803726054
+          },
+          {
+            "index": 16,
+            "accuracy": 40.834710578087304,
+            "weight": 7.97487507095807
+          },
+          {
+            "index": 18,
+            "accuracy": 46.136905602492554,
+            "weight": 12
+          },
+          {
+            "index": 20,
+            "accuracy": 48.61267868516551,
+            "weight": 10.885239474741763
+          },
+          {
+            "index": 22,
+            "accuracy": 68.83994045905,
+            "weight": 7.681573134479306
+          },
+          {
+            "index": 24,
+            "accuracy": 69.020670643272,
+            "weight": 5.2983673213178415
+          },
+          {
+            "index": 26,
+            "accuracy": 43.03034601815883,
+            "weight": 8.083852442079296
+          },
+          {
+            "index": 28,
+            "accuracy": 88.34274291661822,
+            "weight": 7.789970347750563
+          },
+          {
+            "index": 30,
+            "accuracy": 99.9998853309735,
+            "weight": 4.906458336583197
+          },
+          {
+            "index": 32,
+            "accuracy": 99.9998853309735,
+            "weight": 1.4523951684507619
+          },
+          {
+            "index": 34,
+            "accuracy": 62.194099514123316,
+            "weight": 8.308199663355179
+          },
+          {
+            "index": 36,
+            "accuracy": 99.9998853309735,
+            "weight": 9.006538096533491
+          },
+          {
+            "index": 38,
+            "accuracy": 96.49167799109745,
+            "weight": 1.6105423294792256
+          },
+          {
+            "index": 40,
+            "accuracy": 99.9998853309735,
+            "weight": 1.0517616103099217
+          }
+        ]
+      },
+      "typedVsLegacySentinelProjection": 0,
+      "arithmeticOriginal": 78.16549655038958,
+      "arithmeticFresh": 78.31083681135921,
+      "largestContributionChanges": [
+        {
+          "ply": 35,
+          "san": "O-O",
+          "before": 53.98805255781618,
+          "after": 62.194099514123316,
+          "difference": 8.206046956307134
+        },
+        {
+          "ply": 39,
+          "san": "Kh3",
+          "before": 89.64555240197302,
+          "after": 96.49167799109745,
+          "difference": 6.846125589124426
+        },
+        {
+          "ply": 21,
+          "san": "Nf4",
+          "before": 55.28249783664095,
+          "after": 48.61267868516551,
+          "difference": -6.669819151475437
+        },
+        {
+          "ply": 11,
+          "san": "e5",
+          "before": 80.65106444178373,
+          "after": 74.34441574216793,
+          "difference": -6.306648699615806
+        },
+        {
+          "ply": 17,
+          "san": "Qf3+",
+          "before": 35.9980646527655,
+          "after": 40.834710578087304,
+          "difference": 4.836645925321804
+        },
+        {
+          "ply": 27,
+          "san": "Nh5+",
+          "before": 47.662930631204816,
+          "after": 43.03034601815883,
+          "difference": -4.632584613045985
+        }
+      ],
+      "originalLosingPositionMoves": [
+        {
+          "ply": 37,
+          "san": "Kg2",
+          "chanceBefore": 0.03585427926579041,
+          "chanceAfter": 0.03585427926579041,
+          "accuracy": 99.9998853309735
+        },
+        {
+          "ply": 39,
+          "san": "Kh3",
+          "chanceBefore": 0.0242893939534299,
+          "chanceAfter": 1.0207743315884346e-16,
+          "accuracy": 89.64555240197302
+        },
+        {
+          "ply": 41,
+          "san": "Kg4",
+          "chanceBefore": 1.0207743315884346e-16,
+          "chanceAfter": 1.0207743315884346e-16,
+          "accuracy": 99.9998853309735
+        }
+      ],
+      "chessComReference": 44,
+      "referenceScope": "User-reported aggregate only; no per-move reference evidence. No coefficient tuning."
+    },
+    "b": {
+      "original": {
+        "value": 68.84142934672248,
+        "weightedMean": 76.47377145130753,
+        "harmonicMean": 61.209087242137436,
+        "contributions": [
+          {
+            "index": 1,
+            "accuracy": 95.96114342743246,
+            "weight": 1.4844126080640987
+          },
+          {
+            "index": 3,
+            "accuracy": 96.74421231976531,
+            "weight": 1.5728310605936826
+          },
+          {
+            "index": 5,
+            "accuracy": 99.9998853309735,
+            "weight": 12
+          },
+          {
+            "index": 7,
+            "accuracy": 99.9998853309735,
+            "weight": 1.1185723700454648
+          },
+          {
+            "index": 9,
+            "accuracy": 82.60647770272222,
+            "weight": 1.979374604661646
+          },
+          {
+            "index": 11,
+            "accuracy": 10.801526774144182,
+            "weight": 12
+          },
+          {
+            "index": 13,
+            "accuracy": 59.114085127352574,
+            "weight": 12
+          },
+          {
+            "index": 15,
+            "accuracy": 62.57002424597115,
+            "weight": 8.433323379546867
+          },
+          {
+            "index": 17,
+            "accuracy": 99.9998853309735,
+            "weight": 9.026889428405477
+          },
+          {
+            "index": 19,
+            "accuracy": 99.9998853309735,
+            "weight": 8.282175351901959
+          },
+          {
+            "index": 21,
+            "accuracy": 99.9998853309735,
+            "weight": 6.604056203542499
+          },
+          {
+            "index": 23,
+            "accuracy": 93.25379989386416,
+            "weight": 3.583842481754794
+          },
+          {
+            "index": 25,
+            "accuracy": 27.540912912498612,
+            "weight": 7.850187347283042
+          },
+          {
+            "index": 27,
+            "accuracy": 87.52147012019577,
+            "weight": 8.247410803889563
+          },
+          {
+            "index": 29,
+            "accuracy": 61.40119445604913,
+            "weight": 4.181780982487329
+          },
+          {
+            "index": 31,
+            "accuracy": 99.9998853309735,
+            "weight": 4.497613974222123
+          },
+          {
+            "index": 33,
+            "accuracy": 99.9998853309735,
+            "weight": 1.2691516059832217
+          },
+          {
+            "index": 35,
+            "accuracy": 99.9998853309735,
+            "weight": 10.329217918458165
+          },
+          {
+            "index": 37,
+            "accuracy": 99.9998853309735,
+            "weight": 1.4072965513970204
+          },
+          {
+            "index": 39,
+            "accuracy": 99.9998853309735,
+            "weight": 1.7784980943610937
+          },
+          {
+            "index": 41,
+            "accuracy": 99.9998853309735,
+            "weight": 0.5
+          }
+        ]
+      },
+      "fresh": {
+        "value": 67.62576348609826,
+        "weightedMean": 75.73642881952235,
+        "harmonicMean": 59.51509815267417,
+        "contributions": [
+          {
+            "index": 1,
+            "accuracy": 95.96114342743246,
+            "weight": 1.4844126080640987
+          },
+          {
+            "index": 3,
+            "accuracy": 96.7442123197653,
+            "weight": 1.5728310605936826
+          },
+          {
+            "index": 5,
+            "accuracy": 99.9998853309735,
+            "weight": 12
+          },
+          {
+            "index": 7,
+            "accuracy": 99.9998853309735,
+            "weight": 1.1185723700454648
+          },
+          {
+            "index": 9,
+            "accuracy": 82.60647770272222,
+            "weight": 1.979374604661646
+          },
+          {
+            "index": 11,
+            "accuracy": 9.760217471891067,
+            "weight": 12
+          },
+          {
+            "index": 13,
+            "accuracy": 59.95994917556108,
+            "weight": 12
+          },
+          {
+            "index": 15,
+            "accuracy": 61.76015738640867,
+            "weight": 8.433323379546867
+          },
+          {
+            "index": 17,
+            "accuracy": 99.9998853309735,
+            "weight": 9.026889428405477
+          },
+          {
+            "index": 19,
+            "accuracy": 99.9998853309735,
+            "weight": 8.282175351901959
+          },
+          {
+            "index": 21,
+            "accuracy": 99.9998853309735,
+            "weight": 6.604056203542499
+          },
+          {
+            "index": 23,
+            "accuracy": 93.25379989386418,
+            "weight": 3.583842481754794
+          },
+          {
+            "index": 25,
+            "accuracy": 28.48769010779143,
+            "weight": 7.850187347283042
+          },
+          {
+            "index": 27,
+            "accuracy": 75.94138576802231,
+            "weight": 8.247410803889563
+          },
+          {
+            "index": 29,
+            "accuracy": 63.82456288054521,
+            "weight": 4.181780982487329
+          },
+          {
+            "index": 31,
+            "accuracy": 99.9998853309735,
+            "weight": 4.497613974222123
+          },
+          {
+            "index": 33,
+            "accuracy": 99.9998853309735,
+            "weight": 1.2691516059832217
+          },
+          {
+            "index": 35,
+            "accuracy": 99.9998853309735,
+            "weight": 10.329217918458165
+          },
+          {
+            "index": 37,
+            "accuracy": 99.9998853309735,
+            "weight": 1.4072965513970204
+          },
+          {
+            "index": 39,
+            "accuracy": 99.9998853309735,
+            "weight": 1.7784980943610984
+          },
+          {
+            "index": 41,
+            "accuracy": 99.9998853309735,
+            "weight": 0.5
+          }
+        ]
+      },
+      "typedVsLegacySentinelProjection": 1.4210854715202004e-14,
+      "arithmeticOriginal": 84.64350407717637,
+      "arithmeticFresh": 84.20468260831963,
+      "largestContributionChanges": [
+        {
+          "ply": 28,
+          "san": "Kg8",
+          "before": 87.52147012019579,
+          "after": 75.94138576802231,
+          "difference": -11.580084352173472
+        },
+        {
+          "ply": 30,
+          "san": "Kh8",
+          "before": 61.40119445604913,
+          "after": 63.82456288054521,
+          "difference": 2.4233684244960756
+        },
+        {
+          "ply": 12,
+          "san": "Ne4",
+          "before": 10.801526774144182,
+          "after": 9.760217471891067,
+          "difference": -1.041309302253115
+        },
+        {
+          "ply": 26,
+          "san": "g5",
+          "before": 27.540912912498612,
+          "after": 28.48769010779143,
+          "difference": 0.9467771952928175
+        },
+        {
+          "ply": 14,
+          "san": "e6",
+          "before": 59.114085127352574,
+          "after": 59.95994917556108,
+          "difference": 0.8458640482085045
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "before": 62.57002424597115,
+          "after": 61.76015738640867,
+          "difference": -0.8098668595624758
+        }
+      ],
+      "originalLosingPositionMoves": [],
+      "chessComReference": 66.8,
+      "referenceScope": "User-reported aggregate only; no per-move reference evidence. No coefficient tuning."
+    }
+  },
+  "moves": [
+    {
+      "ply": 1,
+      "color": "w",
+      "san": "e4",
+      "uci": "e2e4",
+      "beforeFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "afterFen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      "original": {
+        "grade": "book",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 31,
+        "afterCp": 31,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "book",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 31,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 31,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.5285051773118131,
+      "legacyWinChanceAfter": 0.5285051773118131
+    },
+    {
+      "ply": 2,
+      "color": "b",
+      "san": "c5",
+      "uci": "c7c5",
+      "beforeFen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      "afterFen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "original": {
+        "grade": "book",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": -28,
+        "afterCp": -38,
+        "loss": 0.009171050060543473,
+        "cpLoss": 10,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 95.96114342743246,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "book",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -28,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -38,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.009171050060543473,
+        "cpLoss": 10,
+        "accuracy": 95.96114342743246,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.4742482461063748,
+      "legacyWinChanceAfter": 0.4650771960458313
+    },
+    {
+      "ply": 3,
+      "color": "w",
+      "san": "Bc4",
+      "uci": "f1c4",
+      "beforeFen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "afterFen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "original": {
+        "grade": "book",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": 38,
+        "afterCp": -4,
+        "loss": 0.03860481739483357,
+        "cpLoss": 42,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 84.0366899230695,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "book",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 38,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -4,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.03860481739483357,
+        "cpLoss": 42,
+        "accuracy": 84.0366899230695,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.5349228039541688,
+      "legacyWinChanceAfter": 0.49631798655933523
+    },
+    {
+      "ply": 4,
+      "color": "b",
+      "san": "Nc6",
+      "uci": "b8c6",
+      "beforeFen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "afterFen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+      "original": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": 4,
+        "afterCp": -4,
+        "loss": 0.007364026881329422,
+        "cpLoss": 8,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 96.74421231976531,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 4,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -4,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.007364026881329422,
+        "cpLoss": 8,
+        "accuracy": 96.7442123197653,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": -1.4210854715202004e-14,
+      "legacyWinChanceBefore": 0.5036820134406647,
+      "legacyWinChanceAfter": 0.49631798655933523
+    },
+    {
+      "ply": 5,
+      "color": "w",
+      "san": "Bxf7+",
+      "uci": "c4f7",
+      "beforeFen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+      "afterFen": "r1bqkbnr/pp1ppBpp/2n5/2p5/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 0 3",
+      "original": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 0,
+        "afterCp": -423,
+        "loss": 0.32599717806087736,
+        "cpLoss": 423,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 21.781734061174358,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -5,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -417,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.3181965444430632,
+        "cpLoss": 412,
+        "accuracy": 22.643726986479308,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0.8619929253049499,
+      "legacyWinChanceBefore": 0.5,
+      "legacyWinChanceAfter": 0.17400282193912261
+    },
+    {
+      "ply": 6,
+      "color": "b",
+      "san": "Kxf7",
+      "uci": "e8f7",
+      "beforeFen": "r1bqkbnr/pp1ppBpp/2n5/2p5/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 0 3",
+      "afterFen": "r1bq1bnr/pp1ppkpp/2n5/2p5/4P3/8/PPPP1PPP/RNBQK1NR w KQ - 0 4",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 414,
+        "afterCp": 414,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 414,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 414,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.821182717036527,
+      "legacyWinChanceAfter": 0.821182717036527
+    },
+    {
+      "ply": 7,
+      "color": "w",
+      "san": "Qh5+",
+      "uci": "d1h5",
+      "beforeFen": "r1bq1bnr/pp1ppkpp/2n5/2p5/4P3/8/PPPP1PPP/RNBQK1NR w KQ - 0 4",
+      "afterFen": "r1bq1bnr/pp1ppkpp/2n5/2p4Q/4P3/8/PPPP1PPP/RNB1K1NR b KQ - 1 4",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": -398,
+        "afterCp": -398,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -398,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -398,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.1876324575456314,
+      "legacyWinChanceAfter": 0.1876324575456314
+    },
+    {
+      "ply": 8,
+      "color": "b",
+      "san": "g6",
+      "uci": "g7g6",
+      "beforeFen": "r1bq1bnr/pp1ppkpp/2n5/2p4Q/4P3/8/PPPP1PPP/RNB1K1NR b KQ - 1 4",
+      "afterFen": "r1bq1bnr/pp1ppk1p/2n3p1/2p4Q/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 5",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 443,
+        "afterCp": 443,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Verified candidate; automatic Brilliant awards remain disabled"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 443,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 443,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.8363286822970346,
+      "legacyWinChanceAfter": 0.8363286822970346
+    },
+    {
+      "ply": 9,
+      "color": "w",
+      "san": "Qxc5",
+      "uci": "h5c5",
+      "beforeFen": "r1bq1bnr/pp1ppk1p/2n3p1/2p4Q/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 0 5",
+      "afterFen": "r1bq1bnr/pp1ppk1p/2n3p1/2Q5/4P3/8/PPPP1PPP/RNB1K1NR b KQ - 0 5",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": -388,
+        "afterCp": -388,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -388,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -388,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.19330957860820383,
+      "legacyWinChanceAfter": 0.19330957860820383
+    },
+    {
+      "ply": 10,
+      "color": "b",
+      "san": "Nf6",
+      "uci": "g8f6",
+      "beforeFen": "r1bq1bnr/pp1ppk1p/2n3p1/2Q5/4P3/8/PPPP1PPP/RNB1K1NR b KQ - 0 5",
+      "afterFen": "r1bq1b1r/pp1ppk1p/2n2np1/2Q5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 1 6",
+      "original": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": 426,
+        "afterCp": 352,
+        "loss": 0.04240253018739082,
+        "cpLoss": 74,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 82.60647770272222,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 426,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 352,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.04240253018739082,
+        "cpLoss": 74,
+        "accuracy": 82.60647770272222,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.8275790955442313,
+      "legacyWinChanceAfter": 0.7851765653568404
+    },
+    {
+      "ply": 11,
+      "color": "w",
+      "san": "e5",
+      "uci": "e4e5",
+      "beforeFen": "r1bq1b1r/pp1ppk1p/2n2np1/2Q5/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 1 6",
+      "afterFen": "r1bq1b1r/pp1ppk1p/2n2np1/2Q1P3/8/8/PPPP1PPP/RNB1K1NR b KQ - 0 6",
+      "original": {
+        "grade": "good",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -435,
+        "afterCp": -541,
+        "loss": 0.04769860533334205,
+        "cpLoss": 106,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 80.65106444178373,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "inaccuracy",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -420,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -568,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.06566276150269705,
+        "cpLoss": 148,
+        "accuracy": 74.34441574216793,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -6.306648699615806,
+      "legacyWinChanceBefore": 0.1677434804013099,
+      "legacyWinChanceAfter": 0.12004487506796785
+    },
+    {
+      "ply": 12,
+      "color": "b",
+      "san": "Ne4",
+      "uci": "f6e4",
+      "beforeFen": "r1bq1b1r/pp1ppk1p/2n2np1/2Q1P3/8/8/PPPP1PPP/RNB1K1NR b KQ - 0 6",
+      "afterFen": "r1bq1b1r/pp1ppk1p/2n3p1/2Q1P3/4n3/8/PPPP1PPP/RNB1K1NR w KQ - 1 7",
+      "original": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 572,
+        "afterCp": -74,
+        "loss": 0.4591996151954901,
+        "cpLoss": 646,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 10.801526774144182,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 574,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -93,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.4769912515450939,
+        "cpLoss": 667,
+        "accuracy": 9.760217471891067,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -1.041309302253115,
+      "legacyWinChanceBefore": 0.8914994675781045,
+      "legacyWinChanceAfter": 0.4322998523826144
+    },
+    {
+      "ply": 13,
+      "color": "w",
+      "san": "Qd5+",
+      "uci": "c5d5",
+      "beforeFen": "r1bq1b1r/pp1ppk1p/2n3p1/2Q1P3/4n3/8/PPPP1PPP/RNB1K1NR w KQ - 1 7",
+      "afterFen": "r1bq1b1r/pp1ppk1p/2n3p1/3QP3/4n3/8/PPPP1PPP/RNB1K1NR b KQ - 2 7",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 90,
+        "afterCp": 90,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 100,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 100,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.5820968656397246,
+      "legacyWinChanceAfter": 0.5820968656397246
+    },
+    {
+      "ply": 14,
+      "color": "b",
+      "san": "e6",
+      "uci": "e7e6",
+      "beforeFen": "r1bq1b1r/pp1ppk1p/2n3p1/3QP3/4n3/8/PPPP1PPP/RNB1K1NR b KQ - 2 7",
+      "afterFen": "r1bq1b1r/pp1p1k1p/2n1p1p1/3QP3/4n3/8/PPPP1PPP/RNB1K1NR w KQ - 0 8",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -93,
+        "afterCp": -231,
+        "loss": 0.11590318949050898,
+        "cpLoss": 138,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 59.114085127352574,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -93,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -227,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.11280518207524165,
+        "cpLoss": 134,
+        "accuracy": 59.95994917556108,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0.8458640482085045,
+      "legacyWinChanceBefore": 0.415218486764101,
+      "legacyWinChanceAfter": 0.299315297273592
+    },
+    {
+      "ply": 15,
+      "color": "w",
+      "san": "Qxe4",
+      "uci": "d5e4",
+      "beforeFen": "r1bq1b1r/pp1p1k1p/2n1p1p1/3QP3/4n3/8/PPPP1PPP/RNB1K1NR w KQ - 0 8",
+      "afterFen": "r1bq1b1r/pp1p1k1p/2n1p1p1/4P3/4Q3/8/PPPP1PPP/RNB1K1NR b KQ - 0 8",
+      "original": {
+        "grade": "great",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 254,
+        "afterCp": 254,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "great",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 218,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 218,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.7181388417094262,
+      "legacyWinChanceAfter": 0.7181388417094262
+    },
+    {
+      "ply": 16,
+      "color": "b",
+      "san": "Bc5",
+      "uci": "f8c5",
+      "beforeFen": "r1bq1b1r/pp1p1k1p/2n1p1p1/4P3/4Q3/8/PPPP1PPP/RNB1K1NR b KQ - 0 8",
+      "afterFen": "r1bq3r/pp1p1k1p/2n1p1p1/2b1P3/4Q3/8/PPPP1PPP/RNB1K1NR w KQ - 1 9",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -213,
+        "afterCp": -360,
+        "loss": 0.1035009287367947,
+        "cpLoss": 147,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 62.57002424597115,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -235,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -394,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.10634777015915192,
+        "cpLoss": 159,
+        "accuracy": 61.76015738640867,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -0.8098668595624758,
+      "legacyWinChanceBefore": 0.31339752781910246,
+      "legacyWinChanceAfter": 0.20989659908230776
+    },
+    {
+      "ply": 17,
+      "color": "w",
+      "san": "Qf3+",
+      "uci": "e4f3",
+      "beforeFen": "r1bq3r/pp1p1k1p/2n1p1p1/2b1P3/4Q3/8/PPPP1PPP/RNB1K1NR w KQ - 1 9",
+      "afterFen": "r1bq3r/pp1p1k1p/2n1p1p1/2b1P3/8/5Q2/PPPP1PPP/RNB1K1NR b KQ - 2 9",
+      "original": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 369,
+        "afterCp": 80,
+        "loss": 0.22243260862063263,
+        "cpLoss": 289,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 35.9980646527655,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 375,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 114,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.19569111309936782,
+        "cpLoss": 261,
+        "accuracy": 40.834710578087304,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 4.836645925321804,
+      "legacyWinChanceBefore": 0.7955463025225148,
+      "legacyWinChanceAfter": 0.5731136939018822
+    },
+    {
+      "ply": 18,
+      "color": "b",
+      "san": "Kg7",
+      "uci": "f7g7",
+      "beforeFen": "r1bq3r/pp1p1k1p/2n1p1p1/2b1P3/8/5Q2/PPPP1PPP/RNB1K1NR b KQ - 2 9",
+      "afterFen": "r1bq3r/pp1p2kp/2n1p1p1/2b1P3/8/5Q2/PPPP1PPP/RNB1K1NR w KQ - 3 10",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": -99,
+        "afterCp": -99,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -99,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -99,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.4098644115408538,
+      "legacyWinChanceAfter": 0.4098644115408538
+    },
+    {
+      "ply": 19,
+      "color": "w",
+      "san": "Ne2",
+      "uci": "g1e2",
+      "beforeFen": "r1bq3r/pp1p2kp/2n1p1p1/2b1P3/8/5Q2/PPPP1PPP/RNB1K1NR w KQ - 3 10",
+      "afterFen": "r1bq3r/pp1p2kp/2n1p1p1/2b1P3/8/5Q2/PPPPNPPP/RNB1K2R b KQ - 4 10",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 88,
+        "afterCp": -85,
+        "loss": 0.15791608116699202,
+        "cpLoss": 173,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 48.701746962379794,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 92,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -94,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.169562468275468,
+        "cpLoss": 186,
+        "accuracy": 46.136905602492554,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -2.5648413598872395,
+      "legacyWinChanceBefore": 0.5803043837193158,
+      "legacyWinChanceAfter": 0.4223883025523238
+    },
+    {
+      "ply": 20,
+      "color": "b",
+      "san": "Rf8",
+      "uci": "h8f8",
+      "beforeFen": "r1bq3r/pp1p2kp/2n1p1p1/2b1P3/8/5Q2/PPPPNPPP/RNB1K2R b KQ - 4 10",
+      "afterFen": "r1bq1r2/pp1p2kp/2n1p1p1/2b1P3/8/5Q2/PPPPNPPP/RNB1K2R w KQ - 5 11",
+      "original": {
+        "grade": "great",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 114,
+        "afterCp": 114,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "fresh": {
+        "grade": "great",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 100,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 100,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.603425129353426,
+      "legacyWinChanceAfter": 0.603425129353426
+    },
+    {
+      "ply": 21,
+      "color": "w",
+      "san": "Nf4",
+      "uci": "e2f4",
+      "beforeFen": "r1bq1r2/pp1p2kp/2n1p1p1/2b1P3/8/5Q2/PPPPNPPP/RNB1K2R w KQ - 5 11",
+      "afterFen": "r1bq1r2/pp1p2kp/2n1p1p1/2b1P3/5N2/5Q2/PPPP1PPP/RNB1K2R b KQ - 6 11",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -107,
+        "afterCp": -267,
+        "loss": 0.13048488352011017,
+        "cpLoss": 160,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 55.28249783664095,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -95,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -291,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.15831077579878394,
+        "cpLoss": 196,
+        "accuracy": 48.61267868516551,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -6.669819151475437,
+      "legacyWinChanceBefore": 0.4027589492090241,
+      "legacyWinChanceAfter": 0.27227406568891394
+    },
+    {
+      "ply": 22,
+      "color": "b",
+      "san": "Nd4",
+      "uci": "c6d4",
+      "beforeFen": "r1bq1r2/pp1p2kp/2n1p1p1/2b1P3/5N2/5Q2/PPPP1PPP/RNB1K2R b KQ - 6 11",
+      "afterFen": "r1bq1r2/pp1p2kp/4p1p1/2b1P3/3n1N2/5Q2/PPPP1PPP/RNB1K2R w KQ - 7 12",
+      "original": {
+        "grade": "great",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 290,
+        "afterCp": 290,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "great",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 294,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 294,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.7441789207783136,
+      "legacyWinChanceAfter": 0.7441789207783136
+    },
+    {
+      "ply": 23,
+      "color": "w",
+      "san": "Qc3",
+      "uci": "f3c3",
+      "beforeFen": "r1bq1r2/pp1p2kp/4p1p1/2b1P3/3n1N2/5Q2/PPPP1PPP/RNB1K2R w KQ - 7 12",
+      "afterFen": "r1bq1r2/pp1p2kp/4p1p1/2b1P3/3n1N2/2Q5/PPPP1PPP/RNB1K2R b KQ - 8 12",
+      "original": {
+        "grade": "inaccuracy",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": -227,
+        "afterCp": -344,
+        "loss": 0.08257956512758902,
+        "cpLoss": 117,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 68.83994045905,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "inaccuracy",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -227,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -344,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.08257956512758902,
+        "cpLoss": 117,
+        "accuracy": 68.83994045905,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.30241330468885935,
+      "legacyWinChanceAfter": 0.21983373956127034
+    },
+    {
+      "ply": 24,
+      "color": "b",
+      "san": "b6",
+      "uci": "b7b6",
+      "beforeFen": "r1bq1r2/pp1p2kp/4p1p1/2b1P3/3n1N2/2Q5/PPPP1PPP/RNB1K2R b KQ - 8 12",
+      "afterFen": "r1bq1r2/p2p2kp/1p2p1p1/2b1P3/3n1N2/2Q5/PPPP1PPP/RNB1K2R w KQ - 0 13",
+      "original": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": 344,
+        "afterCp": 320,
+        "loss": 0.015530449701222526,
+        "cpLoss": 24,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 93.25379989386414,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 344,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 320,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.015530449701222526,
+        "cpLoss": 24,
+        "accuracy": 93.25379989386418,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 4.263256414560601e-14,
+      "legacyWinChanceBefore": 0.7801662604387296,
+      "legacyWinChanceAfter": 0.7646358107375071
+    },
+    {
+      "ply": 25,
+      "color": "w",
+      "san": "g3",
+      "uci": "g2g3",
+      "beforeFen": "r1bq1r2/p2p2kp/1p2p1p1/2b1P3/3n1N2/2Q5/PPPP1PPP/RNB1K2R w KQ - 0 13",
+      "afterFen": "r1bq1r2/p2p2kp/1p2p1p1/2b1P3/3n1N2/2Q3P1/PPPP1P1P/RNB1K2R b KQ - 0 13",
+      "original": {
+        "grade": "inaccuracy",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": -320,
+        "afterCp": -464,
+        "loss": 0.08200388335128667,
+        "cpLoss": 144,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 69.020670643272,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "inaccuracy",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -320,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -464,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.08200388335128667,
+        "cpLoss": 144,
+        "accuracy": 69.020670643272,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.23536418926249295,
+      "legacyWinChanceAfter": 0.15336030591120628
+    },
+    {
+      "ply": 26,
+      "color": "b",
+      "san": "g5",
+      "uci": "g6g5",
+      "beforeFen": "r1bq1r2/p2p2kp/1p2p1p1/2b1P3/3n1N2/2Q3P1/PPPP1P1P/RNB1K2R b KQ - 0 13",
+      "afterFen": "r1bq1r2/p2p2kp/1p2p3/2b1P1p1/3n1N2/2Q3P1/PPPP1P1P/RNB1K2R w KQ - 0 14",
+      "original": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 709,
+        "afterCp": 172,
+        "loss": 0.27829895995362064,
+        "cpLoss": 537,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 27.540912912498612,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "blunder",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 671,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 169,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.27132534262414754,
+        "cpLoss": 502,
+        "accuracy": 28.48769010779143,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0.9467771952928175,
+      "legacyWinChanceBefore": 0.9315403330543057,
+      "legacyWinChanceAfter": 0.6532413731006851
+    },
+    {
+      "ply": 27,
+      "color": "w",
+      "san": "Nh5+",
+      "uci": "f4h5",
+      "beforeFen": "r1bq1r2/p2p2kp/1p2p3/2b1P1p1/3n1N2/2Q3P1/PPPP1P1P/RNB1K2R w KQ - 0 14",
+      "afterFen": "r1bq1r2/p2p2kp/1p2p3/2b1P1pN/3n4/2Q3P1/PPPP1P1P/RNB1K2R b KQ - 1 14",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -253,
+        "afterCp": -541,
+        "loss": 0.16256219136121142,
+        "cpLoss": 288,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 47.662930631204816,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -242,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -578,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.18450845871959914,
+        "cpLoss": 336,
+        "accuracy": 43.03034601815883,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -4.632584613045985,
+      "legacyWinChanceBefore": 0.28260706642917927,
+      "legacyWinChanceAfter": 0.12004487506796785
+    },
+    {
+      "ply": 28,
+      "color": "b",
+      "san": "Kg8",
+      "uci": "g7g8",
+      "beforeFen": "r1bq1r2/p2p2kp/1p2p3/2b1P1pN/3n4/2Q3P1/PPPP1P1P/RNB1K2R b KQ - 1 14",
+      "afterFen": "r1bq1rk1/p2p3p/1p2p3/2b1P1pN/3n4/2Q3P1/PPPP1P1P/RNB1K2R w KQ - 2 15",
+      "original": {
+        "grade": "good",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 604,
+        "afterCp": 523,
+        "loss": 0.029606223550268984,
+        "cpLoss": 81,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 87.52147012019579,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "inaccuracy",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 619,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 463,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.060979313485099995,
+        "cpLoss": 156,
+        "accuracy": 75.94138576802231,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": -11.580084352173472,
+      "legacyWinChanceBefore": 0.9023820254495157,
+      "legacyWinChanceAfter": 0.8727758018992468
+    },
+    {
+      "ply": 29,
+      "color": "w",
+      "san": "Nf6+",
+      "uci": "h5f6",
+      "beforeFen": "r1bq1rk1/p2p3p/1p2p3/2b1P1pN/3n4/2Q3P1/PPPP1P1P/RNB1K2R w KQ - 2 15",
+      "afterFen": "r1bq1rk1/p2p3p/1p2pN2/2b1P1p1/3n4/2Q3P1/PPPP1P1P/RNB1K2R b KQ - 3 15",
+      "original": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": -373,
+        "afterCp": -422,
+        "loss": 0.027535859278876196,
+        "cpLoss": 49,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 88.34274291661822,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -373,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -422,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.027535859278876196,
+        "cpLoss": 49,
+        "accuracy": 88.34274291661822,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.20206852665869057,
+      "legacyWinChanceAfter": 0.17453266737981438
+    },
+    {
+      "ply": 30,
+      "color": "b",
+      "san": "Kh8",
+      "uci": "g8h8",
+      "beforeFen": "r1bq1rk1/p2p3p/1p2pN2/2b1P1p1/3n4/2Q3P1/PPPP1P1P/RNB1K2R b KQ - 3 15",
+      "afterFen": "r1bq1r1k/p2p3p/1p2pN2/2b1P1p1/3n4/2Q3P1/PPPP1P1P/RNB1K2R w KQ - 4 16",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": 639,
+        "afterCp": 386,
+        "loss": 0.10762097176826746,
+        "cpLoss": 253,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 61.40119445604913,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "inaccuracy",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 685,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 424,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.09915949542018532,
+        "cpLoss": 261,
+        "accuracy": 63.82456288054521,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 2.4233684244960756,
+      "legacyWinChanceBefore": 0.9131604245116784,
+      "legacyWinChanceAfter": 0.805539452743411
+    },
+    {
+      "ply": 31,
+      "color": "w",
+      "san": "Qd3",
+      "uci": "c3d3",
+      "beforeFen": "r1bq1r1k/p2p3p/1p2pN2/2b1P1p1/3n4/2Q3P1/PPPP1P1P/RNB1K2R w KQ - 4 16",
+      "afterFen": "r1bq1r1k/p2p3p/1p2pN2/2b1P1p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R b KQ - 5 16",
+      "original": {
+        "grade": "good",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -469,
+        "afterCp": -481,
+        "loss": 0.005577095503012747,
+        "cpLoss": 12,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 97.524657422645,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -475,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -475,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 2.475227908328492,
+      "legacyWinChanceBefore": 0.1509851076614163,
+      "legacyWinChanceAfter": 0.14540801215840354
+    },
+    {
+      "ply": 32,
+      "color": "b",
+      "san": "Rxf6",
+      "uci": "f8f6",
+      "beforeFen": "r1bq1r1k/p2p3p/1p2pN2/2b1P1p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R b KQ - 5 16",
+      "afterFen": "r1bq3k/p2p3p/1p2pr2/2b1P1p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R w KQ - 0 17",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 251,
+        "afterCp": 251,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 251,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 251,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Verified candidate; automatic Brilliant awards remain disabled"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.7158975342204064,
+      "legacyWinChanceAfter": 0.7158975342204064
+    },
+    {
+      "ply": 33,
+      "color": "w",
+      "san": "exf6",
+      "uci": "e5f6",
+      "beforeFen": "r1bq3k/p2p3p/1p2pr2/2b1P1p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R w KQ - 0 17",
+      "afterFen": "r1bq3k/p2p3p/1p2pP2/2b3p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R b KQ - 0 17",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": -292,
+        "afterCp": -292,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -292,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -292,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.25442163783820854,
+      "legacyWinChanceAfter": 0.25442163783820854
+    },
+    {
+      "ply": 34,
+      "color": "b",
+      "san": "Qxf6",
+      "uci": "d8f6",
+      "beforeFen": "r1bq3k/p2p3p/1p2pP2/2b3p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R b KQ - 0 17",
+      "afterFen": "r1b4k/p2p3p/1p2pq2/2b3p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R w KQ - 0 18",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 289,
+        "afterCp": 289,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 289,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 289,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.7434773086886245,
+      "legacyWinChanceAfter": 0.7434773086886245
+    },
+    {
+      "ply": 35,
+      "color": "w",
+      "san": "O-O",
+      "uci": "e1g1",
+      "beforeFen": "r1b4k/p2p3p/1p2pq2/2b3p1/3n4/3Q2P1/PPPP1P1P/RNB1K2R w KQ - 0 18",
+      "afterFen": "r1b4k/p2p3p/1p2pq2/2b3p1/3n4/3Q2P1/PPPP1P1P/RNB2RK1 b - - 1 18",
+      "original": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeCp": -457,
+        "afterCp": -1042,
+        "loss": 0.13562801495749716,
+        "cpLoss": 585,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 53.98805255781618,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -518,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -1001,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0.10481799083221115,
+        "cpLoss": 483,
+        "accuracy": 62.194099514123316,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 8.206046956307134,
+      "legacyWinChanceBefore": 0.15673687957968802,
+      "legacyWinChanceAfter": 0.021108864622190845
+    },
+    {
+      "ply": 36,
+      "color": "b",
+      "san": "Nf3+",
+      "uci": "d4f3",
+      "beforeFen": "r1b4k/p2p3p/1p2pq2/2b3p1/3n4/3Q2P1/PPPP1P1P/RNB2RK1 b - - 1 18",
+      "afterFen": "r1b4k/p2p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1P1P/RNB2RK1 w - - 2 19",
+      "original": {
+        "grade": "excellent",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": 733,
+        "afterCp": 894,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "excellent",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 733,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 894,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.9369655220668455,
+      "legacyWinChanceAfter": 0.9641457207342096
+    },
+    {
+      "ply": 37,
+      "color": "w",
+      "san": "Kg2",
+      "uci": "g1g2",
+      "beforeFen": "r1b4k/p2p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1P1P/RNB2RK1 w - - 2 19",
+      "afterFen": "r1b4k/p2p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1PKP/RNB2R2 b - - 3 19",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": -894,
+        "afterCp": -894,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -894,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": -894,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.03585427926579041,
+      "legacyWinChanceAfter": 0.03585427926579041
+    },
+    {
+      "ply": 38,
+      "color": "b",
+      "san": "Bb7",
+      "uci": "c8b7",
+      "beforeFen": "r1b4k/p2p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1PKP/RNB2R2 b - - 3 19",
+      "afterFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1PKP/RNB2R2 w - - 4 20",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 848,
+        "afterCp": 848,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": 848,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "cp",
+          "cp": 848,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": 0,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Incomplete counterfactual evidence: Counterfactual sacrifice-exclusion budget exceeded"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 0.9578074798668287,
+      "legacyWinChanceAfter": 0.9578074798668287
+    },
+    {
+      "ply": 39,
+      "color": "w",
+      "san": "Kh3",
+      "uci": "g2h3",
+      "beforeFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nP1/PPPP1PKP/RNB2R2 w - - 4 20",
+      "afterFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 b - - 5 20",
+      "original": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": -1003,
+        "afterCp": -10000,
+        "loss": 0.0242893939534298,
+        "cpLoss": 8997,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 89.64555240197302,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "mistake",
+        "qualitySource": "same-root",
+        "depth": 18,
+        "beforeEvaluation": {
+          "kind": "cp",
+          "cp": -1311,
+          "depth": 18,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "mate",
+          "moves": -2,
+          "depth": 18,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "allows-forced-mate",
+          "forced": false
+        },
+        "loss": 0.007945227547563563,
+        "cpLoss": null,
+        "accuracy": 96.49167799109745,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 6.846125589124426,
+      "legacyWinChanceBefore": 0.0242893939534299,
+      "legacyWinChanceAfter": 1.0207743315884346e-16
+    },
+    {
+      "ply": 40,
+      "color": "b",
+      "san": "Qh6+",
+      "uci": "f6h6",
+      "beforeFen": "r6k/pb1p3p/1p2pq2/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 b - - 5 20",
+      "afterFen": "r6k/pb1p3p/1p2p2q/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 w - - 6 21",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 10000,
+        "afterCp": 10000,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": 2,
+        "playedMate": 2,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "mate",
+          "moves": 2,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "mate",
+          "moves": 2,
+          "depth": 12,
+          "basis": "root-played-line"
+        },
+        "mateEvidence": {
+          "kind": "ordinary",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "No bounded material offer"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 1,
+      "legacyWinChanceAfter": 1
+    },
+    {
+      "ply": 41,
+      "color": "w",
+      "san": "Kg4",
+      "uci": "h3g4",
+      "beforeFen": "r6k/pb1p3p/1p2p2q/2b3p1/8/3Q1nPK/PPPP1P1P/RNB2R2 w - - 6 21",
+      "afterFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q1nP1/PPPP1P1P/RNB2R2 b - - 7 21",
+      "original": {
+        "grade": "excellent",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeCp": -10000,
+        "afterCp": -10000,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": null,
+        "playedMate": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "good",
+        "qualitySource": "adjacent-position estimate",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "mate",
+          "moves": -1,
+          "depth": 12
+        },
+        "afterEvaluation": {
+          "kind": "mate",
+          "moves": -1,
+          "depth": 12
+        },
+        "mateEvidence": {
+          "kind": "already-forced-loss",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 1.0207743315884346e-16,
+      "legacyWinChanceAfter": 1.0207743315884346e-16
+    },
+    {
+      "ply": 42,
+      "color": "b",
+      "san": "Nxh2#",
+      "uci": "f3h2",
+      "beforeFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q1nP1/PPPP1P1P/RNB2R2 b - - 7 21",
+      "afterFen": "r6k/pb1p3p/1p2p2q/2b3p1/6K1/3Q2P1/PPPP1P1n/RNB2R2 w - - 0 22",
+      "original": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeCp": 10000,
+        "afterCp": 10000,
+        "loss": 0,
+        "cpLoss": 0,
+        "bestMate": 1,
+        "playedMate": 1,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Pending optional audit"
+      },
+      "fresh": {
+        "grade": "best",
+        "qualitySource": "same-root",
+        "depth": 12,
+        "beforeEvaluation": {
+          "kind": "mate",
+          "moves": 1,
+          "depth": 12,
+          "basis": "root-best-line"
+        },
+        "afterEvaluation": {
+          "kind": "checkmate",
+          "outcome": 1,
+          "depth": 0
+        },
+        "mateEvidence": {
+          "kind": "delivers-checkmate",
+          "forced": false
+        },
+        "loss": 0,
+        "cpLoss": null,
+        "accuracy": 99.9998853309735,
+        "brilliantDiagnostic": "Conservative soundness/quality precheck failed"
+      },
+      "accuracyDifference": 0,
+      "legacyWinChanceBefore": 1,
+      "legacyWinChanceAfter": 1
+    }
+  ],
+  "originalTiming": {
+    "complete": false,
+    "metrics": {
+      "requests": 79,
+      "localCacheHits": 0,
+      "transportCacheHits": 54,
+      "engineMs": 114225,
+      "initializationMs": 0,
+      "requestMs": 115846.10000001267,
+      "baseMs": 984.8999999985099,
+      "criticalMs": 84556.60000000149,
+      "brilliantMs": 0,
+      "missMs": 18.50000000372529,
+      "classificationMs": 499.1000000014901,
+      "initialMs": 1271.9000000022352,
+      "totalMs": 0,
+      "criticalMoves": 18,
+      "greatVerifications": 4,
+      "replyChecks": 2,
+      "audits": 2,
+      "errors": [],
+      "fetchMs": 976.1999999992549,
+      "renderMs": 37.19999999925494
+    },
+    "requestsNotReportedAsCacheHits": 25,
+    "completedAuditRecords": 1,
+    "note": "Legacy live snapshot: total wall duration and final search count cannot be recovered. 79 requests minus 54 transport hits implies 25 uncached completed/requested jobs, not necessarily 25 finished searches. audits=2 but only one stored result; cannot assume optional diagnostics had completed."
+  },
+  "freshTiming": {
+    "elapsedMs": 113623.605156,
+    "metrics": {
+      "requests": 90,
+      "localCacheHits": 0,
+      "transportCacheHits": 0,
+      "engineMs": 112007,
+      "initializationMs": 214,
+      "requestMs": 112240.22216799996,
+      "baseMs": 2651.197358,
+      "criticalMs": 67926.638426,
+      "brilliantMs": 42689.696803,
+      "missMs": 6.247105000006741,
+      "classificationMs": 326.70867099999396,
+      "initialMs": 2859.842866,
+      "totalMs": 113613.047137,
+      "criticalMoves": 19,
+      "greatVerifications": 4,
+      "replyChecks": 2,
+      "audits": 2,
+      "errors": [],
+      "engineSearches": 90,
+      "unknownRequestCount": 0,
+      "cacheHitRate": 0
+    },
+    "transport": {
+      "requests": 90,
+      "searches": 90,
+      "workerStarts": 1,
+      "initializationMs": 212.73236099999997,
+      "engineMs": 111993.823217,
+      "requestMs": 112236.24307099995,
+      "byDepth": {
+        "12": 42,
+        "18": 48
+      },
+      "cacheHits": 0,
+      "cacheHitRate": 0,
+      "averageRequestMs": 1247.069367455555
+    },
+    "snapshots": [
+      {
+        "state": "initial-ready",
+        "metrics": {
+          "requests": 42,
+          "localCacheHits": 0,
+          "transportCacheHits": 0,
+          "engineMs": 2320,
+          "initializationMs": 213,
+          "requestMs": 2543.159493999999,
+          "baseMs": 2651.197358,
+          "criticalMs": 0,
+          "brilliantMs": 0,
+          "missMs": 0.02992499999982101,
+          "classificationMs": 192.43102799999997,
+          "initialMs": 2859.842866,
+          "totalMs": 2859.932733,
+          "criticalMoves": 0,
+          "greatVerifications": 0,
+          "replyChecks": 0,
+          "audits": 0,
+          "errors": [],
+          "engineSearches": 42,
+          "unknownRequestCount": 0,
+          "cacheHitRate": 0
+        },
+        "complete": false
+      },
+      {
+        "state": "diagnostics-running",
+        "metrics": {
+          "requests": 75,
+          "localCacheHits": 0,
+          "transportCacheHits": 0,
+          "engineMs": 69937,
+          "initializationMs": 213,
+          "requestMs": 70165.461954,
+          "baseMs": 2651.197358,
+          "criticalMs": 67926.638426,
+          "brilliantMs": 0,
+          "missMs": 6.247105000006741,
+          "classificationMs": 326.70867099999396,
+          "initialMs": 2859.842866,
+          "totalMs": 70922.473163,
+          "criticalMoves": 19,
+          "greatVerifications": 4,
+          "replyChecks": 2,
+          "audits": 0,
+          "errors": [],
+          "engineSearches": 75,
+          "unknownRequestCount": 0,
+          "cacheHitRate": 0
+        },
+        "complete": false
+      }
+    ]
+  },
+  "warmTiming": {
+    "elapsedMs": 1034.3828480000084,
+    "transport": {
+      "requests": 90,
+      "searches": 0,
+      "engineMs": 0,
+      "requestMs": 1.4716399999306304,
+      "workerStarts": 0
+    },
+    "accuracy": [
+      68.4232404076921,
+      67.62576348609826
+    ],
+    "sameGrades": true
+  }
+}

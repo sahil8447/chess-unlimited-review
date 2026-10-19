@@ -64,3 +64,5 @@ The supplied game's V1 64.5/66.8 estimates were reproduced, but the new evidence
 Current branch: `codex/chess-review-v1-2-evidence-fixes`. See [V1.2 validation](V1.2-VALIDATION.md) for material-offer causality, explicit mate states, immutable export lifecycle, timing definitions and actual before/after benchmarks. Automatic Brilliant awards remain disabled. The exact browser JSON referenced in the task was not attached; the committed reproduction is explicitly labeled and sanitized.
 
 `npm run import:review -- input.json sanitized-fixture.json` validates/redacts another export. `npm run benchmark:before` profiles the frozen V1.1 pipeline; `npm run benchmark` profiles the current pipeline. `npm run review -- game.pgn report.json --detailed` requests extra bounded verification. Legacy V1 comparisons remain under `npm run benchmark:v1`.
+
+The original Chrome JSON has now been imported and validated; see [original-export validation](ORIGINAL-EXPORT-VALIDATION.md) for provenance, confirmed fixes, per-move accuracy evidence and fresh benchmarks. The earlier V1.2 missing-attachment limitation is historical.
