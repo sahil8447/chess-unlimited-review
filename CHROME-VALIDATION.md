@@ -57,3 +57,14 @@ For a failure, record the exact PGN/FEN, move, action, expected/actual behavior,
 9. Confirm no background analysis continues to enqueue new jobs after cancel/close. One already-running shared engine job may finish. Check Chrome service-worker/offscreen console for errors and repeated worker creation after reviewing several games.
 
 The callback is undocumented and may change or be denied by Chess.com. No access-control bypass is implemented. Successful fixtures cannot establish live compatibility. Record Chrome/Windows versions, game IDs, outcomes and any console errors before public release.
+
+
+## V1.1 acceptance additions (live-extension checks still pending)
+
+- Review `test/games/rafael-ayden-2026.pgn` and confirm 42 plies, 21 moves per side and the final supplied FEN/checkmate. The transcribed external Black grade totals have only twenty moves; do not treat them as full per-move ground truth.
+- Default: Opening book on, slow Brilliant diagnostics off. Expect an initial interactive board, then critical-move progress and final results. Navigate/explore a PV/custom line during verification; finishing must preserve the same board and exploration.
+- Toggle Book off and re-review. Underlying accuracy/evaluations must be identical; Book presentation counts may change. Actual Elo and performance estimate remain separate.
+- Run optional diagnostics. Expect additional time and bounded candidate coverage, with no automatic Brilliant badge. Cancel during a deep root/acceptance search; do not publish late results or enqueue new stale jobs.
+- Expand Detailed Move Analysis: verify initial/final grades, before/after quality scores, cp/probability loss, per-move accuracy and depth/evidence. The graph is actual position evaluation, distinct from same-root quality scores.
+- Download review JSON. Check `complete`, exact PGN/headers, every move and `metrics.fetchMs`, `renderMs`, initialization/base/critical/Brilliant/Miss times and cache counters. Manual import of a different PGN must not reuse a previous game's fetch timing or ratings.
+- Re-review the same game to exercise the bounded cache. Confirm no duplicate worker creation and stable grades. Reload extension/tab after building before comparing versions.

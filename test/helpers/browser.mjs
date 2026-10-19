@@ -22,7 +22,7 @@ export async function startBrowserFixture(){
   if(file){res.setHeader('Content-Type',file.endsWith('.wasm')?'application/wasm':file.endsWith('.svg')?'image/svg+xml':'text/javascript');res.end(await readFile(file));return;}
   res.setHeader('Content-Type','text/html');res.end(`<!doctype html><html><body><script src="/modules.js"></script><script>
   window.chrome=window.chrome||{};chrome.runtime={getURL:p=>'/'+p,sendMessage:r=>window.testEngine(r)};
-  window.testEngine=async request=>{const game=new ChessReviewTest.Chess(request.fen),move=game.moves({verbose:true})[0];const uci=move ? move.from+move.to+(move.promotion||'') : null;return {success:true,scoreCp:0,mate:null,depth:request.depth,bestMove:uci,pv:uci?[uci]:[],candidates:[]};};
+  window.testEngine=async request=>{const game=new ChessReviewTest.Chess(request.fen),move=game.moves({verbose:true})[0];const uci=move ? move.from+move.to+(move.promotion||'') : null;return {success:true,scoreCp:0,mate:null,depth:request.depth,bestMove:uci,pv:uci?[uci]:[],candidates:uci?[{rank:1,depth:request.depth,move:uci,pv:[uci],scoreCp:0,mate:null,bound:false}]:[]};};
   </script>${url.searchParams.has('content')?'<script src="/content.js"></script>':''}</body></html>`);
  }catch(error){res.statusCode=500;res.end(error.message);}});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));

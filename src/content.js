@@ -1,23 +1,9 @@
-import { estimatePerformance } from "./performanceRating.js";
+import {runReview} from "./reviewEngine.js";
 import { detectChessComGame, fetchCurrentChessComPgn } from "./chesscomPgn.js";
-import { detectMissedOpportunity } from "./missDetection.js";
-import { classifyBrilliantMove } from "./brilliantRules.js";
-import { generateMoveExplanation } from "./moveExplanation.js";
 import { createEvaluationGraph } from "./graph.js";
 import { Chess } from "chess.js";
 import { createReviewBoard } from "./board.js";
-import {
-  materialBalance,
-  detectSacrificeCandidate,
-  verifyBrilliantCandidate
-} from "./tactics.js";
-import {
-  GRADES,
-  classifyMove,
-  calculateAccuracy,
-  classifyTacticalMove,
-  calculateAlternativeLoss
-} from "./grading.js";
+import { GRADES } from "./grading.js";
 (() => {
   const BUTTON_ID = "chess-unlimited-review-btn";
   const PANEL_ID = "chess-unlimited-review-panel";
@@ -53,6 +39,7 @@ async function autoFetchAndReview(panel) {
   const importSignal = panelSessions.get(panel).controller.signal;
   button.disabled = true;
   result.textContent = "Fetching game from Chess.com...";
+  const fetchStart = globalThis.performance.now();
   try {
     const pgn = await fetchCurrentChessComPgn({signal: AbortSignal.any([importSignal, AbortSignal.timeout(15000)])});
     if (!panel.isConnected || importSignal.aborted) return;
@@ -62,6 +49,8 @@ async function autoFetchAndReview(panel) {
     if (!testGame.history().length) {
       throw new Error("No moves found in fetched game");
     }
+    panelSessions.get(panel).fetchMs = globalThis.performance.now() - fetchStart;
+    panelSessions.get(panel).importedPgn = pgn;
     input.value = pgn;
     // Hide PGN editor to leave room for the board.
     const details = panel.querySelector(".chess-pgn-details");
@@ -109,6 +98,8 @@ function openPanel() {
     <button id="chess-review-import">
       Analyze Game
     </button>
+    <label><input id="chess-review-book" type="checkbox" checked> Opening book</label>
+    <label><input id="chess-review-audits" type="checkbox"> Slow Brilliant diagnostics (badges disabled)</label>
     <button id="chess-review-fetch" type="button">Retry current game import</button>
     <button id="chess-review-cancel" type="button">Cancel analysis</button>
     <div id="chess-review-result" role="status" aria-live="polite"></div>
@@ -199,6 +190,7 @@ async function evaluatePosition(fen, depth = 12, options = {}) {
   }
   return {
   depth: result.depth,
+  cacheHit: result.cacheHit, engineMs: result.engineMs, initializationMs: result.initializationMs,
   bestMove: result.bestMove,
   score: result.scoreCp,
   mate: result.mate,
@@ -244,243 +236,11 @@ async function analyzeGame() {
     result.textContent = "No moves found.";
     return;
   }
-  const replay = new Chess();
   const initialFen = chess.header().FEN;
-  if (initialFen) {
-    replay.load(initialFen);
-  }
-  const reviewedMoves = [];
-  const graphData = [];
-  const MAX_DEEP_VERIFICATIONS = 12;
-  // Stockfish returns scores from the side-to-move perspective.
-  function toWhiteCp(evaluation, turn) {
-    if (evaluation.mate !== null && evaluation.mate !== undefined) {
-      return (turn === "w" ? 1 : -1) * Math.sign(evaluation.mate) * 10000;
-    }
-    if (!Number.isFinite(evaluation.score)) {
-      throw new Error("Stockfish returned no evaluation");
-    }
-    return turn === "w" ? evaluation.score : -evaluation.score;
-  }
-  function uciOf(move) {
-    return move.from + move.to + (move.promotion || "");
-  }
-  function terminalEvaluation(position) {
-    if (position.isCheckmate()) {
-      // The side to move has lost.
-      return { bestMove: null, score: null, mate: -1, candidates: [] };
-    }
-    if (position.isGameOver()) {
-      return { bestMove: null, score: 0, mate: null, candidates: [] };
-    }
-    return null;
-  }
-  button.disabled = true;
-  button.textContent = "Analyzing...";
-  try {
-    // PASS 1: Evaluate every unique game position at depth 12.
-    // Position i is shared by the previous move's AFTER and next move's BEFORE.
-    const positionFens = [replay.fen()];
-    const positionTurns = [replay.turn()];
-    for (const move of moves) {
-      replay.move(move.san);
-      positionFens.push(replay.fen());
-      positionTurns.push(replay.turn());
-    }
-    const evaluations = [];
-    for (let i = 0; i < positionFens.length; i++) {
-      const position = new Chess(positionFens[i]);
-      try {
-        evaluations.push(
-          terminalEvaluation(position) ||
-          await evaluateReviewPosition(positionFens[i], 12)
-        );
-      } catch (error) {
-        if (signal.aborted) throw error;
-        throw new Error(
-          `Initial analysis failed at position ${i}/${moves.length}: ${error.message}`
-        );
-      }
-      if (result.isConnected) {
-        result.textContent = `Analyzing positions ${i + 1}/${positionFens.length}...`;
-      }
-    }
-    // PASS 2: Find the largest evaluation jumps, then verify both
-    // endpoint positions at depth 18. Each shared position is verified once.
-    const beforeVerification = evaluations.map((evaluation, i) =>
-      toWhiteCp(evaluation, positionTurns[i])
-    );
-    const suspicious = moves.map((move, i) => ({
-      index: i,
-      jump: Math.abs(beforeVerification[i + 1] - beforeVerification[i])
-    }))
-      .filter(({ index, jump }) =>
-        jump >= 100 &&
-        !new Chess(positionFens[index + 1]).isGameOver()
-      )
-      .sort((a, b) => b.jump - a.jump)
-      .slice(0, MAX_DEEP_VERIFICATIONS)
-      .sort((a, b) => a.index - b.index);
-    const verifiedIndices = new Set();
-    for (const { index } of suspicious) {
-      for (const positionIndex of [index, index + 1]) {
-        if (verifiedIndices.has(positionIndex)) continue;
-        verifiedIndices.add(positionIndex);
-        const position = new Chess(positionFens[positionIndex]);
-        if (position.isGameOver()) continue;
-        try {
-          const deeper = await evaluateReviewPosition(positionFens[positionIndex], 18);
-          if (Number.isFinite(deeper.score) || deeper.mate != null) {
-            evaluations[positionIndex] = deeper;
-          }
-        } catch (error) {
-          if (signal.aborted) throw error;
-          console.warn(
-            `[Deep Verification] Position ${positionIndex}: ${error.message}`
-          );
-        }
-        if (result.isConnected) {
-          result.textContent =
-            `Verifying critical positions ${verifiedIndices.size}/${suspicious.length * 2}...`;
-        }
-      }
-    }
-    // PASS 3: Grade all moves ONLY AFTER the finalized evaluations exist.
-    // Never overwrite a shared before/after evaluation inside this loop.
-    replay.load(positionFens[0]);
-    const whiteCps = evaluations.map((evaluation, i) =>
-      toWhiteCp(evaluation, positionTurns[i])
-    );
-    graphData.push(...whiteCps.map((whiteCp, ply) => ({ ply, whiteCp })));
-    let brilliantAuditCount = 0;
-    for (let i = 0; i < moves.length; i++) {
-      // Let the page paint between bounded local material audits.
-      await new Promise(resolve => setTimeout(resolve, 0));
-      assertActive();
-      const move = moves[i];
-      const player = move.color;
-      const before = evaluations[i];
-      const after = evaluations[i + 1];
-      const beforeFen = positionFens[i];
-      const beforePlayerCp = player === "w" ? whiteCps[i] : -whiteCps[i];
-      const afterWhiteCp = whiteCps[i + 1];
-      const afterPlayerCp = player === "w" ? afterWhiteCp : -afterWhiteCp;
-      const bestMovePlayed =
-        before.bestMove?.toLowerCase() === uciOf(move).toLowerCase();
-      const legalChoices = replay.moves().length;
-      const previousMove = moves[i - 1];
-      const obviousRecapture = Boolean(move.captured && previousMove?.captured && previousMove.to === move.to);
-      replay.move(move.san);
-      const sacrificeCandidate = detectSacrificeCandidate(replay, move);
-      const classification = classifyMove({
-        beforeCp: beforePlayerCp,
-        afterCp: afterPlayerCp,
-        bestMovePlayed
-      });
-      const alternativeLoss = calculateAlternativeLoss(before.candidates);
-      classification.grade = classifyTacticalMove({
-        baseGrade: classification.grade,
-        bestMovePlayed,
-        beforeCp: beforePlayerCp,
-        afterCp: afterPlayerCp,
-        materialBefore: 0,
-        materialAfter: 0,
-        isCapture: Boolean(move.captured),
-        isCheck: replay.isCheck(),
-        alternativeLoss
-      });
-      // Step 47: Sacrifice verification is independent of initial grade.
-      // This lets us inspect near-best offers too, but it never awards a
-      // Brilliant without a real legal capture and favorable continuation.
-      let brilliantDiagnostic = null;
-      if (sacrificeCandidate && brilliantAuditCount >= 12) brilliantDiagnostic = "Audit budget exceeded; no promotion";
-      if (sacrificeCandidate && !replay.isGameOver() && brilliantAuditCount < 12) {
-        brilliantAuditCount++;
-        const eloKey = player === "w" ? "WhiteElo" : "BlackElo";
-        const elo = Number(chess.header()[eloKey]);
-        const rating = Number.isFinite(elo) && elo > 0 ? elo : null;
-        try {
-          const verification = await verifyBrilliantCandidate({
-            chess: replay,
-            beforeFen,
-            move,
-            beforeCp: beforePlayerCp,
-            afterCp: afterPlayerCp,
-            bestMovePlayed,
-            evaluatePosition: evaluateReviewPosition,
-            depth: 18
-          });
-          assertActive();
-          const decision = classifyBrilliantMove({
-            baseGrade: classification.grade,
-            verification,
-            rating,
-            bestMovePlayed,
-            alternatives: before.candidates || []
-          });
-          brilliantDiagnostic = decision.reason;
-          // Diagnostic only: do not promote any grade until engine tests pass.
-          // To enable later, add an explicit validated feature flag.
-          console.info(`[Brilliant audit] ${Number(beforeFen.split(" ")[5])}${player === "w" ? "." : "..."} ${move.san}: ${decision.reason}`, { verification, decision });
-        } catch (error) {
-          if (signal.aborted) throw error;
-          brilliantDiagnostic = `Verification error: ${error.message}`;
-          console.warn(`[Brilliant verification] ${move.san}:`, error);
-        }
-      }
-      // A Miss is a failed tactical opportunity, not every ordinary error.
-      // Use the finalized before-position PV from the two-pass analysis.
-      const missedOpportunity = detectMissedOpportunity({
-        beforeFen,
-        bestVariation: before.pv || [],
-        bestMovePlayed,
-        beforePlayerCp,
-        afterPlayerCp,
-        color: player
-      });
-      if (
-        missedOpportunity &&
-        ["inaccuracy", "mistake", "blunder"].includes(classification.grade)
-      ) {
-        classification.grade = "miss";
-      }
-
-      reviewedMoves.push({
-        legalChoices, obviousRecapture,
-        number: Number(beforeFen.split(" ")[5]),
-        color: player,
-        san: move.san,
-        grade: classification.grade,
-        loss: classification.loss,
-        bestMove: before.bestMove,
-        bestMovePlayed,
-        brilliantDiagnostic,
-        evaluation: afterWhiteCp / 100,
-        beforeFen: beforeFen,
-bestVariation: before.pv || [],
-        beforePlayerCp,
-        afterPlayerCp,
-        explanation: classification.grade === "miss" && missedOpportunity
-          ? missedOpportunity.explanation
-          : generateMoveExplanation({
-              move,
-              grade: classification.grade,
-              beforeFen,
-              afterFen: positionFens[i + 1],
-              bestMove: before.bestMove,
-              bestMovePlayed,
-              beforePlayerCp,
-              afterPlayerCp
-            })
-      });
-      if (result.isConnected) {
-        result.textContent = `Classifying ${i + 1}/${moves.length} moves...`;
-      }
-    }
-assertActive();
-const whiteAccuracy = calculateAccuracy(reviewedMoves, "w");
-const blackAccuracy = calculateAccuracy(reviewedMoves, "b");
-const performance = Object.fromEntries(['w', 'b'].map(color => [color, estimatePerformance({moves: reviewedMoves, color, headers: chess.header(), complete: true, customStart: Boolean(initialFen)})]));
+  const renderReview = (report, final) => {
+    const renderStart = globalThis.performance.now();
+    report.metrics.fetchMs = session.importedPgn === pgn ? session.fetchMs ?? null : null;
+    const {reviewedMoves,graphData,whiteAccuracy,blackAccuracy,performance}=report;
 const gradeCounts = {
   White: {},
   Black: {}
@@ -498,17 +258,20 @@ console.table(gradeCounts);
       reviewedMoves,
       graphData,
       whiteAccuracy,
-      blackAccuracy
+      blackAccuracy, metrics: report.metrics, complete: final
     };
     // Render the accuracy summary.
     const heading = document.createElement("h3");
-    heading.textContent = "Game Review Complete";
+    heading.textContent = final ? "Game Review Complete" : "Initial review — verifying critical moves";
+    const progress = document.createElement("p");
+    progress.id = "chess-review-progress";
+    progress.setAttribute("role", "status");
     const accuracy = document.createElement("div");
     accuracy.className = "chess-accuracy-summary";
     accuracy.textContent =
     `White Estimated Accuracy: ${whiteAccuracy?.toFixed(1) ?? "N/A"}%\n` +
 `Black Estimated Accuracy: ${blackAccuracy?.toFixed(1) ?? "N/A"}%`;
-    result.replaceChildren(heading, accuracy);
+    result.replaceChildren(heading, progress, accuracy);
     const players = document.createElement('div');
     players.className = 'chess-player-summary';
     for (const [color, label, estimatedAccuracy] of [['w', 'White', whiteAccuracy], ['b', 'Black', blackAccuracy]]) {
@@ -521,6 +284,14 @@ console.table(gradeCounts);
     const gameMetadata = document.createElement('p');
     gameMetadata.textContent = `Result: ${chess.header().Result || '*'} · Time control: ${chess.header().TimeControl || 'Unavailable'} · Unofficial review estimates`;
     result.append(players, gameMetadata);
+    const download = document.createElement('button');
+    download.textContent = 'Download review JSON';
+    download.addEventListener('click', () => {
+      const url=URL.createObjectURL(new Blob([JSON.stringify({...report,complete:final},null,2)],{type:'application/json'}));
+      const link=document.createElement('a');link.href=url;link.download='chess-review.json';link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),0);
+    });
+    result.appendChild(download);
 {
   const counts = {
     w: {},
@@ -546,6 +317,7 @@ console.table(gradeCounts);
     header.appendChild(cell);
   });
   const gradeNames = [
+    "book",
     "brilliant",
     "great",
     "best",
@@ -578,7 +350,7 @@ const debugTable = document.createElement("table");
 debugTable.className = "chess-debug-table";
 const debugHeader = document.createElement("tr");
 for (const name of [
-  "Move", "Grade", "Before", "After", "Win Loss", "Brilliant check"
+  "Move", "Initial → Final", "Before", "After", "CP loss", "Win Loss", "Move accuracy", "Depth / evidence", "Brilliant check"
 ]) {
   const th = document.createElement("th");
   th.textContent = name;
@@ -589,16 +361,19 @@ for (const move of reviewedMoves) {
   const row = document.createElement("tr");
   const cells = [
     `${move.number}${move.color === "w" ? "." : "..."} ${move.san}`,
-    GRADES[move.grade]?.label || move.grade,
+    `${GRADES[move.initialGrade]?.label || move.initialGrade} → ${GRADES[move.grade]?.label || move.grade}`,
     Number.isFinite(move.beforePlayerCp)
       ? (move.beforePlayerCp / 100).toFixed(2)
       : "N/A",
     Number.isFinite(move.afterPlayerCp)
       ? (move.afterPlayerCp / 100).toFixed(2)
       : "N/A",
+    Number.isFinite(move.cpLoss) ? move.cpLoss.toFixed(0) : "N/A",
     Number.isFinite(move.loss)
       ? `${(move.loss * 100).toFixed(1)}%`
       : "N/A",
+    Number.isFinite(move.accuracyContribution) ? move.accuracyContribution.toFixed(1) + "%" : "N/A",
+    `${move.depth}${move.deepVerified ? " verified" : ""} / ${move.qualitySource}`,
     move.brilliantDiagnostic || "—"
   ];
   for (const value of cells) {
@@ -790,22 +565,12 @@ if (variation.length > 0) {
 }
 moveInfoCard.appendChild(variationSection);
 }
-const reviewBoard = createReviewBoard(
-  pgn,
-  reviewedMoves,
-  graphData,
-  ply => {
-    updateMoveInfo(ply);
-    const rows = result.querySelectorAll(".chess-move-row");
-    rows.forEach((row, index) => {
-      row.classList.toggle(
-        "chess-move-selected",
-        index === ply - 1
-      );
-    });
-  },
-  evaluatePosition
-);
+const handleMoveChange = ply => {
+  updateMoveInfo(ply);
+  result.querySelectorAll('.chess-move-row').forEach((row,index)=>row.classList.toggle('chess-move-selected',index===ply-1));
+};
+const reviewBoard = session.board || createReviewBoard(pgn,reviewedMoves,graphData,handleMoveChange,(fen,depth)=>evaluatePosition(fen,depth,{multiPV:1}));
+reviewBoard.updateAnalysis(reviewedMoves,graphData,handleMoveChange);
 session.board = reviewBoard;
 result.appendChild(reviewBoard.element);
 const graph = createEvaluationGraph(
@@ -874,7 +639,29 @@ row.addEventListener('keydown', event => {
 });
 moveList.appendChild(row);
 }
-updateMoveInfo(reviewedMoves.length);
+handleMoveChange(reviewBoard.getCurrentPly());
+    report.metrics.renderMs = (report.metrics.renderMs || 0) + globalThis.performance.now() - renderStart;
+  };
+  button.disabled = true;
+  button.textContent = "Analyzing...";
+  const book = panel.querySelector('#chess-review-book').checked;
+  const audits = panel.querySelector('#chess-review-audits').checked;
+  try {
+    const report = await runReview(pgn,evaluateReviewPosition,{
+      signal,book,audits,
+      onInitial: initial => {assertActive();renderReview(initial,false);},
+      onProgress: progress => {
+        assertActive();
+        const status=panel.querySelector('#chess-review-progress');
+        const text=`${progress.stage} ${progress.done}/${progress.total}`;
+        if(status)status.textContent=text;
+        else result.textContent=text;
+      }
+    });
+    assertActive();renderReview(report,true);
+    const finalStatus=panel.querySelector('#chess-review-progress');
+    if(finalStatus)finalStatus.textContent=report.metrics.errors.length ? `${report.metrics.errors.length} critical checks unavailable; see depth/evidence in Detailed Move Analysis.` : 'Verified review complete. All values are unofficial estimates.';
+
   } catch (error) {
     if (signal.aborted) return;
     console.error("[Chess Review]", error);

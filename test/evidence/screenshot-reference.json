@@ -1,0 +1,10 @@
+{
+  "kind": "User-transcribed aggregate counts; screenshots and per-move ground truth not provided in this task",
+  "gameLink": "https://www.chess.com/analysis/game/live/185569084134/review?move=41",
+  "accuracy": {"w":44.0,"b":66.8},
+  "counts": {
+    "w":{"brilliant":0,"great":1,"book":2,"best":5,"excellent":1,"good":2,"inaccuracy":2,"mistake":6,"miss":1,"blunder":1},
+    "b":{"brilliant":1,"great":2,"book":2,"best":5,"excellent":2,"good":3,"inaccuracy":2,"mistake":2,"miss":0,"blunder":1}
+  },
+  "warning":"Black aggregate totals only 20 moves; supplied PGN has 21 Black moves. No per-move labels inferred from NAGs or screenshot totals."
+}

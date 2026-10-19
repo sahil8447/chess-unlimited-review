@@ -627,5 +627,13 @@ export function createReviewBoard(
     invalidateLiveEvaluation();
     liveEvaluationCache.clear();
   }
-  return { element: container, goToMove, showEngineVariation, destroy };
+  function updateAnalysis(nextMoves, nextGraph, onChange) {
+    if (destroyed || nextMoves.length !== moves.length || nextGraph.length !== positions.length) return false;
+    reviewedMoves = nextMoves;
+    graphData = nextGraph;
+    onMoveChange = onChange;
+    render(false);
+    return true;
+  }
+  return { element: container, goToMove, showEngineVariation, destroy, updateAnalysis, getCurrentPly: () => currentPly };
 }

@@ -1,0 +1,11 @@
+{
+  "retrieved": "2026-10-20",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/lichess-org/lila/master/modules/analyse/src/main/AccuracyPercent.scala",
+      "sha256": "a2f27fd960bc438f4ffa5e6682887e046e916d287d635eb91714bd211b4a757c",
+      "notes": "Read as research; coefficients already existed in V1. Current upstream +1 uncertainty bonus and window alignment were not copied into our model."
+    }
+  ],
+  "comparison": "test/evidence/accuracy-models.json"
+}

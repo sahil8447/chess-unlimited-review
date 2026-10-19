@@ -74,6 +74,8 @@ test('legacy boolean-only Brilliant path cannot award badges',()=>{
 test('Miss detects a legal material-winning continuation, not normal eval loss',()=>{
  const beforeFen='4k3/8/8/8/8/8/q7/R3K3 w Q - 0 1';
  const args={beforeFen,bestVariation:['a1a2','e8e7','a2a7'],bestMovePlayed:false,beforePlayerCp:500,afterPlayerCp:0,color:'w'};
+ const root={depth:18,bestMove:'a1a2',pv:args.bestVariation,candidates:[{rank:1,depth:18,move:'a1a2',pv:args.bestVariation,scoreCp:500,mate:null}]};
+ args.evidence={root,quality:{source:'same-root',depth:18,beforeCp:500,afterCp:0}};
  const result=detectMissedOpportunity(args);assert.equal(result.grade,'miss');assert.ok(result.materialGain>=9);
  assert.equal(detectMissedOpportunity({...args,bestMovePlayed:true}),null);assert.equal(detectMissedOpportunity({...args,bestVariation:['a1a2','e8e7']}),null);assert.equal(detectMissedOpportunity({...args,afterPlayerCp:450}),null);
 });

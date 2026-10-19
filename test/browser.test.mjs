@@ -114,8 +114,8 @@ test('Chromium product components and standalone WASM worker',{timeout:180000},a
    await browser.navigate('/game/live/42?content');const result=await browser.evaluate(async()=>{
     document.getElementById('chess-unlimited-review-btn').click();const result=document.getElementById('chess-review-result');
     for(let i=0;i<300&&!result.textContent.includes('Game Review Complete');i++)await new Promise(r=>setTimeout(r,10));
-    return {complete:result.textContent.includes('Game Review Complete'),moves:window.chessReviewResults?.reviewedMoves.length};
-   });assert.deepEqual(result,{complete:true,moves:4});
+    return {complete:result.textContent.includes('Game Review Complete'),moves:window.chessReviewResults?.reviewedMoves.length,fetchMs:window.chessReviewResults?.metrics.fetchMs,renderMs:window.chessReviewResults?.metrics.renderMs};
+   });assert.equal(result.complete,true);assert.equal(result.moves,4);assert.ok(result.fetchMs>=0);assert.ok(result.renderMs>0);
   });
   await t.test('SPA transition closes old game and keeps exactly one review button',async()=>{
    await browser.navigate('/game/live/42?content');
@@ -148,6 +148,19 @@ test('Chromium product components and standalone WASM worker',{timeout:180000},a
     await new Promise(r=>setTimeout(r,30));
     return {calls,enabled:!document.getElementById('chess-review-import').disabled,canceled:document.getElementById('chess-review-result').textContent.includes('canceled'),stale:!!window.chessReviewResults};
    });assert.deepEqual(result,{calls:1,enabled:true,canceled:true,stale:false});
+  });
+  await t.test('progressive analysis updates preserve custom exploration and selected move',async()=>{
+   await browser.navigate('/analysis');
+   const result=await browser.evaluate(()=>{
+    const g=new ChessReviewTest.Chess();g.loadPgn('1. e4 *');
+    const board=ChessReviewTest.createReviewBoard(g.pgn(),[{grade:'good'}],[{whiteCp:0},{whiteCp:20}]);document.body.append(board.element);
+    board.element.querySelector('[data-square="e7"]').click();board.element.querySelector('[data-square="e5"]').click();
+    const before=board.element.querySelector('.chess-board-info').textContent;
+    const updated=board.updateAnalysis([{grade:'best'}],[{whiteCp:0},{whiteCp:30}],()=>{});
+    const after=board.element.querySelector('.chess-board-info').textContent;
+    const pawn=board.element.querySelector('[data-square="e5"] img')?.alt;
+    const ply=board.getCurrentPly();board.destroy();return {before,after,updated,pawn,ply};
+   });assert.equal(result.updated,true);assert.equal(result.before,result.after);assert.equal(result.pawn,'Black p');assert.equal(result.ply,1);
   });
   await t.test('actual Stockfish 19 Lite browser Worker initializes and searches WASM',async()=>{
    await browser.navigate('/analysis');

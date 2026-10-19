@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "build": "node build.mjs",
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "review": "node tools/review-report.mjs",
+    "benchmark": "node tools/benchmark-reviews.mjs",
+    "book:build": "node tools/build-book.mjs"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

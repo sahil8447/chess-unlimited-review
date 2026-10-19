@@ -94,6 +94,8 @@ export function createEvaluationGraph(
     const move = reviewedMoves[point.ply - 1];
 
     const gradeColors = {
+      book: "#b7a7ce",
+      miss: "#f16b6b",
       best: "#81b64c",
       excellent: "#81b64c",
       good: "#96af8b",

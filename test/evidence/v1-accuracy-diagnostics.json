@@ -1,0 +1,610 @@
+{
+  "scope": "Calculated from the actual frozen V1 report, not proprietary per-move labels",
+  "accuracyDetails": {
+    "w": {
+      "value": 64.45421399014461,
+      "weightedMean": 65.86927658267342,
+      "harmonicMean": 63.039151397615804,
+      "contributions": [
+        {
+          "index": 0,
+          "accuracy": 99.9998853309735,
+          "weight": 1.5078554411984386
+        },
+        {
+          "index": 2,
+          "accuracy": 84.04219381896445,
+          "weight": 1.5078554411984386
+        },
+        {
+          "index": 4,
+          "accuracy": 22.955927377126205,
+          "weight": 12
+        },
+        {
+          "index": 6,
+          "accuracy": 91.44414465801484,
+          "weight": 12
+        },
+        {
+          "index": 8,
+          "accuracy": 92.7297318360698,
+          "weight": 0.9494318022170772
+        },
+        {
+          "index": 10,
+          "accuracy": 65.9362304681329,
+          "weight": 3.5563858185520205
+        },
+        {
+          "index": 12,
+          "accuracy": 95.66114207557852,
+          "weight": 12
+        },
+        {
+          "index": 14,
+          "accuracy": 99.9998853309735,
+          "weight": 6.090689671768789
+        },
+        {
+          "index": 16,
+          "accuracy": 37.832595576106385,
+          "weight": 7.514437822736452
+        },
+        {
+          "index": 18,
+          "accuracy": 46.9140342569463,
+          "weight": 12
+        },
+        {
+          "index": 20,
+          "accuracy": 57.06855838579058,
+          "weight": 10.134797301025642
+        },
+        {
+          "index": 22,
+          "accuracy": 67.26508124338814,
+          "weight": 8.134053668242839
+        },
+        {
+          "index": 24,
+          "accuracy": 55.7519428264886,
+          "weight": 7.69543537401094
+        },
+        {
+          "index": 26,
+          "accuracy": 38.62415105216172,
+          "weight": 9.148534490687773
+        },
+        {
+          "index": 28,
+          "accuracy": 56.71038264696809,
+          "weight": 9.234176869728866
+        },
+        {
+          "index": 30,
+          "accuracy": 99.9998853309735,
+          "weight": 7.161861506763656
+        },
+        {
+          "index": 32,
+          "accuracy": 99.9998853309735,
+          "weight": 2.279764565691927
+        },
+        {
+          "index": 34,
+          "accuracy": 56.175151811618115,
+          "weight": 8.145988131289663
+        },
+        {
+          "index": 36,
+          "accuracy": 93.16504637096241,
+          "weight": 4.917624107075943
+        },
+        {
+          "index": 38,
+          "accuracy": 98.10182369776152,
+          "weight": 2.2078923822982746
+        },
+        {
+          "index": 40,
+          "accuracy": 99.9998853309735,
+          "weight": 0.5
+        }
+      ]
+    },
+    "b": {
+      "value": 66.83963348178766,
+      "weightedMean": 74.13537991478134,
+      "harmonicMean": 59.54388704879398,
+      "contributions": [
+        {
+          "index": 1,
+          "accuracy": 97.96299784328501,
+          "weight": 1.5078554411984386
+        },
+        {
+          "index": 3,
+          "accuracy": 99.9998853309735,
+          "weight": 1.9957708614957943
+        },
+        {
+          "index": 5,
+          "accuracy": 92.77092801795358,
+          "weight": 12
+        },
+        {
+          "index": 7,
+          "accuracy": 94.05517979079045,
+          "weight": 0.7974617139328215
+        },
+        {
+          "index": 9,
+          "accuracy": 88.05227523086161,
+          "weight": 1.1288484506815186
+        },
+        {
+          "index": 11,
+          "accuracy": 9.720527571635518,
+          "weight": 12
+        },
+        {
+          "index": 13,
+          "accuracy": 58.34027117108463,
+          "weight": 12
+        },
+        {
+          "index": 15,
+          "accuracy": 65.43445798729525,
+          "weight": 8.07172391990889
+        },
+        {
+          "index": 17,
+          "accuracy": 99.9998853309735,
+          "weight": 8.956043799293106
+        },
+        {
+          "index": 19,
+          "accuracy": 98.00000775319315,
+          "weight": 8.255091710726255
+        },
+        {
+          "index": 21,
+          "accuracy": 99.9998853309735,
+          "weight": 6.515611445685891
+        },
+        {
+          "index": 23,
+          "accuracy": 99.73731800525222,
+          "weight": 4.8253251383162565
+        },
+        {
+          "index": 25,
+          "accuracy": 34.95005090172839,
+          "weight": 8.11478755804207
+        },
+        {
+          "index": 27,
+          "accuracy": 64.40478993902728,
+          "weight": 9.062947857340383
+        },
+        {
+          "index": 29,
+          "accuracy": 54.221400557107884,
+          "weight": 5.889398143339518
+        },
+        {
+          "index": 31,
+          "accuracy": 99.9998853309735,
+          "weight": 7.3849225809999295
+        },
+        {
+          "index": 33,
+          "accuracy": 99.9998853309735,
+          "weight": 4.103731904452153
+        },
+        {
+          "index": 35,
+          "accuracy": 86.25085540919389,
+          "weight": 7.903587621475252
+        },
+        {
+          "index": 37,
+          "accuracy": 99.9998853309735,
+          "weight": 1.8137238654363212
+        },
+        {
+          "index": 39,
+          "accuracy": 99.9998853309735,
+          "weight": 1.5455209815509408
+        },
+        {
+          "index": 41,
+          "accuracy": 99.9998853309735,
+          "weight": 0.5
+        }
+      ]
+    }
+  },
+  "misses": [
+    {
+      "number": 6,
+      "color": "b",
+      "san": "Ne4",
+      "beforeCp": 576,
+      "afterCp": -93,
+      "depth": 18,
+      "oldExplanation": "Stockfish found a continuation that gains approximately 1.0 pawn-equivalents of material. The played move missed that opportunity.",
+      "materialTrace": [
+        {
+          "uci": "d7d6",
+          "netMaterialGain": 0,
+          "turn": "w"
+        },
+        {
+          "uci": "c5e3",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "d6e5",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "g1f3",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "b"
+        },
+        {
+          "uci": "c8f5",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "d2d3",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "b"
+        },
+        {
+          "uci": "f8g7",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "e1g1",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "b"
+        },
+        {
+          "uci": "a8c8",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "b1c3",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "b"
+        },
+        {
+          "uci": "f6d5",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "c3d5",
+          "netMaterialGain": -2.2,
+          "turn": "b"
+        },
+        {
+          "uci": "d8d5",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "b2b3",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "b"
+        },
+        {
+          "uci": "h8f8",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        },
+        {
+          "uci": "c1a3",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "b"
+        },
+        {
+          "uci": "d5d8",
+          "netMaterialGain": 0.9999999999999998,
+          "turn": "w"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "color": "b",
+      "san": "Kg8",
+      "beforeCp": 625,
+      "afterCp": 397,
+      "depth": 18,
+      "oldExplanation": "Stockfish found a continuation that gains approximately 7.0 pawn-equivalents of material. The played move missed that opportunity.",
+      "materialTrace": [
+        {
+          "uci": "g7h8",
+          "netMaterialGain": 0,
+          "turn": "w"
+        },
+        {
+          "uci": "d2d3",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "c5b4",
+          "netMaterialGain": 0,
+          "turn": "w"
+        },
+        {
+          "uci": "c1e3",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "b4c3",
+          "netMaterialGain": 9,
+          "turn": "w"
+        },
+        {
+          "uci": "b1c3",
+          "netMaterialGain": 5.699999999999999,
+          "turn": "b"
+        },
+        {
+          "uci": "d4c2",
+          "netMaterialGain": 6.699999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "e1d2",
+          "netMaterialGain": 6.699999999999999,
+          "turn": "b"
+        },
+        {
+          "uci": "c2e3",
+          "netMaterialGain": 10,
+          "turn": "w"
+        },
+        {
+          "uci": "f2e3",
+          "netMaterialGain": 6.800000000000001,
+          "turn": "b"
+        },
+        {
+          "uci": "f8f2",
+          "netMaterialGain": 6.800000000000001,
+          "turn": "w"
+        },
+        {
+          "uci": "d2e1",
+          "netMaterialGain": 6.800000000000001,
+          "turn": "b"
+        },
+        {
+          "uci": "d8f8",
+          "netMaterialGain": 6.800000000000001,
+          "turn": "w"
+        },
+        {
+          "uci": "h5f6",
+          "netMaterialGain": 6.800000000000001,
+          "turn": "b"
+        },
+        {
+          "uci": "f2f6",
+          "netMaterialGain": 10,
+          "turn": "w"
+        },
+        {
+          "uci": "e5f6",
+          "netMaterialGain": 5,
+          "turn": "b"
+        },
+        {
+          "uci": "c8a6",
+          "netMaterialGain": 5,
+          "turn": "w"
+        },
+        {
+          "uci": "f6f7",
+          "netMaterialGain": 5,
+          "turn": "b"
+        },
+        {
+          "uci": "a6d3",
+          "netMaterialGain": 6,
+          "turn": "w"
+        },
+        {
+          "uci": "e1d2",
+          "netMaterialGain": 6,
+          "turn": "b"
+        },
+        {
+          "uci": "d3c4",
+          "netMaterialGain": 6,
+          "turn": "w"
+        },
+        {
+          "uci": "b2b3",
+          "netMaterialGain": 6,
+          "turn": "b"
+        },
+        {
+          "uci": "c4a6",
+          "netMaterialGain": 6,
+          "turn": "w"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "color": "w",
+      "san": "Nf6+",
+      "beforeCp": -397,
+      "afterCp": -732,
+      "depth": 12,
+      "oldExplanation": "Stockfish found a continuation that gains approximately 2.0 pawn-equivalents of material. The played move missed that opportunity.",
+      "materialTrace": [
+        {
+          "uci": "b1a3",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "c8b7",
+          "netMaterialGain": 0,
+          "turn": "w"
+        },
+        {
+          "uci": "h1f1",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "a8c8",
+          "netMaterialGain": 0,
+          "turn": "w"
+        },
+        {
+          "uci": "f2f4",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "d8e8",
+          "netMaterialGain": 0,
+          "turn": "w"
+        },
+        {
+          "uci": "h5f6",
+          "netMaterialGain": 0,
+          "turn": "b"
+        },
+        {
+          "uci": "f8f6",
+          "netMaterialGain": -3.2,
+          "turn": "w"
+        },
+        {
+          "uci": "e5f6",
+          "netMaterialGain": 1.8000000000000003,
+          "turn": "b"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "color": "b",
+      "san": "Kh8",
+      "beforeCp": 732,
+      "afterCp": 380,
+      "depth": 18,
+      "oldExplanation": "Stockfish found a continuation that gains approximately 5.0 pawn-equivalents of material. The played move missed that opportunity.",
+      "materialTrace": [
+        {
+          "uci": "f8f6",
+          "netMaterialGain": 3.2,
+          "turn": "w"
+        },
+        {
+          "uci": "e5f6",
+          "netMaterialGain": -1.8000000000000003,
+          "turn": "b"
+        },
+        {
+          "uci": "d8f6",
+          "netMaterialGain": -0.8000000000000003,
+          "turn": "w"
+        },
+        {
+          "uci": "c3d3",
+          "netMaterialGain": -0.8000000000000003,
+          "turn": "b"
+        },
+        {
+          "uci": "c8b7",
+          "netMaterialGain": -0.8000000000000003,
+          "turn": "w"
+        },
+        {
+          "uci": "f2f4",
+          "netMaterialGain": -0.8000000000000003,
+          "turn": "b"
+        },
+        {
+          "uci": "b7h1",
+          "netMaterialGain": 4.199999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "b1c3",
+          "netMaterialGain": 4.199999999999999,
+          "turn": "b"
+        },
+        {
+          "uci": "g5f4",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "c3e2",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "b"
+        },
+        {
+          "uci": "f4f3",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "e2d4",
+          "netMaterialGain": 2,
+          "turn": "b"
+        },
+        {
+          "uci": "f6d4",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "d3d4",
+          "netMaterialGain": -3.8000000000000003,
+          "turn": "b"
+        },
+        {
+          "uci": "c5d4",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "d2d3",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "b"
+        },
+        {
+          "uci": "f3f2",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "w"
+        },
+        {
+          "uci": "e1e2",
+          "netMaterialGain": 5.199999999999999,
+          "turn": "b"
+        }
+      ]
+    }
+  ]
+}

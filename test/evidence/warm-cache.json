@@ -1,0 +1,46 @@
+{
+  "scope": "Same actual worker and bounded cache, second review of identical supplied game",
+  "firstMs": 66718.779443,
+  "warmMs": 556.6253250000009,
+  "warmInitialMs": 230.35433699999703,
+  "metrics": {
+    "requests": 72,
+    "searches": 0,
+    "workerStarts": 0,
+    "initializationMs": 0,
+    "engineMs": 0,
+    "requestMs": 1.2852679999923566,
+    "cacheHits": 72,
+    "cacheHitRate": 1
+  },
+  "identicalGrades": true,
+  "identicalAccuracy": true,
+  "summary": {
+    "plies": 42,
+    "counts": {
+      "w": {
+        "book": 2,
+        "blunder": 2,
+        "best": 5,
+        "good": 4,
+        "great": 1,
+        "mistake": 4,
+        "inaccuracy": 2,
+        "excellent": 1
+      },
+      "b": {
+        "book": 1,
+        "good": 4,
+        "best": 8,
+        "blunder": 2,
+        "mistake": 3,
+        "great": 2,
+        "excellent": 1
+      }
+    },
+    "accuracy": {
+      "w": 68.34474981611713,
+      "b": 68.84142934672248
+    }
+  }
+}

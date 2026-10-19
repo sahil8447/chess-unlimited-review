@@ -1,133 +1,42 @@
+import {Chess} from 'chess.js';
+import {completeRootLine,scoreForMover} from './tactics.js';
+import {materialBalance,playUci} from './sacrificeMaterial.js';
+import {winChance} from './grading.js';
 
-import { Chess } from "chess.js";
-
-const VALUES = {
-  p: 1,
-  n: 3,
-  b: 3,
-  r: 5,
-  q: 9,
-  k: 0
-};
-
-function materialAdvantage(chess, color) {
-  let own = 0;
-  let opponent = 0;
-
-  for (const row of chess.board()) {
-    for (const piece of row) {
-      if (!piece) continue;
-
-      const value = VALUES[piece.type] ?? 0;
-
-      if (piece.color === color) {
-        own += value;
-      } else {
-        opponent += value;
-      }
+// A PV material swing alone is not proof of a missed tactic.
+export function detectMissedOpportunity({beforeFen,bestVariation,bestMovePlayed,beforePlayerCp,afterPlayerCp,color,evidence}) {
+  if(bestMovePlayed || !beforeFen || !Array.isArray(bestVariation) || bestVariation.length<3 || !['w','b'].includes(color))return null;
+  if(!Number.isFinite(beforePlayerCp)||!Number.isFinite(afterPlayerCp))return null;
+  const loss=winChance(beforePlayerCp)-winChance(afterPlayerCp),evaluationLoss=beforePlayerCp-afterPlayerCp;
+  // Require a lost attainable advantage, rather than a tactical flourish in a lost/decided position.
+  if(evaluationLoss<150 || loss<.10 || beforePlayerCp<100 || afterPlayerCp>=100)return null;
+  const {root,quality,minDepth=18}=evidence||{};
+  const primary=root?.candidates?.find(line=>line.rank===1 && line.move===root.bestMove);
+  if(!quality || quality.source!=='same-root' || quality.depth<Math.max(18,minDepth) || root?.depth!==quality.depth ||
+     quality.beforeCp!==beforePlayerCp || quality.afterCp!==afterPlayerCp ||
+     !completeRootLine(primary,beforeFen,root.depth) || bestVariation.join(' ')!==primary.pv.join(' '))return null;
+  const primaryScore=scoreForMover({score:primary.scoreCp,mate:primary.mate},'w','w');
+  if(quality.bestMove && quality.bestMove!==root.bestMove || Math.abs(primaryScore-beforePlayerCp)>35)return null;
+  try{
+    const game=new Chess(beforeFen);if(game.turn()!==color)return null;
+    // Validate the entire supplied line, including tails beyond the material inspection horizon.
+    if(bestVariation.length>128)return null;
+    const baseline=materialBalance(game,color),future=[];
+    const replay=new Chess(beforeFen);for(const uci of bestVariation){playUci(replay,uci);future.push(materialBalance(replay,color)-baseline);}
+    let captures=0;
+    for(let i=0;i<Math.min(15,bestVariation.length);i++){
+      const move=playUci(game,bestVariation[i]);if(move.captured)captures++;
+      if(i<2 || game.turn()===color)continue;
+      const gain=materialBalance(game,color)-baseline;
+      if(game.isCheckmate())return {grade:'miss',materialGain:gain,evaluationLoss,winChanceLoss:loss,depth:root.depth,plies:i+1,explanation:'The verified best line forces checkmate; the played move loses that winning opportunity.'};
+      if(!captures || gain<2 || future.slice(i).some(value=>value<2))continue;
+      // All immediate legal captures must preserve the gain. This rejects PVs
+      // stopped just before a recapture, including en passant and promotion captures.
+      const replies=game.moves({verbose:true});
+      if(replies.some(reply=>{if(!reply.captured)return false;const test=new Chess(game.fen());test.move(reply);return materialBalance(test,color)-baseline<2;}))continue;
+      return {grade:'miss',materialGain:gain,evaluationLoss,winChanceLoss:loss,depth:root.depth,plies:i+1,
+        explanation:`A depth-${root.depth} best-defense line gains at least ${gain.toFixed(1)} pawn-equivalents, surviving immediate recaptures. The played move gives up the verified advantage.`};
     }
-  }
-
-  return own - opponent;
-}
-
-export function detectMissedOpportunity({
-  beforeFen,
-  bestVariation,
-  bestMovePlayed,
-  beforePlayerCp,
-  afterPlayerCp,
-  color
-}) {
-  if (bestMovePlayed) return null;
-
-  if (
-    !beforeFen ||
-    !Array.isArray(bestVariation) ||
-    bestVariation.length < 3 ||
-    !["w", "b"].includes(color)
-  ) {
-    return null;
-  }
-
-  if (
-    !Number.isFinite(beforePlayerCp) ||
-    !Number.isFinite(afterPlayerCp)
-  ) {
-    return null;
-  }
-
-  // Require a substantial missed advantage.
-  const evaluationLoss =
-    beforePlayerCp - afterPlayerCp;
-
-  if (evaluationLoss < 150) return null;
-
-  try {
-    const chess = new Chess(beforeFen);
-
-    if (chess.turn() !== color) return null;
-
-    const startingAdvantage =
-      materialAdvantage(chess, color);
-
-    let captures = 0;
-    let playedMoves = 0;
-
-    for (const uci of bestVariation.slice(0, 10)) {
-      if (
-        typeof uci !== "string" ||
-        !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)
-      ) {
-        return null;
-      }
-
-      let move;
-
-      try {
-        move = chess.move({
-          from: uci.slice(0, 2),
-          to: uci.slice(2, 4),
-          promotion: uci[4] || undefined
-        });
-      } catch {
-        return null;
-      }
-
-      if (!move) return null;
-
-      playedMoves++;
-
-      if (move.captured) captures++;
-    }
-
-    // A partial or invalid line isn't enough evidence.
-    if (playedMoves < 3 || captures === 0) {
-      return null;
-    }
-
-    const endingAdvantage =
-      materialAdvantage(chess, color);
-
-    const materialGain =
-      endingAdvantage - startingAdvantage;
-
-    // The proposed engine continuation must produce
-    // a meaningful net material gain.
-    if (materialGain < 1) return null;
-
-    return {
-      grade: "miss",
-      materialGain,
-      evaluationLoss,
-      explanation:
-        "Stockfish found a continuation that gains " +
-        `approximately ${materialGain.toFixed(1)} ` +
-        "pawn-equivalents of material. " +
-        "The played move missed that opportunity."
-    };
-  } catch (error) {
-    console.warn("[Miss Detection]", error.message);
-    return null;
-  }
+  }catch{return null;}
+  return null;
 }

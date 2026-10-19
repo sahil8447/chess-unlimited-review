@@ -1,0 +1,847 @@
+{
+  "scope": "Cold sequential single samples, same actual WASM/offscreen transport; 20/80 are explicitly unfinished legal PGN prefixes, 42 is complete supplied game. No laptop extrapolation.",
+  "environment": {
+    "platform": "linux",
+    "node": "v24.19.0",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "cpuQuota": "400000 100000",
+    "memoryLimitBytes": "34359738368",
+    "hostMemoryBytes": 35743760384,
+    "engineSha256": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de"
+  },
+  "results": [
+    {
+      "id": "20",
+      "plies": 20,
+      "beforeMs": 63341.55179,
+      "afterMs": 32157.116304,
+      "initialAfterMs": 881.1648470000001,
+      "beforeSearches": 46,
+      "afterSearches": 40,
+      "beforeRequests": 53,
+      "afterRequests": 40,
+      "beforeCacheHitRate": 0.1320754716981132,
+      "afterCacheHitRate": 0,
+      "beforeSummary": {
+        "plies": 20,
+        "counts": {
+          "w": {
+            "best": 4,
+            "good": 1,
+            "blunder": 2,
+            "inaccuracy": 1,
+            "great": 1,
+            "mistake": 1
+          },
+          "b": {
+            "excellent": 2,
+            "best": 3,
+            "good": 1,
+            "blunder": 1,
+            "mistake": 1,
+            "inaccuracy": 1,
+            "great": 1
+          }
+        },
+        "accuracy": {
+          "w": 71.25415892558041,
+          "b": 67.37935806155755
+        }
+      },
+      "afterSummary": {
+        "plies": 20,
+        "counts": {
+          "w": {
+            "book": 2,
+            "blunder": 2,
+            "best": 3,
+            "inaccuracy": 1,
+            "great": 1,
+            "mistake": 1
+          },
+          "b": {
+            "book": 1,
+            "good": 1,
+            "best": 3,
+            "excellent": 1,
+            "blunder": 1,
+            "mistake": 2,
+            "great": 1
+          }
+        },
+        "accuracy": {
+          "w": 70.23713347992992,
+          "b": 68.52414800771818
+        }
+      },
+      "afterPhases": {
+        "requests": 40,
+        "localCacheHits": 0,
+        "transportCacheHits": 0,
+        "engineMs": 31490,
+        "initializationMs": 198,
+        "requestMs": 31691.183997999997,
+        "baseMs": 776.042521,
+        "criticalMs": 31169.912444999998,
+        "brilliantMs": 0.04608899999948335,
+        "missMs": 23.701737999998727,
+        "classificationMs": 191.29684200000122,
+        "initialMs": 881.1648470000001,
+        "totalMs": 32146.974608,
+        "criticalMoves": 11,
+        "greatVerifications": 3,
+        "replyChecks": 0,
+        "audits": 0,
+        "errors": [],
+        "engineSearches": 40,
+        "cacheHitRate": 0
+      },
+      "changedGrades": [
+        {
+          "ply": 1,
+          "san": "e4",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 2,
+          "san": "c5",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.004579522005367986,
+          "afterLoss": 0.009171050060543473
+        },
+        {
+          "ply": 3,
+          "san": "Bc4",
+          "before": "good",
+          "after": "book",
+          "beforeLoss": 0.038590323264487636,
+          "afterLoss": 0.03860481739483357
+        },
+        {
+          "ply": 4,
+          "san": "Nc6",
+          "before": "excellent",
+          "after": "good",
+          "beforeLoss": 0,
+          "afterLoss": 0.007364026881329422
+        },
+        {
+          "ply": 10,
+          "san": "Nf6",
+          "before": "good",
+          "after": "excellent",
+          "beforeLoss": 0.012884929233406894,
+          "afterLoss": 0
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "before": "inaccuracy",
+          "after": "mistake",
+          "beforeLoss": 0.09087309232796129,
+          "afterLoss": 0.10915633481141482
+        }
+      ]
+    },
+    {
+      "id": "42",
+      "plies": 42,
+      "beforeMs": 252906.163533,
+      "afterMs": 65956.247698,
+      "initialAfterMs": 1678.9753779999992,
+      "beforeSearches": 110,
+      "afterSearches": 72,
+      "beforeRequests": 118,
+      "afterRequests": 72,
+      "beforeCacheHitRate": 0.06779661016949153,
+      "afterCacheHitRate": 0,
+      "beforeSummary": {
+        "plies": 42,
+        "counts": {
+          "w": {
+            "best": 5,
+            "good": 2,
+            "blunder": 3,
+            "inaccuracy": 2,
+            "great": 1,
+            "mistake": 4,
+            "miss": 1,
+            "excellent": 3
+          },
+          "b": {
+            "excellent": 3,
+            "best": 8,
+            "good": 2,
+            "miss": 3,
+            "mistake": 1,
+            "inaccuracy": 1,
+            "great": 2,
+            "blunder": 1
+          }
+        },
+        "accuracy": {
+          "w": 64.45421399014461,
+          "b": 66.83963348178766
+        }
+      },
+      "afterSummary": {
+        "plies": 42,
+        "counts": {
+          "w": {
+            "book": 2,
+            "blunder": 2,
+            "best": 5,
+            "good": 4,
+            "great": 1,
+            "mistake": 4,
+            "inaccuracy": 2,
+            "excellent": 1
+          },
+          "b": {
+            "book": 1,
+            "good": 4,
+            "best": 8,
+            "blunder": 2,
+            "mistake": 3,
+            "great": 2,
+            "excellent": 1
+          }
+        },
+        "accuracy": {
+          "w": 68.34474981611713,
+          "b": 68.84142934672248
+        }
+      },
+      "afterPhases": {
+        "requests": 72,
+        "localCacheHits": 0,
+        "transportCacheHits": 0,
+        "engineMs": 65086,
+        "initializationMs": 238,
+        "requestMs": 65335.509288000016,
+        "baseMs": 1523.7008540000024,
+        "criticalMs": 64134.26609,
+        "brilliantMs": 0.01235300001280848,
+        "missMs": 10.96900400002778,
+        "classificationMs": 277.67497999998886,
+        "initialMs": 1678.9753779999992,
+        "totalMs": 65950.26101500001,
+        "criticalMoves": 18,
+        "greatVerifications": 4,
+        "replyChecks": 2,
+        "audits": 0,
+        "errors": [],
+        "engineSearches": 72,
+        "cacheHitRate": 0
+      },
+      "changedGrades": [
+        {
+          "ply": 1,
+          "san": "e4",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 2,
+          "san": "c5",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.004579522005367986,
+          "afterLoss": 0.009171050060543473
+        },
+        {
+          "ply": 3,
+          "san": "Bc4",
+          "before": "good",
+          "after": "book",
+          "beforeLoss": 0.038590323264487636,
+          "afterLoss": 0.03860481739483357
+        },
+        {
+          "ply": 4,
+          "san": "Nc6",
+          "before": "excellent",
+          "after": "good",
+          "beforeLoss": 0,
+          "afterLoss": 0.007364026881329422
+        },
+        {
+          "ply": 11,
+          "san": "e5",
+          "before": "inaccuracy",
+          "after": "good",
+          "beforeLoss": 0.09203228600792208,
+          "afterLoss": 0.04769860533334205
+        },
+        {
+          "ply": 12,
+          "san": "Ne4",
+          "before": "miss",
+          "after": "blunder",
+          "beforeLoss": 0.47769743116782093,
+          "afterLoss": 0.4591996151954901
+        },
+        {
+          "ply": 16,
+          "san": "Bc5",
+          "before": "inaccuracy",
+          "after": "mistake",
+          "beforeLoss": 0.09370592061983699,
+          "afterLoss": 0.1035009287367947
+        },
+        {
+          "ply": 22,
+          "san": "Nd4",
+          "before": "best",
+          "after": "great",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 24,
+          "san": "b6",
+          "before": "excellent",
+          "after": "good",
+          "beforeLoss": 0.0005852266108161697,
+          "afterLoss": 0.015530449701222526
+        },
+        {
+          "ply": 25,
+          "san": "g3",
+          "before": "mistake",
+          "after": "inaccuracy",
+          "beforeLoss": 0.1286477683372291,
+          "afterLoss": 0.08200388335128667
+        },
+        {
+          "ply": 27,
+          "san": "Nh5+",
+          "before": "blunder",
+          "after": "mistake",
+          "beforeLoss": 0.20752828893764552,
+          "afterLoss": 0.16256219136121142
+        },
+        {
+          "ply": 28,
+          "san": "Kg8",
+          "before": "miss",
+          "after": "good",
+          "beforeLoss": 0.09717899702202537,
+          "afterLoss": 0.029606223550268984
+        },
+        {
+          "ply": 29,
+          "san": "Nf6+",
+          "before": "miss",
+          "after": "good",
+          "beforeLoss": 0.12494205385455959,
+          "afterLoss": 0.027535859278876196
+        },
+        {
+          "ply": 30,
+          "san": "Kh8",
+          "before": "miss",
+          "after": "mistake",
+          "beforeLoss": 0.13469231820687577,
+          "afterLoss": 0.10762097176826746
+        },
+        {
+          "ply": 31,
+          "san": "Qd3",
+          "before": "excellent",
+          "after": "good",
+          "beforeLoss": 0,
+          "afterLoss": 0.005577095503012747
+        },
+        {
+          "ply": 32,
+          "san": "Rxf6",
+          "before": "great",
+          "after": "best",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 36,
+          "san": "Nf3+",
+          "before": "good",
+          "after": "excellent",
+          "beforeLoss": 0.03284657876474506,
+          "afterLoss": 0
+        },
+        {
+          "ply": 37,
+          "san": "Kg2",
+          "before": "good",
+          "after": "best",
+          "beforeLoss": 0.015741937496791092,
+          "afterLoss": 0
+        },
+        {
+          "ply": 39,
+          "san": "Kh3",
+          "before": "excellent",
+          "after": "good",
+          "beforeLoss": 0.004264484030876871,
+          "afterLoss": 0.0242893939534298
+        }
+      ]
+    },
+    {
+      "id": "80",
+      "plies": 80,
+      "beforeMs": 272967.34735,
+      "afterMs": 40206.26680500001,
+      "initialAfterMs": 2858.1107800000027,
+      "beforeSearches": 141,
+      "afterSearches": 98,
+      "beforeRequests": 143,
+      "afterRequests": 98,
+      "beforeCacheHitRate": 0.013986013986013986,
+      "afterCacheHitRate": 0,
+      "beforeSummary": {
+        "plies": 80,
+        "counts": {
+          "w": {
+            "good": 8,
+            "excellent": 8,
+            "best": 23,
+            "inaccuracy": 1
+          },
+          "b": {
+            "good": 13,
+            "best": 17,
+            "excellent": 4,
+            "great": 2,
+            "inaccuracy": 4
+          }
+        },
+        "accuracy": {
+          "w": 96.11747062974533,
+          "b": 91.05486240797009
+        }
+      },
+      "afterSummary": {
+        "plies": 80,
+        "counts": {
+          "w": {
+            "book": 10,
+            "best": 17,
+            "excellent": 7,
+            "good": 6
+          },
+          "b": {
+            "book": 11,
+            "excellent": 4,
+            "best": 10,
+            "good": 13,
+            "inaccuracy": 2
+          }
+        },
+        "accuracy": {
+          "w": 98.33220126986319,
+          "b": 93.6337292935938
+        }
+      },
+      "afterPhases": {
+        "requests": 98,
+        "localCacheHits": 0,
+        "transportCacheHits": 0,
+        "engineMs": 39518,
+        "initializationMs": 224,
+        "requestMs": 39749.99700599996,
+        "baseMs": 2726.1271160000033,
+        "criticalMs": 37243.427287,
+        "brilliantMs": 0.0005139999848324805,
+        "missMs": 0.09654400018916931,
+        "classificationMs": 202.24402700000792,
+        "initialMs": 2858.1107800000027,
+        "totalMs": 40198.240907000014,
+        "criticalMoves": 10,
+        "greatVerifications": 4,
+        "replyChecks": 1,
+        "audits": 0,
+        "errors": [],
+        "engineSearches": 98,
+        "cacheHitRate": 0
+      },
+      "changedGrades": [
+        {
+          "ply": 1,
+          "san": "c4",
+          "before": "good",
+          "after": "book",
+          "beforeLoss": 0.022061894012292194,
+          "afterLoss": 0.01654070169515054
+        },
+        {
+          "ply": 2,
+          "san": "e6",
+          "before": "good",
+          "after": "book",
+          "beforeLoss": 0.01563483079077005,
+          "afterLoss": 0.011032287951036723
+        },
+        {
+          "ply": 3,
+          "san": "Nf3",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.0036760296780974366,
+          "afterLoss": 0
+        },
+        {
+          "ply": 4,
+          "san": "d5",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 6,
+          "san": "Nf6",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 7,
+          "san": "Nc3",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.0009193343660769404,
+          "afterLoss": 0
+        },
+        {
+          "ply": 8,
+          "san": "Be7",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.003676565194545456,
+          "afterLoss": 0
+        },
+        {
+          "ply": 9,
+          "san": "Bg5",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.0009189420283945982,
+          "afterLoss": 0.005513173071276967
+        },
+        {
+          "ply": 10,
+          "san": "O-O",
+          "before": "good",
+          "after": "book",
+          "beforeLoss": 0.005511380681357758,
+          "afterLoss": 0.00367602967809727
+        },
+        {
+          "ply": 11,
+          "san": "e3",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0.00643045969119127,
+          "afterLoss": 0
+        },
+        {
+          "ply": 12,
+          "san": "h6",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 13,
+          "san": "Bh4",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 14,
+          "san": "b6",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 15,
+          "san": "cxd5",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0.0009197705588127603,
+          "afterLoss": 0
+        },
+        {
+          "ply": 16,
+          "san": "Nxd5",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 17,
+          "san": "Bxe7",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0.009201821026430967,
+          "afterLoss": 0
+        },
+        {
+          "ply": 18,
+          "san": "Qxe7",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 19,
+          "san": "Nxd5",
+          "before": "best",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 20,
+          "san": "exd5",
+          "before": "great",
+          "after": "book",
+          "beforeLoss": 0.0027611575570820612,
+          "afterLoss": 0
+        },
+        {
+          "ply": 21,
+          "san": "Rc1",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0.0009203442604454048,
+          "afterLoss": 0
+        },
+        {
+          "ply": 22,
+          "san": "Be6",
+          "before": "excellent",
+          "after": "book",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 24,
+          "san": "c5",
+          "before": "best",
+          "after": "excellent",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 25,
+          "san": "Qa3",
+          "before": "best",
+          "after": "excellent",
+          "beforeLoss": 0.006442890234428289,
+          "afterLoss": 0.0027615319200139377
+        },
+        {
+          "ply": 29,
+          "san": "dxc5",
+          "before": "excellent",
+          "after": "best",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 34,
+          "san": "Nd7",
+          "before": "best",
+          "after": "excellent",
+          "beforeLoss": 0.012873953961482332,
+          "afterLoss": 0
+        },
+        {
+          "ply": 38,
+          "san": "fxe6",
+          "before": "great",
+          "after": "best",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 42,
+          "san": "Qe7",
+          "before": "best",
+          "after": "good",
+          "beforeLoss": 0.010418376955668107,
+          "afterLoss": 0.007883442379633177
+        },
+        {
+          "ply": 44,
+          "san": "Rb8",
+          "before": "good",
+          "after": "inaccuracy",
+          "beforeLoss": 0.04593441383728336,
+          "afterLoss": 0.08466855671518181
+        },
+        {
+          "ply": 48,
+          "san": "Nf8",
+          "before": "inaccuracy",
+          "after": "good",
+          "beforeLoss": 0.0713447737001191,
+          "afterLoss": 0.020457467970934062
+        },
+        {
+          "ply": 49,
+          "san": "b3",
+          "before": "best",
+          "after": "excellent",
+          "beforeLoss": 0.030223235252434644,
+          "afterLoss": 0.002888782801159784
+        },
+        {
+          "ply": 51,
+          "san": "f5",
+          "before": "good",
+          "after": "best",
+          "beforeLoss": 0.0341951128653879,
+          "afterLoss": 0
+        },
+        {
+          "ply": 56,
+          "san": "Qd8",
+          "before": "best",
+          "after": "good",
+          "beforeLoss": 0.02767065490499071,
+          "afterLoss": 0.03819974264976772
+        },
+        {
+          "ply": 57,
+          "san": "Qg3",
+          "before": "excellent",
+          "after": "best",
+          "beforeLoss": 0.003017312324690158,
+          "afterLoss": 0
+        },
+        {
+          "ply": 58,
+          "san": "Re7",
+          "before": "good",
+          "after": "best",
+          "beforeLoss": 0.02816935335490306,
+          "afterLoss": 0
+        },
+        {
+          "ply": 59,
+          "san": "h4",
+          "before": "best",
+          "after": "excellent",
+          "beforeLoss": 0,
+          "afterLoss": 0
+        },
+        {
+          "ply": 60,
+          "san": "Rbb7",
+          "before": "best",
+          "after": "good",
+          "beforeLoss": 0.010808462680904518,
+          "afterLoss": 0.015535054192252151
+        },
+        {
+          "ply": 62,
+          "san": "Rbc7",
+          "before": "inaccuracy",
+          "after": "good",
+          "beforeLoss": 0.06258856734526413,
+          "afterLoss": 0.026070342428682003
+        },
+        {
+          "ply": 65,
+          "san": "a4",
+          "before": "good",
+          "after": "excellent",
+          "beforeLoss": 0.0325590359184712,
+          "afterLoss": 0
+        },
+        {
+          "ply": 69,
+          "san": "R2f3",
+          "before": "good",
+          "after": "excellent",
+          "beforeLoss": 0.01407605894215691,
+          "afterLoss": 0
+        },
+        {
+          "ply": 71,
+          "san": "Bd3",
+          "before": "excellent",
+          "after": "good",
+          "beforeLoss": 0,
+          "afterLoss": 0.008345796185609156
+        },
+        {
+          "ply": 72,
+          "san": "Qe8",
+          "before": "inaccuracy",
+          "after": "good",
+          "beforeLoss": 0.0643431129724242,
+          "afterLoss": 0.03238993545845435
+        },
+        {
+          "ply": 73,
+          "san": "Qe4",
+          "before": "inaccuracy",
+          "after": "excellent",
+          "beforeLoss": 0.05768219530533081,
+          "afterLoss": 0
+        },
+        {
+          "ply": 74,
+          "san": "Nf6",
+          "before": "good",
+          "after": "best",
+          "beforeLoss": 0.02015439240390715,
+          "afterLoss": 0
+        },
+        {
+          "ply": 78,
+          "san": "Kg8",
+          "before": "best",
+          "after": "excellent",
+          "beforeLoss": 0.012579111309522177,
+          "afterLoss": 0
+        },
+        {
+          "ply": 79,
+          "san": "Bc4",
+          "before": "best",
+          "after": "good",
+          "beforeLoss": 0,
+          "afterLoss": 0.010162083236180952
+        },
+        {
+          "ply": 80,
+          "san": "Kh8",
+          "before": "good",
+          "after": "excellent",
+          "beforeLoss": 0.010445837986717625,
+          "afterLoss": 0.001721847268172808
+        }
+      ]
+    }
+  ]
+}

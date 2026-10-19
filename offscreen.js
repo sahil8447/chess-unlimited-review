@@ -122,6 +122,8 @@ function initializeEngine() {
             mate: primary?.mate ?? null,
             pv: primary?.pv ?? [],
             candidates,
+            engineMs: Date.now() - job.startedAt,
+            initializationMs: job.initializationMs,
             depth: job.maxDepth
           });
         }
@@ -156,7 +158,9 @@ async function analyzePosition(fen, depth = 12, searchmoves = [], multiPV = sear
     throw new Error("Invalid engine depth");
   }
 
+  const initializationStart = Date.now();
   await initializeEngine();
+  const initializationMs = Date.now() - initializationStart;
 
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -164,6 +168,7 @@ async function analyzePosition(fen, depth = 12, searchmoves = [], multiPV = sear
     }, SEARCH_TIMEOUT_MS);
 
     pending = {
+      startedAt: Date.now(), initializationMs,
       resolve,
       reject,
       timer,
@@ -182,8 +187,8 @@ async function analyzePosition(fen, depth = 12, searchmoves = [], multiPV = sear
 const evaluationCache = new Map();
 function enqueuePosition(fen, depth, searchmoves = [], multiPV = searchmoves.length ? Math.min(searchmoves.length, 3) : 3) {
   const key = JSON.stringify([fen, depth ?? 12, searchmoves, multiPV]);
-  if (evaluationCache.has(key)) return evaluationCache.get(key);
-  const job = queue.then(() => analyzePosition(fen, depth, searchmoves, multiPV));
+  if (evaluationCache.has(key)) return evaluationCache.get(key).then(result => ({...result, cacheHit: true}));
+  const job = queue.then(() => analyzePosition(fen, depth, searchmoves, multiPV)).then(result => ({...result,cacheHit:false}));
   queue = job.catch(() => {});
   evaluationCache.set(key, job);
   job.catch(() => evaluationCache.delete(key));

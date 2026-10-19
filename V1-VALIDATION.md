@@ -1,3 +1,5 @@
+> V1 checkpoint. See [V1.1-VALIDATION.md](V1.1-VALIDATION.md) for the subsequent grading and speed changes.
+
 # V1 development delivery — 19 October 2026
 
 Release branch: `codex/chess-unlimited-review-v1`, based on `bdceead6fe23a0edcbef3b43ba304da113fe8ef2` on the previous completed branch. See Git history for the exact release commit. `main` is unchanged. The cloud has not accessed or modified `D:\Chess-Unlimited-review`.

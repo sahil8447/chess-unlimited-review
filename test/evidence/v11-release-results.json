@@ -1,0 +1,76 @@
+{
+  "branch": "codex/chess-review-v1-1-optimized",
+  "baseCommit": "25cd750544eaa459bde46f430a2241575c06cffc",
+  "userDate": "2026-10-20",
+  "commands": [
+    "npm run build",
+    "node --test test/*.test.mjs",
+    "node tools/profile-v1.mjs",
+    "node tools/benchmark-reviews.mjs",
+    "node tools/warm-cache.mjs"
+  ],
+  "results": {
+    "tests": 159,
+    "pass": 158,
+    "fail": 0,
+    "skipped": 1
+  },
+  "durationMs": 120383.647001,
+  "build": "passed",
+  "diffCheck": "passed",
+  "browser": {
+    "localComponentGroupTests": 17,
+    "passed": 16,
+    "skipped": 1,
+    "skipReason": "Loading of unpacked extensions is disabled by the administrator.",
+    "liveChessComVerified": false,
+    "standaloneActualWasmWorker": "passed"
+  },
+  "brilliant": {
+    "automaticAwards": false,
+    "soundRecognized": 13,
+    "eligible": 11,
+    "withheld": 2,
+    "negativeMoveCases": 9,
+    "negativeEligible": 0
+  },
+  "suppliedGame": {
+    "plies": 42,
+    "finalFenMatchesCurrentPosition": true,
+    "summary": {
+      "plies": 42,
+      "counts": {
+        "w": {
+          "book": 2,
+          "blunder": 2,
+          "best": 5,
+          "good": 4,
+          "great": 1,
+          "mistake": 4,
+          "inaccuracy": 2,
+          "excellent": 1
+        },
+        "b": {
+          "book": 1,
+          "good": 4,
+          "best": 8,
+          "blunder": 2,
+          "mistake": 3,
+          "great": 2,
+          "excellent": 1
+        }
+      },
+      "accuracy": {
+        "w": 68.34474981611713,
+        "b": 68.84142934672248
+      }
+    },
+    "externalReferenceKind": "aggregate-only; Black totals 20 instead of 21",
+    "accuracyAgreementClaim": false
+  },
+  "benchmarks": "test/evidence/benchmarks.json",
+  "warmCache": "test/evidence/warm-cache.json",
+  "windowsModified": false,
+  "performanceModelEmpiricallyCalibrated": false,
+  "dependencyInstall": "Existing V1 frozen dependencies reused; no dependency/lockfile change needed"
+}

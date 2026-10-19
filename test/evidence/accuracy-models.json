@@ -1,0 +1,107 @@
+{
+  "scope": "Aggregation alternatives on actual engine reports; not proprietary per-move labels or empirical Elo calibration",
+  "results": [
+    {
+      "file": "v1-20.json",
+      "alternatives": {
+        "w": {
+          "arithmetic": 74.36655525991299,
+          "harmonic": 57.73390363692084,
+          "volatilityWeighted": 84.77441421423998,
+          "selected": 71.25415892558041
+        },
+        "b": {
+          "arithmetic": 80.53475781439985,
+          "harmonic": 48.002396829199625,
+          "volatilityWeighted": 86.7563192939155,
+          "selected": 67.37935806155755
+        }
+      }
+    },
+    {
+      "file": "v1-supplied.json",
+      "alternatives": {
+        "w": {
+          "arithmetic": 74.30369355985458,
+          "harmonic": 63.039151397615804,
+          "volatilityWeighted": 65.86927658267342,
+          "selected": 64.45421399014461
+        },
+        "b": {
+          "arithmetic": 83.04286394410461,
+          "harmonic": 59.54388704879398,
+          "volatilityWeighted": 74.13537991478134,
+          "selected": 66.83963348178766
+        }
+      }
+    },
+    {
+      "file": "v1-80.json",
+      "alternatives": {
+        "w": {
+          "arithmetic": 96.60947734113171,
+          "harmonic": 96.31071681681402,
+          "volatilityWeighted": 95.92422444267662,
+          "selected": 96.11747062974533
+        },
+        "b": {
+          "arithmetic": 93.10188292107104,
+          "harmonic": 92.30335861598371,
+          "volatilityWeighted": 89.80636619995647,
+          "selected": 91.05486240797009
+        }
+      }
+    },
+    {
+      "file": "v11-20.json",
+      "alternatives": {
+        "w": {
+          "arithmetic": 75.7684191388198,
+          "harmonic": 57.94264140255625,
+          "volatilityWeighted": 82.53162555730358,
+          "selected": 70.23713347992992
+        },
+        "b": {
+          "arithmetic": 81.7495935776389,
+          "harmonic": 48.87138947700023,
+          "volatilityWeighted": 88.17690653843613,
+          "selected": 68.52414800771818
+        }
+      }
+    },
+    {
+      "file": "v11-42.json",
+      "alternatives": {
+        "w": {
+          "arithmetic": 78.16549655038958,
+          "harmonic": 66.0675173737331,
+          "volatilityWeighted": 70.62198225850116,
+          "selected": 68.34474981611713
+        },
+        "b": {
+          "arithmetic": 84.64350407717637,
+          "harmonic": 61.209087242137436,
+          "volatilityWeighted": 76.47377145130753,
+          "selected": 68.84142934672248
+        }
+      }
+    },
+    {
+      "file": "v11-80.json",
+      "alternatives": {
+        "w": {
+          "arithmetic": 98.57773825171189,
+          "harmonic": 98.4604530420934,
+          "volatilityWeighted": 98.20394949763298,
+          "selected": 98.33220126986319
+        },
+        "b": {
+          "arithmetic": 95.3695756129642,
+          "harmonic": 94.58339623636817,
+          "volatilityWeighted": 92.68406235081943,
+          "selected": 93.6337292935938
+        }
+      }
+    }
+  ]
+}

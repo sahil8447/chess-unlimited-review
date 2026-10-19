@@ -43,8 +43,17 @@ Automatic Brilliant badges remain disabled. Complete the live Chrome acceptance 
 
 ## V1 development update
 
-The current release branch is `codex/chess-unlimited-review-v1`. See [V1 validation](V1-VALIDATION.md), [performance model](PERFORMANCE-RATING.md), and [safe Windows synchronization](LOCAL-SYNC.md).
+The V1 checkpoint branch is `codex/chess-unlimited-review-v1`; the current V1.1 branch is listed below. See [V1 validation](V1-VALIDATION.md), [performance model](PERFORMANCE-RATING.md), and [safe Windows synchronization](LOCAL-SYNC.md).
 
 Completed `/game/live/<id>`, `/game/daily/<id>`, `/analysis/game/...` and `/play/online/<id>` routes support automatic import when Chess.com's callback returns a valid completed game. History pages offer manual PGN import; open an individual game for automatic import. Generic `/play/online` pages without a game identifier cannot be reliably imported and use the explicit manual fallback. No analysis-page detour is required on a supported completed-game route.
 
 Estimated Performance Rating is an unofficial model estimate. Short, unfinished, trivial, abandoned or custom-start games may show Insufficient data. Automatic Brilliant awards remain disabled. Final real Chess.com/Windows Chrome acceptance is pending.
+
+
+## V1.1: profiling and comparison
+
+The current optimization branch is `codex/chess-review-v1-1-optimized`; see [V1.1 investigation and validation](V1.1-VALIDATION.md). Reviews expose a provisional interactive board after base analysis, verify critical moves with same-root evidence, and keep slow Brilliant diagnostics optional (badges disabled). Book lookup uses a committed, legally replayed CC0 opening resource; no runtime opening API is needed.
+
+For another game: `npm run review -- game.pgn report.json --csv report.csv`. Add `--reference reference.json` for explicitly aggregate-only or identity-checked per-move comparisons. `npm run benchmark` runs cold sequential actual-WASM V1/V1.1 profiles. These benchmarks are intentionally separate from routine tests. `npm run book:build` reproduces the local lookup from attributed TSVs. No paid review data is scraped.
+
+The supplied game's V1 64.5/66.8 estimates were reproduced, but the new evidence does not establish agreement with Chess.com's proprietary accuracy. See the report for exact measurements and trade-offs, including remaining false-negative risks in conservative Miss/Brilliant checks.

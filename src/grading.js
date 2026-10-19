@@ -11,6 +11,7 @@
  */
 
 export const GRADES = {
+  book: {label: "Book", symbol: "▣", color: "#b7a7ce"},
   best: {
     label: "Best",
     symbol: "★",
@@ -182,7 +183,7 @@ function standardDeviation(values) {
  * 3. Harmonic mean
  * 4. Average of these two
  */
-export function calculateAccuracy(
+export function calculateAccuracyDetails(
   reviewedMoves,
   color
 ) {
@@ -214,7 +215,7 @@ export function calculateAccuracy(
       ? first.beforePlayerCp
       : -first.beforePlayerCp;
 
-  const whiteCps = [
+  const whiteCps = reviewedMoves.every(m => Number.isFinite(m.positionBeforeWhiteCp) && Number.isFinite(m.positionAfterWhiteCp)) ? [reviewedMoves[0].positionBeforeWhiteCp, ...reviewedMoves.map(m=>m.positionAfterWhiteCp)] : [
     initialWhiteCp,
     ...reviewedMoves.map(move =>
       move.color === "w"
@@ -257,6 +258,7 @@ export function calculateAccuracy(
   let weightedSum = 0;
   let totalWeight = 0;
   const accuracies = [];
+  const contributions = [];
 
   for (let i = 0; i < reviewedMoves.length; i++) {
     const move = reviewedMoves[i];
@@ -271,6 +273,7 @@ export function calculateAccuracy(
     if (accuracy === null) return null;
 
     accuracies.push(accuracy);
+    contributions.push({index:i,accuracy,weight:weights[i]});
 
     weightedSum += accuracy * weights[i];
     totalWeight += weights[i];
@@ -293,15 +296,11 @@ export function calculateAccuracy(
   const finalAccuracy =
     (weightedMean + harmonicMean) / 2;
 
-  console.log("[Accuracy]", {
-    color,
-    moves: accuracies.length,
-    weightedMean: weightedMean.toFixed(2),
-    harmonicMean: harmonicMean.toFixed(2),
-    finalAccuracy: finalAccuracy.toFixed(2)
-  });
+  return {value:clamp(finalAccuracy,0,100),weightedMean,harmonicMean,contributions};
+}
 
-  return clamp(finalAccuracy, 0, 100);
+export function calculateAccuracy(reviewedMoves,color) {
+  return calculateAccuracyDetails(reviewedMoves,color)?.value ?? null;
 }
 
 /*
